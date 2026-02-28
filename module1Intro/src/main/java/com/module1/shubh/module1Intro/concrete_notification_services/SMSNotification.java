@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Qualifier("smsNotif")
-@ConditionalOnProperty(name = "notification.type",havingValue = "sms")
+//@ConditionalOnProperty(name = "notification.type",havingValue = "sms")
+// If the property is not defined in application.properties, then also the bean won't be created
 public class SMSNotification implements NotificationService {
     @Override
     public void sendNotification(String msg) {
@@ -16,5 +17,5 @@ public class SMSNotification implements NotificationService {
     }
 }
 
-//@ConditionalOnProperty annotation specifies when should a specific bean be created based on
-//configurations defined in application.properties file
+
+

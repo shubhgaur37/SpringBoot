@@ -10,13 +10,11 @@ import org.springframework.stereotype.Component;
 // @Qualifier: helps you distinguish between multiple beans of the same type. Notification Service in this case
 @Component
 @Qualifier("emailNotif")
-@ConditionalOnProperty(name = "notification.type",havingValue = "email")
+//@ConditionalOnProperty(name = "notification.type",havingValue = "email")
+// If the property is not defined in application.properties, then also the bean won't be created
 public class EmailNotification implements NotificationService {
     @Override
     public void sendNotification(String msg) {
         System.out.println("Sending Email notification: "+ msg);
     }
 }
-
-//@ConditionalOnProperty annotation specifies when should a specific bean be created based on
-//configurations defined in application.properties file
