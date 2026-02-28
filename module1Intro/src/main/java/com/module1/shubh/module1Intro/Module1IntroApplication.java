@@ -1,6 +1,5 @@
 package com.module1.shubh.module1Intro;
 
-import com.module1.shubh.module1Intro.concrete_notification_services.SMSNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,6 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Module1IntroApplication implements CommandLineRunner {
 //	Injecting notification service avoiding tight-coupling
 //	Conflicting beans of type Notification Service causing build issues
+//	Resolved Bean Conflict Using @Primary annotation on EmailNotification
+//	Field Injection: To be avoided in production
 	@Autowired
 	NotificationService notificationService;
 
