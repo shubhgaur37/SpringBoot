@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Module1IntroApplication implements CommandLineRunner {
 //	Injecting notification service avoiding tight-coupling
+//	Conflicting beans of type Notification Service causing build issues
 	@Autowired
 	NotificationService notificationService;
 
