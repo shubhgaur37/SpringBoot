@@ -7,12 +7,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class Module1IntroApplication implements CommandLineRunner {
-//	Injecting notification service avoiding tight-coupling
-//	Conflicting beans of type Notification Service causing build issues
-//	Resolved Bean Conflict Using @Primary annotation on EmailNotification
-//	Field Injection: To be avoided in production
-	@Autowired
-	NotificationService notificationService;
+//	@Autowired not needed now to inject notification service field using field injection
+//	because we are using constructor dependency injection
+//	Immutable Dependency
+	final NotificationService notificationService;
+
+//	Preferred way to inject dependencies: constructor dependency Injection
+// Email is set to primary, so primary bean would be injected
+	public Module1IntroApplication(NotificationService notificationService) {
+		this.notificationService = notificationService;
+	}
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(Module1IntroApplication.class, args);
