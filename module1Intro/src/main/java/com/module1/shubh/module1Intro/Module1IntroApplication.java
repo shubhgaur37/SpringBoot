@@ -13,8 +13,8 @@ public class Module1IntroApplication implements CommandLineRunner {
 	final NotificationService notificationService;
 
 //	Preferred way to inject dependencies: constructor dependency Injection
-// Email is set to primary, so primary bean would be injected
 	public Module1IntroApplication(NotificationService notificationService) {
+//		No Primary Bean is set, so build issue due to conflicting dependencies
 		this.notificationService = notificationService;
 	}
 
