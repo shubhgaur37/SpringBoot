@@ -8,15 +8,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class Module1IntroApplication implements CommandLineRunner {
-//	@Autowired not needed now to inject notification service field using field injection
-//	because we are using constructor dependency injection
 //	Immutable Dependency
 	final NotificationService notificationService;
 
 //	Preferred way to inject dependencies: constructor dependency Injection
-	public Module1IntroApplication(@Qualifier("smsNotif") NotificationService notificationService) {
-//		Defining the bean to be used for initialising notification service when primary bean is not set
-//		using @Qualifier annotation
+	public Module1IntroApplication(NotificationService notificationService) {
+//		bean conflict resolved because we are ensured that only the bean defined in
+//		application.properties would be created and none else
 		this.notificationService = notificationService;
 	}
 
