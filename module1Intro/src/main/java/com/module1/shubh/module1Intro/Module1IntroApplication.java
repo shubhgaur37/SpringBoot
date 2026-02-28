@@ -1,6 +1,7 @@
 package com.module1.shubh.module1Intro;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,8 +14,9 @@ public class Module1IntroApplication implements CommandLineRunner {
 	final NotificationService notificationService;
 
 //	Preferred way to inject dependencies: constructor dependency Injection
-	public Module1IntroApplication(NotificationService notificationService) {
-//		No Primary Bean is set, so build issue due to conflicting dependencies
+	public Module1IntroApplication(@Qualifier("smsNotif") NotificationService notificationService) {
+//		Defining the bean to be used for initialising notification service when primary bean is not set
+//		using @Qualifier annotation
 		this.notificationService = notificationService;
 	}
 
