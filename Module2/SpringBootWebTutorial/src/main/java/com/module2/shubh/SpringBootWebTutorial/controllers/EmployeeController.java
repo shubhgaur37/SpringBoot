@@ -3,6 +3,7 @@ package com.module2.shubh.SpringBootWebTutorial.controllers;
 import com.module2.shubh.SpringBootWebTutorial.dto.EmployeeDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -21,6 +22,16 @@ public class EmployeeController {
     @GetMapping(path = "/employees/{employeeId}")
     public EmployeeDTO getEmployeeByID(@PathVariable long employeeId) {
         return new EmployeeDTO(employeeId,"Shubh","shubh@gaur.com",26, LocalDate.now(),true);
+    }
+
+//    Defining Query Parameters
+//    making them optional requires setting the required field to false
+//    Otherwise, the request will only work when all required fields are included in the query params
+//    One more thing, is that we needed to append a "/" after the resource to allow adding query params
+//    in the endpoint, simply a "/employees" mapping won't work to inject the query params.
+    @GetMapping(path = "/employees/")
+    public String getAllEmployees(@RequestParam(required = false) Integer age, @RequestParam(required = false) String sortBy) {
+        return "Hi, Age = " + age + " | "  + sortBy;
     }
 }
 
