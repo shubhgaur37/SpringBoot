@@ -30,14 +30,12 @@ public class EmployeeController {
         return "Hi, Age = " + age + " | "  + sortBy;
     }
 
-//    Post without a request body
-//    Now, if we call the employee endpoint then we would be redirected directly to the GetMapping
-//    because web browsers are designed to call get methods
-//    unless a web client[web app/website] is used to make the request
-//    so we will need to use postman to call the post method and testing this request
+//    Request Body makes sure to map the request correctly with the dto after matching
+//    the fields passed in the request.
     @PostMapping
-    public String createEmployee() {
-        return "HELLO from POST";
+    public EmployeeDTO createEmployee(@RequestBody EmployeeDTO inputEmployee) {
+        inputEmployee.setId(37);
+        return inputEmployee;
     }
 
     @PutMapping
