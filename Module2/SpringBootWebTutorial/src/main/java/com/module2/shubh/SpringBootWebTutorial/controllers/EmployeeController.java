@@ -12,18 +12,21 @@ import java.time.LocalDate;
 @RestController
 @RequestMapping(path = "/employees")
 public class EmployeeController {
-//    Having to define the endpoint in every type of get request for this resource is extra work
-//    Instead we can define a top level resource endpoint on the controller that makes sure
-//    all requests for the employee resource are routed to appropriate methods within this controller
-//    it also enables us to eliminate redundant definition of employee resource on the get mappings
-//    In essence, /employees acts as a prefix for all the defined mappings
-    @GetMapping(path = "/{employeeId}")
-    public EmployeeDTO getEmployeeByID(@PathVariable long employeeId) {
-        return new EmployeeDTO(employeeId,"Shubh","shubh@gaur.com",26, LocalDate.now(),true);
-    }
 
-    @GetMapping(path = "/")
-    public String getAllEmployees(@RequestParam(required = false) Integer age, @RequestParam(required = false) String sortBy) {
+//    Defines a mapping between path parameter and method argument
+//    if we want to use different names for both of them
+    @GetMapping(path = "/{employeeId}")
+    public EmployeeDTO getEmployeeByID(@PathVariable(name = "employeeId") long id) {
+        return new EmployeeDTO(id,"Shubh","shubh@gaur.com",26, LocalDate.now(),true);
+    }
+    //    Defines a mapping between optional query parameter and method argument
+    //    enforces name constraint on the query parameter's name
+    //    Since query parameters are optional, if we try to use an undefined parameter. eg. xyz=hello
+    //    then also we will get a 200 response because the parameter passed doesn't exist in the method arguments.
+    //    Also, its not required for us to add a / because the convention for query params is
+    //    resource_name?optional_query_params
+    @GetMapping
+    public String getAllEmployees(@RequestParam(required = false,name = "inputAge") Integer age, @RequestParam(required = false) String sortBy) {
         return "Hi, Age = " + age + " | "  + sortBy;
     }
 }
