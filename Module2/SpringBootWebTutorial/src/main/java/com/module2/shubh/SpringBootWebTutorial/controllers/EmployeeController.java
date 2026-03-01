@@ -30,7 +30,7 @@ public class EmployeeController {
         return "Hi, Age = " + age + " | "  + sortBy;
     }
 
-//    Post without a response body
+//    Post without a request body
 //    Now, if we call the employee endpoint then we would be redirected directly to the GetMapping
 //    because web browsers are designed to call get methods
 //    unless a web client[web app/website] is used to make the request
