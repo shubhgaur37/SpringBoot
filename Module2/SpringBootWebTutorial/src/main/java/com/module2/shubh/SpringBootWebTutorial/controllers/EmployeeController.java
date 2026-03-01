@@ -29,5 +29,21 @@ public class EmployeeController {
     public String getAllEmployees(@RequestParam(required = false,name = "inputAge") Integer age, @RequestParam(required = false) String sortBy) {
         return "Hi, Age = " + age + " | "  + sortBy;
     }
+
+//    Post without a response body
+//    Now, if we call the employee endpoint then we would be redirected directly to the GetMapping
+//    because web browsers are designed to call get methods
+//    unless a web client[web app/website] is used to make the request
+//    so we will need to use postman to call the post method and testing this request
+    @PostMapping
+    public String createEmployee() {
+        return "HELLO from POST";
+    }
+
+    @PutMapping
+    public String updateEmployeeById(){
+        return "HELLO from PUT";
+    }
+
 }
 
