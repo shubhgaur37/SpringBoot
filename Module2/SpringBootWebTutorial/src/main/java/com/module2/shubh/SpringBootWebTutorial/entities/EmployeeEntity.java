@@ -5,13 +5,13 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-
+// Fundamental part of Object-Relationship Model (ORM) paradigm
 @Entity // This notation tells hibernate that we need a table of this class
 // @Table : used for defining the name of table, table would be created even if this annotation is
 // not specified but with class name, @Table gives us flexibility to add properties like indexes, constraints
 @Table(name = "employees")
 // Queries returning an empty response because of private fields and no getters
-// due to which jdbc is struggling to return proper responses
+// due to which JDBC is struggling to return proper responses
 // we will use lombok annotations to make our life easy and define
 // getters setters constructors for us using annotations
 @Getter
