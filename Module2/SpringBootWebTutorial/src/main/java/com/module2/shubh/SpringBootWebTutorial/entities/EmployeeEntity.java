@@ -14,7 +14,7 @@ public class EmployeeEntity {
     // used to enforce strategy to ensure uniqueness eg. auto-increment, sequence,
     // here it chooses generation strategy automatically
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     private String name;
     private String email;
     private int age;
