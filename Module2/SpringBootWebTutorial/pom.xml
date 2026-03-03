@@ -49,10 +49,15 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-<!--			Not Required the below 2 fields as they are already configured by spring-boot-starter-parent-->
-<!--Check Spring boot dependencies under spring-boot-starter-parent-->
+<!--			Not Required, the below 2 fields as they are already configured by spring-boot-starter-parent-->
+<!--IMP STEP FOR ELIMINATING CONFIGURED FIELDS: Check Spring boot dependencies under spring-boot-starter-parent-->
 <!--			<version>2.4.240</version>-->
 <!--			<scope>test</scope>-->
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
 		</dependency>
 
 	</dependencies>
