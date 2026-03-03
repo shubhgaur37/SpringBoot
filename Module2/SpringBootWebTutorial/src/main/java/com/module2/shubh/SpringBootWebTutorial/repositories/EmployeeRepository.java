@@ -14,6 +14,5 @@ import org.springframework.stereotype.Repository;
 public interface EmployeeRepository extends JpaRepository<EmployeeEntity,Long> {
 
 }
-// ApplicationLogs: In-memory Database started
-// Database JDBC URL [jdbc:h2:mem:4b5e437b-07bf-4e62-b4fb-1ab011bcc131]
-// 4b5e437b-07bf-4e62-b4fb-1ab011bcc131 - session id for the connection
+// ApplicationLogs: File Database started
+// Added connection conn0: url=jdbc:h2:file:/Users/shubhgaur/Documents/SpringBoot/Module2/tutorialDB/db user="SHUBHDB"
