@@ -1,6 +1,6 @@
 package com.module2.shubh.SpringBootWebTutorial.controllers;
 
-import com.module2.shubh.SpringBootWebTutorial.entities.EmployeeEntity;
+import com.module2.shubh.SpringBootWebTutorial.dto.EmployeeDTO;
 import org.springframework.web.bind.annotation.*;
 import com.module2.shubh.SpringBootWebTutorial.service.EmployeeService;
 
@@ -13,7 +13,8 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/employees")
 public class EmployeeController {
-
+// Still, We are using EmployeeEntity for serving our requests which is a part of persistence layer
+// Best Practice: Use a data transfer object(DTO) to serve responses through the presentation layer
     private final EmployeeService employeeService;
 
     public EmployeeController(EmployeeService employeeService) {
@@ -22,19 +23,19 @@ public class EmployeeController {
     }
 
     @GetMapping(path = "/{employeeId}")
-    public EmployeeEntity getEmployeeByID(@PathVariable(name = "employeeId") Long id) {
+    public EmployeeDTO getEmployeeByID(@PathVariable(name = "employeeId") Long id) {
         return employeeService.findById(id);
     }
 
     @GetMapping
-    public List<EmployeeEntity> getAllEmployees() {
+    public List<EmployeeDTO> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
 //    Request Body makes sure to map the request correctly with the dto after matching
 //    the fields passed in the request.
     @PostMapping
-    public EmployeeEntity createNewEmployee(@RequestBody EmployeeEntity inputEmployee) {
+    public EmployeeDTO createNewEmployee(@RequestBody EmployeeDTO inputEmployee) {
         return employeeService.createNewEmployee(inputEmployee);
     }
 
