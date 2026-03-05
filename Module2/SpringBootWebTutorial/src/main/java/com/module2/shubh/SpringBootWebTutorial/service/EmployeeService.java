@@ -48,12 +48,12 @@ public class EmployeeService {
         return modelMapper.map(employeeRepository.save(toUpdate), EmployeeDTO.class);
     }
 
-    public void deleteEmployeeByID(Long id) {
-//        Exception Handling for errors while deleting[id does not exist or something else]
-        try {
+    public boolean deleteEmployeeByID(Long id) {
+//        more efficient than findById() as it checks membership within the table
+        boolean employeeExists = employeeRepository.existsById(id);
+        if (employeeExists)
             employeeRepository.deleteById(id);
-        }
-        catch (Exception e) {}
+        return employeeExists;
 
     }
 }
