@@ -21,12 +21,12 @@ public class EmployeeService {
 //    Using Model Mapper Defined in the Configuration class for converting entities to DTO's
     private final ModelMapper modelMapper;
 
-//    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public EmployeeService(EmployeeRepository employeeRepository, ModelMapper modelMapper, ObjectMapper objectMapper) {
         this.employeeRepository = employeeRepository;
         this.modelMapper = modelMapper;
-//        this.objectMapper = objectMapper;
+        this.objectMapper = objectMapper;
     }
 //    Instead of returning the entity, best practice is to return DTO of Employee by using a model mapper
 //    between entity and dto
@@ -78,8 +78,10 @@ public class EmployeeService {
             Field fieldToBeUpdated = ReflectionUtils.findField(EmployeeEntity.class, fieldName);
 //                the field in EmployeeEntity is set to private, so make it accessible
             fieldToBeUpdated.setAccessible(true);
+//            make the value compatible before updating
+            Object convertedValue = objectMapper.convertValue(fieldValue, fieldToBeUpdated.getType());
 //                2nd argument denotes the target where we want to make the changes
-            ReflectionUtils.setField(fieldToBeUpdated, toPatch, fieldValue);
+            ReflectionUtils.setField(fieldToBeUpdated, toPatch, convertedValue);
         });
 //        some issues here with Date of Joining field as its passed as a String from the controller
 //        because of using a Map<String,Object> as request type which creates problems when mapping back
