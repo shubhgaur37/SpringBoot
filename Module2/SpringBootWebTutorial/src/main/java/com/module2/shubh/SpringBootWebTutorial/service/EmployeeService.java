@@ -12,6 +12,7 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 // Uses @Component behind the scenes which makes it a bean
@@ -30,10 +31,17 @@ public class EmployeeService {
     }
 //    Instead of returning the entity, best practice is to return DTO of Employee by using a model mapper
 //    between entity and dto
-    public EmployeeDTO findById(Long id) {
+//    We are getting internal server error caused by a null entity not being able to be mapped with dto
+//    java.lang.IllegalArgumentException: source cannot be null
+    public Optional<EmployeeDTO> findById(Long id) {
 //        map the entity object to DTO
-        return modelMapper.map(employeeRepository.findById(id).orElse(null), EmployeeDTO.class);
+//        Optional<EmployeeEntity> employeeEntity = employeeRepository.findById(id);
+//        if no entity is found then we return an empty optional
+//        return employeeEntity.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
+//        Simplified version
+        return employeeRepository.findById(id).map(employee -> modelMapper.map(employee, EmployeeDTO.class));
     }
+
 
     public List<EmployeeDTO> getAllEmployees() {
         List<EmployeeEntity> employees = employeeRepository.findAll();

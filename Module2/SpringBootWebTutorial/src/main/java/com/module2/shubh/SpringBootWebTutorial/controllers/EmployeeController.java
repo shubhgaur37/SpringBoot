@@ -1,11 +1,14 @@
 package com.module2.shubh.SpringBootWebTutorial.controllers;
 
 import com.module2.shubh.SpringBootWebTutorial.dto.EmployeeDTO;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.module2.shubh.SpringBootWebTutorial.service.EmployeeService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 // The annotation below makes sure that mappings defined are actually REST in nature
 // Rest Controller uses @Controller & @ResponseBody annotations behind the scenes
@@ -22,22 +25,27 @@ public class EmployeeController {
 //        will be automatically injected as Employee Service internally is a bean
         this.employeeService = employeeService;
     }
-
+//    ResponseEntity are used in order to return responses along with status codes
     @GetMapping(path = "/{employeeId}")
-    public EmployeeDTO getEmployeeByID(@PathVariable(name = "employeeId") Long id) {
-        return employeeService.findById(id);
+    public ResponseEntity<EmployeeDTO> getEmployeeByID(@PathVariable(name = "employeeId") Long id) {
+//        if some entity exists then return it in the response with appropriate code else return not found
+        return employeeService.findById(id)
+                .map(employeeDTO -> ResponseEntity.ok(employeeDTO)).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
-    public List<EmployeeDTO> getAllEmployees() {
-        return employeeService.getAllEmployees();
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
+        return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
 //    Request Body makes sure to map the request correctly with the dto after matching
 //    the fields passed in the request.
     @PostMapping
-    public EmployeeDTO createNewEmployee(@RequestBody EmployeeDTO inputEmployee) {
-        return employeeService.createNewEmployee(inputEmployee);
+    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody EmployeeDTO inputEmployee) {
+        EmployeeDTO savedEmployee = employeeService.createNewEmployee(inputEmployee);
+//        new ResponseEntity<>(employeeDTO, HttpStatus.CREATED); // can be used alternatively
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedEmployee);
+
     }
 
 //    When we want to change an entire record(row) in the db then we use a put request signalling,
@@ -46,13 +54,15 @@ public class EmployeeController {
 //    if all the fields are not provided i.e. the request body does not
 //    follow the rules of a put request
     @PutMapping(path = "/{employeeId}")
-    public EmployeeDTO updateEmployeeById(@PathVariable(name="employeeId") Long id, @RequestBody EmployeeDTO updateEmployee) {
-        return employeeService.updateEmployeeByID(id,updateEmployee);
+    public ResponseEntity<EmployeeDTO> updateEmployeeById(@PathVariable(name="employeeId") Long id, @RequestBody EmployeeDTO updateEmployee) {
+        return ResponseEntity.ok(employeeService.updateEmployeeByID(id,updateEmployee));
     }
 
     @DeleteMapping(path = "/{employeeId}")
-    public boolean deleteEmployeeById(@PathVariable(name="employeeId") Long id) {
-        return employeeService.deleteEmployeeByID(id);
+    public ResponseEntity<Boolean> deleteEmployeeById(@PathVariable(name="employeeId") Long id) {
+        boolean isEmployeeDeleted = employeeService.deleteEmployeeByID(id);
+        if(isEmployeeDeleted) return ResponseEntity.ok(isEmployeeDeleted);
+        return ResponseEntity.notFound().build();
     }
 //    We want to update some fields within the table and we might not know what all fields came in the request
 //    maybe some invalid fields may cause mapping issues with DTO
@@ -60,8 +70,10 @@ public class EmployeeController {
 //    Error :java.lang.IllegalArgumentException: Can not set java.time.LocalDate field com.module2.shubh.SpringBootWebTutorial.entities.EmployeeEntity.dateOfJoining to java.lang.String
 //    and corresponding objects denoting the values that we wanna set for these fields
     @PatchMapping(path = "/{employeeId}")
-    public EmployeeDTO updatePartialEmployeeById(@PathVariable(name="employeeId") Long id, @RequestBody Map<String,Object> partialEmployee) {
-        return employeeService.updatePartialEmployeeByID(id,partialEmployee);
+    public ResponseEntity<EmployeeDTO> updatePartialEmployeeById(@PathVariable(name="employeeId") Long id, @RequestBody Map<String,Object> partialEmployee) {
+        EmployeeDTO employeeDTO = employeeService.updatePartialEmployeeByID(id,partialEmployee);
+        if (employeeDTO == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(employeeDTO);
     }
 }
 
