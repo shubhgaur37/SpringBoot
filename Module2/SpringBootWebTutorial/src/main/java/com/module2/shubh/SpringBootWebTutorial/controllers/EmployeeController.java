@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import com.module2.shubh.SpringBootWebTutorial.service.EmployeeService;
 
 import java.util.List;
+import java.util.Map;
 
 // The annotation below makes sure that mappings defined are actually REST in nature
 // Rest Controller uses @Controller & @ResponseBody annotations behind the scenes
@@ -52,6 +53,15 @@ public class EmployeeController {
     @DeleteMapping(path = "/{employeeId}")
     public boolean deleteEmployeeById(@PathVariable(name="employeeId") Long id) {
         return employeeService.deleteEmployeeByID(id);
+    }
+//    We want to update some fields within the table and we might not know what all fields came in the request
+//    maybe some invalid fields may cause mapping issues with DTO
+//    so instead of a DTO we are using a map with key as strings denoting fields we want to update
+//    Error :java.lang.IllegalArgumentException: Can not set java.time.LocalDate field com.module2.shubh.SpringBootWebTutorial.entities.EmployeeEntity.dateOfJoining to java.lang.String
+//    and corresponding objects denoting the values that we wanna set for these fields
+    @PatchMapping(path = "/{employeeId}")
+    public EmployeeDTO updatePartialEmployeeById(@PathVariable(name="employeeId") Long id, @RequestBody Map<String,Object> partialEmployee) {
+        return employeeService.updatePartialEmployeeByID(id,partialEmployee);
     }
 }
 
