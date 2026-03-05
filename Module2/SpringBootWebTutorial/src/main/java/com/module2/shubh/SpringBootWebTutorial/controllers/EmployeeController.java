@@ -41,6 +41,9 @@ public class EmployeeController {
 
 //    When we want to change an entire record(row) in the db then we use a put request signalling,
 //    we want to update an entire row
+//    also the request incorrectly updates the record
+//    if all the fields are not provided i.e. the request body does not
+//    follow the rules of a put request
     @PutMapping(path = "/{employeeId}")
     public EmployeeDTO updateEmployeeById(@PathVariable(name="employeeId") Long id, @RequestBody EmployeeDTO updateEmployee) {
         return employeeService.updateEmployeeByID(id,updateEmployee);
