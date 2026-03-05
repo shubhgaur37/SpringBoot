@@ -45,6 +45,11 @@ public class EmployeeController {
     public EmployeeDTO updateEmployeeById(@PathVariable(name="employeeId") Long id, @RequestBody EmployeeDTO updateEmployee) {
         return employeeService.updateEmployeeByID(id,updateEmployee);
     }
+
+    @DeleteMapping(path = "/{employeeId}")
+    public void deleteEmployeeById(@PathVariable(name="employeeId") Long id) {
+        employeeService.deleteEmployeeByID(id);
+    }
 }
 
 // We were able to get rid of the Employee Repository by introducing a Service layer in between to interact with database(repository) which

@@ -4,6 +4,7 @@ import com.module2.shubh.SpringBootWebTutorial.dto.EmployeeDTO;
 import com.module2.shubh.SpringBootWebTutorial.entities.EmployeeEntity;
 import com.module2.shubh.SpringBootWebTutorial.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,5 +46,14 @@ public class EmployeeService {
         if (employeeRepository.findById(id).isPresent())
             toUpdate.setId(id);
         return modelMapper.map(employeeRepository.save(toUpdate), EmployeeDTO.class);
+    }
+
+    public void deleteEmployeeByID(Long id) {
+//        Exception Handling for errors while deleting[id does not exist or something else]
+        try {
+            employeeRepository.deleteById(id);
+        }
+        catch (Exception e) {}
+
     }
 }
