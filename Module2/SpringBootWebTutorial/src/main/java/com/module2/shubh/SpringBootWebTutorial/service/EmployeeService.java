@@ -38,4 +38,15 @@ public class EmployeeService {
 //        Adding the employee to database
         return modelMapper.map(employeeRepository.save(toSave), EmployeeDTO.class);
     }
+
+    public EmployeeDTO updateEmployeeByID(Long id, EmployeeDTO updateEmployee) {
+        EmployeeEntity toUpdate = modelMapper.map(updateEmployee, EmployeeEntity.class);
+        toUpdate.setId(id);
+//        if the employee already exists, then it updates the details
+//        If the employee does not exist then it does nothing.
+//        But in this case, we want to create a new employee if the id does not exist
+//        also we can't guarantee that the creation operation would be successful because
+//        we have set id to autogenerate and we are explicitly setting the id field in the entity
+        return modelMapper.map(employeeRepository.save(toUpdate), EmployeeDTO.class);
+    }
 }
