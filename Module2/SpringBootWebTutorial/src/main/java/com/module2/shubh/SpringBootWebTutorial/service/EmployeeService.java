@@ -4,7 +4,6 @@ import com.module2.shubh.SpringBootWebTutorial.dto.EmployeeDTO;
 import com.module2.shubh.SpringBootWebTutorial.entities.EmployeeEntity;
 import com.module2.shubh.SpringBootWebTutorial.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,12 +40,10 @@ public class EmployeeService {
 
     public EmployeeDTO updateEmployeeByID(Long id, EmployeeDTO updateEmployee) {
         EmployeeEntity toUpdate = modelMapper.map(updateEmployee, EmployeeEntity.class);
-        toUpdate.setId(id);
 //        if the employee already exists, then it updates the details
-//        If the employee does not exist then it does nothing.
-//        But in this case, we want to create a new employee if the id does not exist
-//        also we can't guarantee that the creation operation would be successful because
-//        we have set id to autogenerate and we are explicitly setting the id field in the entity
+//        If the employee does not exist then it creates a new one
+        if (employeeRepository.findById(id).isPresent())
+            toUpdate.setId(id);
         return modelMapper.map(employeeRepository.save(toUpdate), EmployeeDTO.class);
     }
 }
