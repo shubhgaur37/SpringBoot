@@ -1,6 +1,7 @@
 package com.module2.shubh.SpringBootWebTutorial.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class EmployeeDTO {
 //    needed a non-primitive type here as DTO to Entity Conversion is not working
 //    because primary key is set to autogenerate in the entity and its being passed as 0
     private Long id;
+    @NotNull(message = "Name is Required") // Using Jakarta's Validation Constraint
     private String name;
     private String email;
     private int age;

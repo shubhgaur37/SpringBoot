@@ -1,6 +1,7 @@
 package com.module2.shubh.SpringBootWebTutorial.controllers;
 
 import com.module2.shubh.SpringBootWebTutorial.dto.EmployeeDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +41,9 @@ public class EmployeeController {
 
 //    Request Body makes sure to map the request correctly with the dto after matching
 //    the fields passed in the request.
+//    Asking the controller to validate the request before servicing it usin Jakarta's @Valid annotation with request
     @PostMapping
-    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody EmployeeDTO inputEmployee) {
+    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody @Valid EmployeeDTO inputEmployee) {
         EmployeeDTO savedEmployee = employeeService.createNewEmployee(inputEmployee);
 //        new ResponseEntity<>(employeeDTO, HttpStatus.CREATED); // can be used alternatively
         return ResponseEntity.status(HttpStatus.CREATED).body(savedEmployee);
