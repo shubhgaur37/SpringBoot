@@ -56,7 +56,7 @@ public class EmployeeController {
 //    if all the fields are not provided i.e. the request body does not
 //    follow the rules of a put request
     @PutMapping(path = "/{employeeId}")
-    public ResponseEntity<EmployeeDTO> updateEmployeeById(@PathVariable(name="employeeId") Long id, @RequestBody EmployeeDTO updateEmployee) {
+    public ResponseEntity<EmployeeDTO> updateEmployeeById(@PathVariable(name="employeeId") Long id, @RequestBody @Valid EmployeeDTO updateEmployee) {
         return ResponseEntity.ok(employeeService.updateEmployeeByID(id,updateEmployee));
     }
 

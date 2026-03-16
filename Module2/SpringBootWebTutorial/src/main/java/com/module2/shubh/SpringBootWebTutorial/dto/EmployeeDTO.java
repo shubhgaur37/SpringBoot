@@ -1,6 +1,7 @@
 package com.module2.shubh.SpringBootWebTutorial.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.module2.shubh.SpringBootWebTutorial.annotations.EmployeeRoleValidation;
 import jakarta.validation.constraints.*;
 
 import lombok.AllArgsConstructor;
@@ -33,8 +34,9 @@ public class EmployeeDTO {
     @Max(value = 80,message = "Age cannot be more than 80")
     private int age;
 
-    @Pattern(regexp = "^(ADMIN|USER)$", message = "ROLE can be EMPLOYEE | ADMIN")
+//    @Pattern(regexp = "^(ADMIN|USER)$", message = "ROLE can be EMPLOYEE | ADMIN")
     @NotBlank(message = "Role of Employee cannot be blank") // enforces not null constraint as well
+    @EmployeeRoleValidation // using the custom validation
     private String role;
     @NotNull(message="Salary cannot be null") @Positive(message = "Salary should be positive")
     // digits does not consider all zeroes after decimal i.e. xxxx.00000000 is valid and won't fail the request
