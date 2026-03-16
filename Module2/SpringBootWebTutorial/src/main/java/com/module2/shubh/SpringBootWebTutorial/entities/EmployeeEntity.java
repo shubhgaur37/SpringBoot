@@ -29,6 +29,8 @@ public class EmployeeEntity {
     private int age;
     private LocalDate dateOfJoining;
     private Boolean isActive;
+    private String role;
+    private Double salary;
 }
 
 // this is not code duplication as it might look comparing EmployeeDTO
