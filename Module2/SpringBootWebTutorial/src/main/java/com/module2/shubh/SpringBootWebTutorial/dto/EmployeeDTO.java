@@ -1,9 +1,7 @@
 package com.module2.shubh.SpringBootWebTutorial.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.module2.shubh.SpringBootWebTutorial.annotations.EmployeeRoleValidation;
 import jakarta.validation.constraints.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

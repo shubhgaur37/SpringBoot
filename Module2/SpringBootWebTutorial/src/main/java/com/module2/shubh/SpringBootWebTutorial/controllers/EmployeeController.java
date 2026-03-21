@@ -2,16 +2,14 @@ package com.module2.shubh.SpringBootWebTutorial.controllers;
 
 import com.module2.shubh.SpringBootWebTutorial.dto.EmployeeDTO;
 import com.module2.shubh.SpringBootWebTutorial.exceptions.ResourceNotFoundException;
+import com.module2.shubh.SpringBootWebTutorial.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.module2.shubh.SpringBootWebTutorial.service.EmployeeService;
 
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 // The annotation below makes sure that mappings defined are actually REST in nature
 // Rest Controller uses @Controller & @ResponseBody annotations behind the scenes
