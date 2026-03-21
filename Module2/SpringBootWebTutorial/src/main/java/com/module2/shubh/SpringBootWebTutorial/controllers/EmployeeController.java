@@ -82,14 +82,15 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeDTO);
     }
 
-//    Exception handling to prevent application crashes and meaningful error responses
-//    for end users, facilitate debugging and maintenance, ensure consistent error handling across the application
-    @ExceptionHandler(NoSuchElementException.class) // defined in controller to handle controller level exceptions
-    // also we are getting a 200 response which is not consistent with the actual state, so lets return a proper response entity
-    // from handler itself
-    public ResponseEntity<String> handleEmployeeNotFound(NoSuchElementException exception){
-        return new ResponseEntity<>("Employee was not found", HttpStatus.NOT_FOUND);
-    }
+////    Exception handling to prevent application crashes and meaningful error responses
+////    for end users, facilitate debugging and maintenance, ensure consistent error handling across the application
+////    If there is a global exception handler defined then controller level handler takes precedence over it
+//    @ExceptionHandler(NoSuchElementException.class) // defined in controller to handle controller level exceptions
+//    // also we are getting a 200 response which is not consistent with the actual state, so lets return a proper response entity
+//    // from handler itself
+//    public ResponseEntity<String> handleEmployeeNotFound(NoSuchElementException exception){
+//        return new ResponseEntity<>("Employee was not found", HttpStatus.NOT_FOUND);
+//    }
 
 }
 
