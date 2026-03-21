@@ -1,5 +1,6 @@
 package com.module2.shubh.SpringBootWebTutorial.dto;
 
+import com.module2.shubh.SpringBootWebTutorial.annotations.PrimeNumberValidation;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
@@ -19,5 +20,7 @@ public class DepartmentDTO {
     Boolean isActive;
     @PastOrPresent(message = "Date of Department creation cannot be in the future")
     LocalDate createdAt;
+//    @PrimeNumberValidation
+//    Integer testPrime;
 }
 
