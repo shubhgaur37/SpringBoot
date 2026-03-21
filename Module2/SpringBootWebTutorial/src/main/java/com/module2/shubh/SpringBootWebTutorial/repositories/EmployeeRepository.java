@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 // and the type of primary key in the table
 
 @Repository // extends from component which makes it a bean
-public interface EmployeeRepository extends JpaRepository<EmployeeEntity,Long> {
+public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long> {
 
 }
 // ApplicationLogs: File Database started

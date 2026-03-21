@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping(path = "/employees")
 public class EmployeeController {
-// Still, We are using EmployeeEntity for serving our requests which is a part of persistence layer
+    // Still, We are using EmployeeEntity for serving our requests which is a part of persistence layer
 // Best Practice: Use a data transfer object(DTO) to serve responses through the presentation layer
     private final EmployeeService employeeService;
 
@@ -29,7 +29,7 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-//    ResponseEntity are used in order to return responses along with status codes
+    //    ResponseEntity are used in order to return responses along with status codes
     @GetMapping(path = "/{employeeId}")
     public ResponseEntity<EmployeeDTO> getEmployeeByID(@PathVariable(name = "employeeId") Long id) {
 //        if some entity exists then return it in the response with appropriate code else return not found
@@ -45,7 +45,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
-//    Request Body makes sure to map the request correctly with the dto after matching
+    //    Request Body makes sure to map the request correctly with the dto after matching
 //    the fields passed in the request.
 //    Asking the controller to validate the request before servicing it usin Jakarta's @Valid annotation with request
     @PostMapping
@@ -56,30 +56,31 @@ public class EmployeeController {
 
     }
 
-//    When we want to change an entire record(row) in the db then we use a put request signalling,
+    //    When we want to change an entire record(row) in the db then we use a put request signalling,
 //    we want to update an entire row
 //    also the request incorrectly updates the record
 //    if all the fields are not provided i.e. the request body does not
 //    follow the rules of a put request
     @PutMapping(path = "/{employeeId}")
-    public ResponseEntity<EmployeeDTO> updateEmployeeById(@PathVariable(name="employeeId") Long id, @RequestBody @Valid EmployeeDTO updateEmployee) {
-        return ResponseEntity.ok(employeeService.updateEmployeeByID(id,updateEmployee));
+    public ResponseEntity<EmployeeDTO> updateEmployeeById(@PathVariable(name = "employeeId") Long id, @RequestBody @Valid EmployeeDTO updateEmployee) {
+        return ResponseEntity.ok(employeeService.updateEmployeeByID(id, updateEmployee));
     }
 
     @DeleteMapping(path = "/{employeeId}")
-    public ResponseEntity<Boolean> deleteEmployeeById(@PathVariable(name="employeeId") Long id) {
+    public ResponseEntity<Boolean> deleteEmployeeById(@PathVariable(name = "employeeId") Long id) {
         boolean isEmployeeDeleted = employeeService.deleteEmployeeByID(id);
-        if(isEmployeeDeleted) return ResponseEntity.ok(isEmployeeDeleted);
+        if (isEmployeeDeleted) return ResponseEntity.ok(isEmployeeDeleted);
         return ResponseEntity.notFound().build();
     }
-//    We want to update some fields within the table and we might not know what all fields came in the request
+
+    //    We want to update some fields within the table and we might not know what all fields came in the request
 //    maybe some invalid fields may cause mapping issues with DTO
 //    so instead of a DTO we are using a map with key as strings denoting fields we want to update
 //    Error :java.lang.IllegalArgumentException: Can not set java.time.LocalDate field com.module2.shubh.SpringBootWebTutorial.entities.EmployeeEntity.dateOfJoining to java.lang.String
 //    and corresponding objects denoting the values that we wanna set for these fields
     @PatchMapping(path = "/{employeeId}")
-    public ResponseEntity<EmployeeDTO> updatePartialEmployeeById(@PathVariable(name="employeeId") Long id, @RequestBody Map<String,Object> partialEmployee) {
-        EmployeeDTO employeeDTO = employeeService.updatePartialEmployeeByID(id,partialEmployee);
+    public ResponseEntity<EmployeeDTO> updatePartialEmployeeById(@PathVariable(name = "employeeId") Long id, @RequestBody Map<String, Object> partialEmployee) {
+        EmployeeDTO employeeDTO = employeeService.updatePartialEmployeeByID(id, partialEmployee);
         if (employeeDTO == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(employeeDTO);
     }

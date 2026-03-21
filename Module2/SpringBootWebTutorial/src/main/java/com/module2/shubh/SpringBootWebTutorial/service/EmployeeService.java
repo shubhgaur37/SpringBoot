@@ -6,7 +6,6 @@ import com.module2.shubh.SpringBootWebTutorial.entities.EmployeeEntity;
 import com.module2.shubh.SpringBootWebTutorial.exceptions.ResourceNotFoundException;
 import com.module2.shubh.SpringBootWebTutorial.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
-//    Using Model Mapper Defined in the Configuration class for converting entities to DTO's
+    //    Using Model Mapper Defined in the Configuration class for converting entities to DTO's
     private final ModelMapper modelMapper;
 
     private final ObjectMapper objectMapper;
@@ -30,7 +29,8 @@ public class EmployeeService {
         this.modelMapper = modelMapper;
         this.objectMapper = objectMapper;
     }
-//    Instead of returning the entity, best practice is to return DTO of Employee by using a model mapper
+
+    //    Instead of returning the entity, best practice is to return DTO of Employee by using a model mapper
 //    between entity and dto
 //    We are getting internal server error caused by a null entity not being able to be mapped with dto
 //    java.lang.IllegalArgumentException: source cannot be null
@@ -50,6 +50,7 @@ public class EmployeeService {
                 .map(employee -> modelMapper.map(employee, EmployeeDTO.class))
                 .collect(Collectors.toList());
     }
+
     public EmployeeDTO createNewEmployee(EmployeeDTO inputEmployee) {
         EmployeeEntity toSave = modelMapper.map(inputEmployee, EmployeeEntity.class);
 //        Adding the employee to database
@@ -106,10 +107,11 @@ public class EmployeeService {
         return modelMapper.map(employeeRepository.save(toPatch), EmployeeDTO.class);
     }
 
-//    make code DRY compliant
-    private void isEmployeeIDPresent(Long id){
+    //    make code DRY compliant
+    private void isEmployeeIDPresent(Long id) {
 //        exception can be thrown here if id does not exist and all calling methods don't need to have a separate
 //        check
-        if (!employeeRepository.existsById(id)) throw new ResourceNotFoundException("Employee not found with id: " + id);
+        if (!employeeRepository.existsById(id))
+            throw new ResourceNotFoundException("Employee not found with id: " + id);
     }
 }

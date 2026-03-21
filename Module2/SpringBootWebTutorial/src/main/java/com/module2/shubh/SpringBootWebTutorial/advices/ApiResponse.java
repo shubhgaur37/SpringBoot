@@ -11,22 +11,22 @@ import java.time.LocalDateTime;
 // either data will be there or error
 @Getter
 public class ApiResponse<T> {
-//    specifying custom format for datetime in responses
+    //    specifying custom format for datetime in responses
     @JsonFormat(pattern = "hh-mm-ss dd-MM-yyyy")
     private LocalDateTime timestamp;
     private T data;
     private ApiError error;
 
-    public ApiResponse(){
+    public ApiResponse() {
         this.timestamp = LocalDateTime.now();
     }
 
-    public ApiResponse(T data){
+    public ApiResponse(T data) {
         this(); // calling default constructor
         this.data = data;
     }
 
-    public ApiResponse(ApiError error){
+    public ApiResponse(ApiError error) {
         this();
         this.error = error;
     }
