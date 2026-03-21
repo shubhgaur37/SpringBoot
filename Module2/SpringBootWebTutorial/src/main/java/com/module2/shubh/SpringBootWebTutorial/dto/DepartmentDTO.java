@@ -1,5 +1,6 @@
 package com.module2.shubh.SpringBootWebTutorial.dto;
 
+import com.module2.shubh.SpringBootWebTutorial.annotations.PasswordValidation;
 import com.module2.shubh.SpringBootWebTutorial.annotations.PrimeNumberValidation;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
@@ -22,5 +23,7 @@ public class DepartmentDTO {
     LocalDate createdAt;
 //    @PrimeNumberValidation
 //    Integer testPrime;
+//    @PasswordValidation
+//    String pass;
 }
 
