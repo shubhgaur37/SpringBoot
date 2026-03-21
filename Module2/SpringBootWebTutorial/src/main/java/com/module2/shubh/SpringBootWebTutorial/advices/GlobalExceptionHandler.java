@@ -16,34 +16,33 @@ import java.util.stream.Collectors;
 // ensures proper exception handling mechanism is trigerred based on the type of exception
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
     // Using custom exception
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiError> handleResourceNotFound(ResourceNotFoundException exception){
+    public ResponseEntity<ApiResponse<?>> handleResourceNotFound(ResourceNotFoundException exception){
 //        getting exception from the message
 //        useful when we want to throw exceptions with custom error messages at multiple points within the application
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.NOT_FOUND)
                 .message(exception.getMessage())
                 .build();
-        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+        return buildErrorResponseEntity(apiError);
 //        return new ResponseEntity<>("Resource not found", HttpStatus.NOT_FOUND);
     }
 
     // Handle all other exceptions except Resource Not Found
     // in case of Resource not found the control will go to first handler as it is more granular
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleInternalServerError(Exception exception){
+    public ResponseEntity<ApiResponse<?>> handleInternalServerError(Exception exception){
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .message(exception.getMessage())
                 .build();
-        return new ResponseEntity<>(apiError,HttpStatus.INTERNAL_SERVER_ERROR);
+        return buildErrorResponseEntity(apiError);
     }
 
     // Exception Handler for invalid inputs
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleInputValidationErrors(MethodArgumentNotValidException exception){
+    public ResponseEntity<ApiResponse<?>> handleInputValidationErrors(MethodArgumentNotValidException exception){
         // get list of all the errors based on the error messages defined on the validations
         // getBinding Results
         List<String> errors = exception.getBindingResult().getAllErrors()
@@ -58,7 +57,12 @@ public class GlobalExceptionHandler {
                 // to return list of suberrors in response
                 .subErrors(errors)
                 .build();
-        return new ResponseEntity<>(apiError,HttpStatus.INTERNAL_SERVER_ERROR);
+        return buildErrorResponseEntity(apiError);
+    }
+
+    private ResponseEntity<ApiResponse<?>> buildErrorResponseEntity(ApiError apiError){
+        return new ResponseEntity<>(new ApiResponse<>(apiError),apiError.getStatus());
+
     }
 
 }
