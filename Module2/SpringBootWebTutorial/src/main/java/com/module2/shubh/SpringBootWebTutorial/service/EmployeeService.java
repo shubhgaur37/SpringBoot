@@ -3,6 +3,7 @@ package com.module2.shubh.SpringBootWebTutorial.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.module2.shubh.SpringBootWebTutorial.dto.EmployeeDTO;
 import com.module2.shubh.SpringBootWebTutorial.entities.EmployeeEntity;
+import com.module2.shubh.SpringBootWebTutorial.exceptions.ResourceNotFoundException;
 import com.module2.shubh.SpringBootWebTutorial.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -56,27 +57,33 @@ public class EmployeeService {
     }
 
     public EmployeeDTO updateEmployeeByID(Long id, EmployeeDTO updateEmployee) {
+        // if employee exists no exception thrown
+        isEmployeeIDPresent(id);
+
         EmployeeEntity toUpdate = modelMapper.map(updateEmployee, EmployeeEntity.class);
 //        if the employee already exists, then it updates the details
 //        If the employee does not exist then it creates a new one
-        if (employeeRepository.findById(id).isPresent())
-            toUpdate.setId(id);
+//        if (!isEmployeeIDPresent(id)) throw new ResourceNotFoundException("Employee not found with id: " + id);
+        // the above exception will also be caught by global handler for handling
+
+        toUpdate.setId(id);
         return modelMapper.map(employeeRepository.save(toUpdate), EmployeeDTO.class);
+
     }
 
     public boolean deleteEmployeeByID(Long id) {
-//        more efficient than findById() as it checks membership within the table
-        boolean employeeExists = isEmployeeIDPresent(id);
-        if (employeeExists)
-            employeeRepository.deleteById(id);
-        return employeeExists;
+        // if employee exists no exception thrown
+        isEmployeeIDPresent(id);
+        // duplicated
+//        if (!employeeExists) throw new ResourceNotFoundException("Employee not found with id: " + id);
+        employeeRepository.deleteById(id);
+        return true;
 
     }
 
     public EmployeeDTO updatePartialEmployeeByID(Long id, Map<String, Object> partialEmployee) {
-        boolean employeeExists = isEmployeeIDPresent(id);
-        if(!employeeExists)
-            return null;
+        // throws exception if employee not found
+        isEmployeeIDPresent(id);
 //            get the employee, check already done
         EmployeeEntity toPatch = employeeRepository.findById(id).get();
 //            Using Reflection: Actions performed by a program to inspect or modify its structure or
@@ -100,7 +107,9 @@ public class EmployeeService {
     }
 
 //    make code DRY compliant
-    private boolean isEmployeeIDPresent(Long id){
-        return employeeRepository.existsById(id);
+    private void isEmployeeIDPresent(Long id){
+//        exception can be thrown here if id does not exist and all calling methods don't need to have a separate
+//        check
+        if (!employeeRepository.existsById(id)) throw new ResourceNotFoundException("Employee not found with id: " + id);
     }
 }
