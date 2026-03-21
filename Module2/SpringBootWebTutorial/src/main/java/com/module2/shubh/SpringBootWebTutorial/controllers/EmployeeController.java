@@ -1,6 +1,7 @@
 package com.module2.shubh.SpringBootWebTutorial.controllers;
 
 import com.module2.shubh.SpringBootWebTutorial.dto.EmployeeDTO;
+import com.module2.shubh.SpringBootWebTutorial.exceptions.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -34,7 +35,7 @@ public class EmployeeController {
         return employeeService.findById(id)
                 .map(employeeDTO -> ResponseEntity.ok(employeeDTO))
                 // supplier required in arguments so using a lambda function
-                .orElseThrow(() -> new NoSuchElementException("Employee not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id)); // using custom exception
         // whenever this exception is thrown, control goes to corresponding exception handler
     }
 
