@@ -1,6 +1,7 @@
 package com.module2.shubh.SpringBootWebTutorial.advices;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,8 @@ import java.time.LocalDateTime;
 // either data will be there or error
 @Getter
 public class ApiResponse<T> {
+//    specifying custom format for datetime in responses
+    @JsonFormat(pattern = "hh-mm-ss dd-MM-yyyy")
     private LocalDateTime timestamp;
     private T data;
     private ApiError error;
