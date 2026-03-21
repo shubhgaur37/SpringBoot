@@ -3,13 +3,14 @@ package com.module2.shubh.SpringBootWebTutorial.controllers;
 import com.module2.shubh.SpringBootWebTutorial.dto.EmployeeDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.module2.shubh.SpringBootWebTutorial.service.EmployeeService;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 // The annotation below makes sure that mappings defined are actually REST in nature
 // Rest Controller uses @Controller & @ResponseBody annotations behind the scenes
@@ -31,7 +32,10 @@ public class EmployeeController {
     public ResponseEntity<EmployeeDTO> getEmployeeByID(@PathVariable(name = "employeeId") Long id) {
 //        if some entity exists then return it in the response with appropriate code else return not found
         return employeeService.findById(id)
-                .map(employeeDTO -> ResponseEntity.ok(employeeDTO)).orElse(ResponseEntity.notFound().build());
+                .map(employeeDTO -> ResponseEntity.ok(employeeDTO))
+                // supplier required in arguments so using a lambda function
+                .orElseThrow(() -> new NoSuchElementException("Employee not found"));
+        // whenever this exception is thrown, control goes to corresponding exception handler
     }
 
     @GetMapping
@@ -77,6 +81,16 @@ public class EmployeeController {
         if (employeeDTO == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(employeeDTO);
     }
+
+//    Exception handling to prevent application crashes and meaningful error responses
+//    for end users, facilitate debugging and maintenance, ensure consistent error handling across the application
+    @ExceptionHandler(NoSuchElementException.class) // defined in controller to handle controller level exceptions
+    // also we are getting a 200 response which is not consistent with the actual state, so lets return a proper response entity
+    // from handler itself
+    public ResponseEntity<String> handleEmployeeNotFound(NoSuchElementException exception){
+        return new ResponseEntity<>("Employee was not found", HttpStatus.NOT_FOUND);
+    }
+
 }
 
 // We were able to get rid of the Employee Repository by introducing a Service layer in between to interact with database(repository) which
