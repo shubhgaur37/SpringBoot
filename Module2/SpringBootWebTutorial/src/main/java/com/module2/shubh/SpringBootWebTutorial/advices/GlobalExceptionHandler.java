@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 // annotation used to define a global exception handler
@@ -54,8 +53,10 @@ public class GlobalExceptionHandler {
 
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                // convert list of errors into message for good debugging
-                .message(errors.toString())
+                // generic error message
+                .message("VALIDATION ERROR")
+                // to return list of suberrors in response
+                .subErrors(errors)
                 .build();
         return new ResponseEntity<>(apiError,HttpStatus.INTERNAL_SERVER_ERROR);
     }
