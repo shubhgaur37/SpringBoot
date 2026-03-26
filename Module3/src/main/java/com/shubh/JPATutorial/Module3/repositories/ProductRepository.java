@@ -1,6 +1,7 @@
 package com.shubh.JPATutorial.Module3.repositories;
 
 import com.shubh.JPATutorial.Module3.entities.ProductEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -99,6 +100,10 @@ public interface ProductRepository extends JpaRepository<ProductEntity,Long> {
     // we can sort using any parameters which is a more flexible approach
 
     List<ProductEntity> findBy(Sort sort);
+
+    // Pagination Query Method
+
+    List<ProductEntity> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 }
 
 
