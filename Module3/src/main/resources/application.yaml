@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: Module3
+
+  datasource:
+    # ensure that the database exists beforehand, otherwise error is thrown
+    url: jdbc:mysql://localhost:3306/test?useSSL=false # useSSL=true is used in production env's
+    username: root
+    password: passwd
+
+  jpa: # hibernate configurations
+    show-sql: true # show the query run by hibernate, useful in development phase(staging env)
+
+    properties:
+      hibernate:
+        format_sql: true # get pretty formatting for queries
+
+        # optional property: defines rules that hibernate uses to convert jpql
+        # queries to sql queries, other dialects are defined at hibernate
+        # spring boot is smart enough to auto-detect the used dialect
+        # dialect: org.hibernate.dialect.MySQLDialect
+
+    hibernate:
+      ddl-auto: create
+
+    # the below configuration allows tables to be created first before sql init scripts
+    # tells spring-boot to wait for hibernate before running initialisation queries
+    # Why? After SpringBoot 2.5, default initialisation order changed : data.sql runs before jpa is initialised.
+    # if tables are not found then application fails with table not found
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
