@@ -45,9 +45,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity,Long> {
     // case-sensitive: but mysql database collation is case-insensitive by defaukt
     List<ProductEntity> findByTitleContaining(String word);
 
-    // ignore case in title search
-    List<ProductEntity> findByTitleContainingIgnoreCase(String word);
-
     // Return single entity: This should only be used for fields with a UNIQUE constraint
     // (like @Id or @Column(unique = true)). If the query returns more than one
     // record, Spring Data JPA will throw a NonUniqueResultException.
@@ -101,9 +98,10 @@ public interface ProductRepository extends JpaRepository<ProductEntity,Long> {
 
     List<ProductEntity> findBy(Sort sort);
 
-    // Pagination Query Method
+    // ignore case in title search
+    // adding pagination
+    List<ProductEntity> findByTitleContainingIgnoreCase(String word,Pageable page);
 
-    List<ProductEntity> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 }
 
 

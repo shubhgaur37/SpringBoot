@@ -5,6 +5,9 @@ import com.shubh.JPATutorial.Module3.repositories.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -141,7 +144,14 @@ class Module3ApplicationTests {
 
 	@Test
 	void findByTitleContainingIgnoreCaseTest(){
-		List<ProductEntity> entityList = productRepository.findByTitleContainingIgnoreCase("Ocolat");
+		List<ProductEntity> entityList = productRepository.findByTitleContainingIgnoreCase("Ocolat",null);
+		System.out.println(entityList);
+	}
+
+	@Test
+	void findByTitleContainingIgnoreCasePaginationTest(){
+		Pageable pageable = PageRequest.of(0,5, Sort.by(Sort.Direction.DESC,"priceCurrent"));
+		List<ProductEntity> entityList = productRepository.findByTitleContainingIgnoreCase("maaz",pageable);
 		System.out.println(entityList);
 	}
 

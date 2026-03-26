@@ -26,7 +26,10 @@ public class ProductController {
     }
 
     @GetMapping
-    public Page<ProductEntity> getAllProducts(@RequestParam(defaultValue = "id") String sortBy, @RequestParam(defaultValue = "0") Integer pageNumber) {
+    public List<ProductEntity> getAllProducts(@RequestParam String title,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "0") Integer pageNumber
+    ) {
 //        // sort by provided parameter, maintainable approach
 //        // prevents bloated repositories
 //        // if we want to sort by a specific direction, then we can also provide
@@ -43,9 +46,11 @@ public class ProductController {
         // sorting also possible with page request
         // Pages use 0 based indexing
         Pageable pageable = PageRequest.of(pageNumber,PAGE_SIZE,Sort.by(Sort.Direction.DESC,sortBy));
-        // returns a Page<ProductEntity>
-        return productRepository.findAll(pageable);
+//        // returns a Page<ProductEntity>, return type needs to match, or else just get content
+//        // returns a list of Product Entity
+//        return productRepository.findAll(pageable).getContent();
 
+        return productRepository.findByTitleContainingIgnoreCase(title,pageable);
     }
 
 }
