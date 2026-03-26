@@ -81,14 +81,14 @@ class Module3ApplicationTests {
 	void quantityPriceFilterValueTest1(){
 		ProductEntity productEntity1 = ProductEntity.builder()
 				.sku("FIveStar_1532")
-				.title("FiveStar Crunchy Hello")
+				.title("FiveStar Crunchy 4423")
 				.priceCurrent(BigDecimal.valueOf(90))
 				.quantity(5)
 				.build();
 
 		ProductEntity productEntity2 = ProductEntity.builder()
 				.sku("new_p123")
-				.title("Maggi")
+				.title("Maggi432")
 				.priceCurrent(BigDecimal.valueOf(45))
 				.quantity(11)
 				.build();

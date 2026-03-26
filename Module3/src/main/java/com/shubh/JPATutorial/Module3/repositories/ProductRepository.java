@@ -1,6 +1,7 @@
 package com.shubh.JPATutorial.Module3.repositories;
 
 import com.shubh.JPATutorial.Module3.entities.ProductEntity;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -81,6 +82,23 @@ public interface ProductRepository extends JpaRepository<ProductEntity,Long> {
     @Query("select e from ProductEntity e where e.title = :t and e.priceCurrent = :pCurrent")
     Optional<ProductEntity> findByTitleAndPrice2(@Param("t")String title,@Param("pCurrent") BigDecimal price);
 
+    // Sorting
+
+    List<ProductEntity> findByTitleOrderByPriceCurrent(String title);
+
+    // since we are not finding on any field we have to name it findBy
+    // sorting by descending price
+    List<ProductEntity> findByOrderByPriceCurrentDesc();
+
+    // For any new query pattern which requires sorting we are currently
+    // defining a sort implementation, so if we have numerous such requirements
+    // the interface would become bloated. So instead we can use a sort parameter
+    // to optionally sort based on usecase
+
+    // It also helps reduce tight coupling with sorting parameters
+    // we can sort using any parameters which is a more flexible approach
+
+    List<ProductEntity> findBy(Sort sort);
 }
 
 

@@ -4,7 +4,7 @@ spring:
 
   datasource:
     # ensure that the database exists beforehand, otherwise error is thrown
-    url: jdbc:mysql://localhost:3306/test?useSSL=false # useSSL=true is used in production env's
+    url: jdbc:mysql://localhost:3306/test?allowPublicKeyRetrieval=true&useSSL=false # useSSL=true is used in production env's
     username: root
     password: passwd
 
