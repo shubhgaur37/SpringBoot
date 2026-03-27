@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: Module3_Projection_Hospital_Example
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hospitalDB
+    username: shubhgaur # change appropriately
+    password:
+
+  jpa:
+    defer-datasource-initialization: true # run sql scripts after hibernate initialises the schema
+    show-sql: true # show sql queries
+
+    hibernate:
+      ddl-auto: create
+
+    properties:
+      hibernate:
+        format-sql: false # pretty print sql queries
+
+#  helpful for seeding the data
+  sql:
+    init:
+      mode: always # always run sql scripts on startup
+      data-locations: classpath:startup_data.sql
