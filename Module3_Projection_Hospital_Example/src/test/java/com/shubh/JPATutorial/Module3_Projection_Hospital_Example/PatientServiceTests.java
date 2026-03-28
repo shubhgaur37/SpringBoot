@@ -4,6 +4,7 @@ import com.shubh.JPATutorial.Module3_Projection_Hospital_Example.dto.BloodGroupS
 import com.shubh.JPATutorial.Module3_Projection_Hospital_Example.dto.CPatientInfo;
 import com.shubh.JPATutorial.Module3_Projection_Hospital_Example.dto.IPatientInfo;
 import com.shubh.JPATutorial.Module3_Projection_Hospital_Example.repository.PatientRepository;
+import com.shubh.JPATutorial.Module3_Projection_Hospital_Example.service.PatientService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,9 @@ class PatientServiceTests {
 
     @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    private PatientService patientService;
 
     @Test
     void testPatientProjectionInterface(){
@@ -50,5 +54,24 @@ class PatientServiceTests {
     @Test
     void testUpdatePatientNameMultipleRecords() {
         System.out.println("Updated : " + patientRepository.updatePatientNameWithId("Shubh",List.of(1,2)) + " records");
+    }
+
+    @Test
+    void persistenceContextTestWithoutTransactional(){
+        // redundant db calls for the same record
+        patientService.testPersistenceWithoutTransactional();
+    }
+
+    @Test
+    void persistenceContextTestWithTransactional(){
+        patientService.testPersistenceWithTransactional();
+    }
+
+    @Test
+    void dirtyEntityPersistedToDBTest(){
+        patientService.dirtyEntityPersistedToDB();
+        // patient name commited to DB, verified by making selectDB call
+
+        System.out.println(patientRepository.findById(1L));
     }
 }
