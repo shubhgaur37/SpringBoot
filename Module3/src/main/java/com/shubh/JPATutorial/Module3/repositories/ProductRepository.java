@@ -42,7 +42,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity,Long> {
     List<ProductEntity> findByTitleLike(String pattern);
 
     // granular search : internally uses wildcard
-    // case-sensitive: but mysql database collation is case-insensitive by defaukt
+    // case-sensitive: but mysql database collation is case-insensitive by default
     List<ProductEntity> findByTitleContaining(String word);
 
     // Return single entity: This should only be used for fields with a UNIQUE constraint

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 // used to define properties and constraints of table
 @Table(name = "product_table",
-        uniqueConstraints = { // define unique constraints for columns in the tab;e
+        uniqueConstraints = { // define unique constraints for columns in the table
 //                @UniqueConstraint(name = "sku_unique", columnNames = {"sku"}),
                 // index is created whenever a unique_constraint is defined,ensure the column names
                 // match exactly if explicity defined in @Column annotation
