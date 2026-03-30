@@ -4,15 +4,14 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.math.BigInteger;
 import java.time.LocalDateTime;
-
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@ToString
 @Entity
 public class Appointment {
     @Id
@@ -26,23 +25,26 @@ public class Appointment {
     String reason;
 
     String status;
-//    A patient can have multiple appointments: One to Many from Patients to Appointment
-//    One Appointment can only belong to a single patient and converse is true for appointments
-//    i.e. Many appointments can belong to one patient, so we use @ManyToOne here
-//    owning-side: patient_id as the foreign key.
-//    Meaning Appointment cannot exist without the patient so Appointment becomes the owning side
-    @ManyToOne
-    // setting it to non-nullable, meaning appointment can only be created with a patient
-    // enforces using a non-null constraint that patient should exist in the db before scheduling the appointment
+
+    /**
+     * PITFALL: Missing @ToString.Exclude on LAZY associations.
+     * If this entity is DETACHED (transaction closed) and toString() is called
+     * (e.g., in a log or debugger), Hibernate will attempt to initialize the
+     * Proxy. Since the session is closed, it throws LazyInitializationException.
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     @JoinColumn(nullable = false)
     Patient patient;
 
-    // Similarly relation-mapping for doctor
-
-    @ManyToOne
-    // setting it to non-nullable, meaning appointment can only be created with a doctor
-    // enforces using a non-null constraint that doctor should exist in the db before scheduling the appointment
+    /**
+     * PITFALL: Infinite Recursion.
+     * If the Doctor entity also has a @ToString that includes a list of Appointments,
+     * calling toString() on either will trigger a circular chain of calls,
+     * resulting in a StackOverflowError.
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     @JoinColumn(nullable = false)
     Doctor doctor;
-
 }

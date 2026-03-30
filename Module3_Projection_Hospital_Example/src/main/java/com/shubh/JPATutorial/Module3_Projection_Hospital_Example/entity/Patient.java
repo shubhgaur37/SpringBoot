@@ -21,6 +21,7 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Patient {
 
@@ -28,7 +29,7 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(nullable = false,length = 50)
+    @Column(nullable = false, length = 50)
     String name;
 
     @Column(nullable = false)
@@ -57,14 +58,40 @@ public class Patient {
      * @JoinColumn details: to be applied on the owning side, table where foreign key is defined
      * - name: Specifies the physical column name in the Patient table.
      * - unique = true: Explicitly creates a UNIQUE constraint in the DB schema. Creates an index automatically for columns with unique constraint.
-     *   taken care by @OneToOne Annotation automatically but just a safeguard and best practice to also include it.
-     *   Note: While @OneToOne implies a 1:1 link, 'unique=true' ensures the DB
-     *   physically prevents multiple Patients from sharing the same Insurance record.
+     * taken care by @OneToOne Annotation automatically but just a safeguard and best practice to also include it.
+     * Note: While @OneToOne implies a 1:1 link, 'unique=true' ensures the DB
+     * physically prevents multiple Patients from sharing the same Insurance record.
+     * <p>
+     * ---------------- CASCADING ----------------
+     * <p>
+     * Cascade defines whether operations performed on Patient should be
+     * automatically propagated to the associated Insurance entity.
+     * Good practice to define cascading on the owning side of relationship.
+     * <p>
+     * Example (if cascade is added):
+     * @OneToOne(cascade = CascadeType.ALL)
+     * <p>
+     * Then:
+     * - save(patient)   → insurance is also saved automatically
+     * - delete(patient) → insurance is also deleted
+     * - merge(patient)  → insurance is also updated
+     * <p>
+     * Without cascade (current setup):
+     * - Insurance must be saved explicitly using insuranceRepository.save(...)
+     * - Otherwise, setting a new (transient) Insurance may cause an error
+     * because Hibernate cannot persist it automatically.
+     * <p>
+     * Important:
+     * - Cascade does NOT control the relationship itself.
+     * - Patient (owning side) still controls the foreign key in DB.
      */
-    @OneToOne
+//    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    // multiple cascading types can also be defined together
     @JoinColumn(name = "patient_insurance", unique = true)
     Insurance insurance;
 
-    @OneToMany(mappedBy = "patient") // inverse-side
-    Set<Appointment> appointments = new HashSet<>();
+    // Whenever a patient is deleted appointments are also deleted
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL) // inverse-side
+            Set<Appointment> appointments = new HashSet<>();
 }

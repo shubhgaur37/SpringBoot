@@ -18,6 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 @Entity
 public class Doctor {
     @Id
@@ -38,25 +39,25 @@ public class Doctor {
 
     /**
      * Relationship Concepts: Unidirectional vs Bidirectional Mapping
-     *
+     * <p>
      * 1. Unidirectional (One-Way):
-     *    - Only one entity knows about the other in Java code.
-     *    - If this Doctor class did NOT have this 'appointments' field, the
-     *      relationship would be Unidirectional from Appointment -> Doctor.
-     *    - You could call appointment.getDoctor(), but NOT doctor.getAppointments().
-     *
+     * - Only one entity knows about the other in Java code.
+     * - If this Doctor class did NOT have this 'appointments' field, the
+     * relationship would be Unidirectional from Appointment -> Doctor.
+     * - You could call appointment.getDoctor(), but NOT doctor.getAppointments().
+     * <p>
      * 2. Bidirectional (Two-Way):
-     *    - Both entities have fields referring to each other in Java code.
-     *    - By adding this 'appointments' field here and using 'mappedBy', we make
-     *      it Bidirectional.
-     *    - Now you can navigate the relationship from both sides in Java:
-     *      doctor.getAppointments() AND appointment.getDoctor().
-     *
+     * - Both entities have fields referring to each other in Java code.
+     * - By adding this 'appointments' field here and using 'mappedBy', we make
+     * it Bidirectional.
+     * - Now you can navigate the relationship from both sides in Java:
+     * doctor.getAppointments() AND appointment.getDoctor().
+     * <p>
      * 3. Behavior of mappedBy:
-     *    - Without 'mappedBy': Hibernate assumes a Unidirectional mapping and
-     *      tries to manage the link (Owning-side) by creating a Join Table.
-     *    - With 'mappedBy': Signals this is the Inverse-side. It points to the
-     *      field in the Appointment class that manages the link (Owning-side).
+     * - Without 'mappedBy': Hibernate assumes a Unidirectional mapping and
+     * tries to manage the link (Owning-side) by creating a Join Table.
+     * - With 'mappedBy': Signals this is the Inverse-side. It points to the
+     * field in the Appointment class that manages the link (Owning-side).
      */
     @OneToMany(mappedBy = "doctor")
     Set<Appointment> appointments = new HashSet<>();

@@ -3,12 +3,15 @@ package com.shubh.JPATutorial.Module3_Projection_Hospital_Example;
 import com.shubh.JPATutorial.Module3_Projection_Hospital_Example.dto.BloodGroupStats;
 import com.shubh.JPATutorial.Module3_Projection_Hospital_Example.dto.CPatientInfo;
 import com.shubh.JPATutorial.Module3_Projection_Hospital_Example.dto.IPatientInfo;
+import com.shubh.JPATutorial.Module3_Projection_Hospital_Example.entity.Patient;
+import com.shubh.JPATutorial.Module3_Projection_Hospital_Example.entity.type.BloodGroupType;
 import com.shubh.JPATutorial.Module3_Projection_Hospital_Example.repository.PatientRepository;
 import com.shubh.JPATutorial.Module3_Projection_Hospital_Example.service.PatientService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootTest()
@@ -58,20 +61,41 @@ class PatientServiceTests {
 
     @Test
     void persistenceContextTestWithoutTransactional(){
+        Patient patient = patientRepository.save(Patient.builder()
+                .name("Shubh")
+                .dob(LocalDate.of(2000,2,22))
+                .email("shubh@gaur123.com")
+                .bloodGroup(BloodGroupType.B_POSITIVE)
+                .build()
+        );
         // redundant db calls for the same record
-        patientService.testPersistenceWithoutTransactional();
+        patientService.testPersistenceWithoutTransactional(patient.getId());
     }
 
     @Test
     void persistenceContextTestWithTransactional(){
-        patientService.testPersistenceWithTransactional();
+        Patient patient = patientRepository.save(Patient.builder()
+                .name("Shubh")
+                .dob(LocalDate.of(2000,2,22))
+                .email("shubh@gaur123Transaction.com")
+                .bloodGroup(BloodGroupType.B_POSITIVE)
+                .build()
+        );
+        patientService.testPersistenceWithTransactional(patient.getId());
     }
 
     @Test
     void dirtyEntityPersistedToDBTest(){
-        patientService.dirtyEntityPersistedToDB();
+        Patient patient = patientRepository.save(Patient.builder()
+                .name("Shubh")
+                .dob(LocalDate.of(2000,2,22))
+                .email("shubh@gaur123DirtyTransaction.com")
+                .bloodGroup(BloodGroupType.B_POSITIVE)
+                .build()
+        );
+        patientService.dirtyEntityPersistedToDB(patient.getId());
         // patient name commited to DB, verified by making selectDB call
 
-        System.out.println(patientRepository.findById(1L));
+        System.out.println(patientRepository.findById(patient.getId()));
     }
 }
