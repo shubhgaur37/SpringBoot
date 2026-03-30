@@ -62,7 +62,7 @@ class PatientServiceTests {
     @Test
     void persistenceContextTestWithoutTransactional(){
         Patient patient = patientRepository.save(Patient.builder()
-                .name("Shubh")
+                .name("ShubhGAURRRRR")
                 .dob(LocalDate.of(2000,2,22))
                 .email("shubh@gaur123.com")
                 .bloodGroup(BloodGroupType.B_POSITIVE)
@@ -75,7 +75,7 @@ class PatientServiceTests {
     @Test
     void persistenceContextTestWithTransactional(){
         Patient patient = patientRepository.save(Patient.builder()
-                .name("Shubh")
+                .name("ShubhGAUR")
                 .dob(LocalDate.of(2000,2,22))
                 .email("shubh@gaur123Transaction.com")
                 .bloodGroup(BloodGroupType.B_POSITIVE)
@@ -87,7 +87,7 @@ class PatientServiceTests {
     @Test
     void dirtyEntityPersistedToDBTest(){
         Patient patient = patientRepository.save(Patient.builder()
-                .name("Shubh")
+                .name("ShubhGAURRR")
                 .dob(LocalDate.of(2000,2,22))
                 .email("shubh@gaur123DirtyTransaction.com")
                 .bloodGroup(BloodGroupType.B_POSITIVE)
@@ -125,7 +125,7 @@ class PatientServiceTests {
      *    in exactly ONE query, use a "JOIN FETCH" in your Repository JPQL.
      */
     @Test
-    void findAllPatientsWithAppointments() {
+    void findAllPatientsWithAppointmentsNPLUSONE() {
         // Step 1: Initial query to fetch all patients (The "1" in N+1)
         List<Patient> patients = patientRepository.findAll();
 
@@ -136,6 +136,16 @@ class PatientServiceTests {
             // as soon as all patients are fetched, and we try to fire db queries on a non-existent session
             System.out.println("Patient: " + patient.getName());
             System.out.println("Appointments: " + patient.getAppointments());
+        }
+    }
+
+    @Test
+    void findAllPatientsWithAppointmentsSINGLEQUERY() {
+        // fires a single query to fetch appointments for all patients. 1 DB call
+        List<Patient> patients = patientRepository.getAllPatientsWithAppointments();
+
+        for (var patient : patients){
+            System.out.println(patient);
         }
     }
 

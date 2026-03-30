@@ -43,6 +43,8 @@ public class Appointment {
      * calling toString() on either will trigger a circular chain of calls,
      * resulting in a StackOverflowError.
      */
+    // doctors are many to one, so default fetch type is eager
+    // I have set it to lazy because I don't want the doctor's information when I fetch appointments for a patient
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     @JoinColumn(nullable = false)

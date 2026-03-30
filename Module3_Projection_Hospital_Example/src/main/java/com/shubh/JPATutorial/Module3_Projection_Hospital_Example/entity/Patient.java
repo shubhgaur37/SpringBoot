@@ -102,6 +102,6 @@ public class Patient {
     // Whenever a patient is deleted appointments are also deleted
     // fetch type is set to eager to reproduce the N+1 problem
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // inverse-side
-    @ToString.Exclude
+//    @ToString.Exclude, commented to see appointments in the N+1 query optimisation
     Set<Appointment> appointments = new HashSet<>();
 }
