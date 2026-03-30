@@ -74,6 +74,20 @@ public class InsuranceService {
         return insurance;
     }
 
+    @Transactional
+    public Insurance updateInsurance(Insurance insurance, Long patientId) {
+        Patient patient = patientRepository.findById(patientId).orElseThrow();
+        patient.setInsurance(insurance);
+        return insurance;
+    }
+
+    @Transactional
+    public Patient removeInsurance(Long patientId) {
+        Patient patient = patientRepository.findById(patientId).orElseThrow();
+        patient.setInsurance(null);
+        return patient;
+    }
+
     public boolean doesInsuranceExists(Long id) {
         return insuranceRepository.existsById(id);
     }

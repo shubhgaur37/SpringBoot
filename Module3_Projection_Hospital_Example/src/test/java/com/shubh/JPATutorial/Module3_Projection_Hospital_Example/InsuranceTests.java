@@ -52,10 +52,9 @@ public class InsuranceTests {
         System.out.println(updatedInsurance);
     }
 
-
     @Test
     void testDeletePatientWithInsuranceRemovesBothCascading(){
-        patient.setEmail("new@key.com");
+        patient.setEmail("new@1234532.com");
         patient = patientService.savePatient(patient); // added to persistence context
         insurance.setPolicyNumber("HDFC_NEW_TEST");
         var updatedInsurance = insuranceService.assignInsuranceToPatient(insurance, patient.getId());
@@ -69,5 +68,39 @@ public class InsuranceTests {
          * tracked. Re-attaching requires CascadeType.MERGE to sync child updates.
          */
         System.out.println("Insurance Exists in DB: " + insuranceService.doesInsuranceExists(updatedInsurance.getId()));
+    }
+
+    @Test
+    void testUpdateInsuranceForPatientRemovesOrphanedInsurance(){
+        patient.setEmail("new@key.com");
+        patient = patientService.savePatient(patient); // added to persistence context
+        insurance.setPolicyNumber("HDFC_NEW_ORPHAN");
+
+        var oldInsurance = insuranceService.assignInsuranceToPatient(insurance, patient.getId());
+
+        // Action: Update Insurance
+        Insurance newInsurance = Insurance.builder()
+                .provider("Reliance")
+                .policyNumber("Reliance_230")
+                .validUntil(LocalDate.of(2030,1,1))
+                .build();
+
+        var updatedInsurance = insuranceService.updateInsurance(newInsurance, patient.getId());
+
+        System.out.println("Orphan Insurance Exists in DB: " + insuranceService.doesInsuranceExists(oldInsurance.getId()));
+        System.out.println("Updated Insurance exists in DB: " + insuranceService.doesInsuranceExists(updatedInsurance.getId()));
+    }
+
+    @Test
+    void testRemoveInsuranceForPatientRemovesOrphanedInsurance(){
+        patient.setEmail("fdsgds@key.com");
+        patient = patientService.savePatient(patient); // added to persistence context
+        insurance.setPolicyNumber("HDFC_NEW_ORPHAN2");
+
+        var oldInsurance = insuranceService.assignInsuranceToPatient(insurance, patient.getId());
+        var patientWithoutInsurance = insuranceService.removeInsurance(patient.getId());
+
+        System.out.println("Orphan Insurance Exists in DB: " + insuranceService.doesInsuranceExists(oldInsurance.getId()));
+        System.out.println(patient);
     }
 }

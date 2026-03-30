@@ -86,12 +86,17 @@ public class Patient {
      * - Patient (owning side) still controls the foreign key in DB.
      */
 //    @OneToOne(cascade = CascadeType.PERSIST)
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+//    Orphan removal ensures that whenever the insurance for a patient is updated, the older insurance mapping
+//    is removed from the DB, as it no longer has a mapping. It can be done by setting orphanRemoval parameter
+//    to true in the oneToOne annotation. can be done on parent as well as children side depending on the usecase
+//    here it is being done for the parent side
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     // multiple cascading types can also be defined together
     @JoinColumn(name = "patient_insurance", unique = true)
     Insurance insurance;
 
     // Whenever a patient is deleted appointments are also deleted
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL) // inverse-side
-            Set<Appointment> appointments = new HashSet<>();
+    @Builder.Default
+    Set<Appointment> appointments = new HashSet<>();
 }

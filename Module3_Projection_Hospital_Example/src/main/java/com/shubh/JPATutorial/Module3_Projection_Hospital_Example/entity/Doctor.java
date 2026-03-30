@@ -60,5 +60,6 @@ public class Doctor {
      * field in the Appointment class that manages the link (Owning-side).
      */
     @OneToMany(mappedBy = "doctor")
+    @Builder.Default
     Set<Appointment> appointments = new HashSet<>();
 }
