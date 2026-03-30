@@ -100,7 +100,8 @@ public class Patient {
     Insurance insurance;
 
     // Whenever a patient is deleted appointments are also deleted
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL) // inverse-side
-    @Builder.Default
+    // fetch type is set to eager to reproduce the N+1 problem
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // inverse-side
+    @ToString.Exclude
     Set<Appointment> appointments = new HashSet<>();
 }
