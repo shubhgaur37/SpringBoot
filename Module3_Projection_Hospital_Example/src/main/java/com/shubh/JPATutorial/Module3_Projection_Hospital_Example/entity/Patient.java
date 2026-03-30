@@ -90,7 +90,11 @@ public class Patient {
 //    is removed from the DB, as it no longer has a mapping. It can be done by setting orphanRemoval parameter
 //    to true in the oneToOne annotation. can be done on parent as well as children side depending on the usecase
 //    here it is being done for the parent side
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+//    Also, currently whenever we fetch a patient from the db we do a join call to fetch the corresponding insurance
+//    this is because we have fetch type set to eager by default in one to one mapping, if we only want to fetch insurance
+//    when we want to see the insurance then we can set the fetch type to lazy. This will also improve the query performance for
+//    fetching patients
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
     // multiple cascading types can also be defined together
     @JoinColumn(name = "patient_insurance", unique = true)
     Insurance insurance;
