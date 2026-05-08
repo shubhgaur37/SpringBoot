@@ -97,7 +97,60 @@ Meaning:
 - AdmissionRecord stores student financial onboarding data.
 - Persistence is driven from the student side.
 
-## 5. Relationship rules implemented in the project
+## 5. UML relationship diagram
+
+The following ER-style UML diagram uses crow's foot notation to show the cardinality and mandatory/optional constraints in the current design.
+
+```mermaid
+erDiagram
+    PROFESSOR ||--|{ SUBJECT : teaches
+    SUBJECT }o--o{ STUDENT : enrolls
+    STUDENT ||--|| ADMISSION_RECORD : owns
+
+    PROFESSOR {
+        long id PK
+        string name
+    }
+
+    SUBJECT {
+        long id PK
+        string title UK
+        long professor_id FK
+    }
+
+    STUDENT {
+        long id PK
+        string name
+        long admission_record_id FK
+    }
+
+    ADMISSION_RECORD {
+        long id PK
+        int fees
+    }
+```
+
+How to read it:
+
+- `PROFESSOR ||--|{ SUBJECT`
+  - One professor is linked to one or more subjects.
+  - One subject must belong to exactly one professor.
+- `SUBJECT }o--o{ STUDENT`
+  - A subject can have zero or many students.
+  - A student can have zero or many subjects.
+- `STUDENT ||--|| ADMISSION_RECORD`
+  - A student has exactly one admission record.
+  - An admission record belongs to exactly one student in the domain model.
+
+Constraint notes from the implementation:
+
+- `SUBJECT.title` is unique.
+- `SUBJECT.professor_id` is mandatory.
+- Student creation automatically creates and links an admission record.
+- Deleting a professor deletes owned subjects because of cascade plus orphan removal.
+- Deleting a student deletes the linked admission record.
+
+## 6. Relationship rules implemented in the project
 
 ### Mandatory link: Professor -> Subject
 
@@ -116,7 +169,7 @@ Meaning:
 - Subjects may exist with zero students.
 - Students can later be enrolled into subjects through a patch endpoint.
 
-## 6. What the API currently supports
+## 7. What the API currently supports
 
 ### Professor operations
 
@@ -165,7 +218,7 @@ Defined in [SubjectController.java](/Users/shubhgaur/Documents/SpringBOOT/Colleg
 - `PATCH /subjects/{subjectId}/students/{studentId}`
   - Enroll a student into a subject
 
-## 7. What is possible in business terms
+## 8. What is possible in business terms
 
 Using the current codebase, the project can:
 
@@ -181,7 +234,7 @@ Using the current codebase, the project can:
 - Keep student-subject enrollment data in a join table
 - Filter out already-existing subject titles when adding new subjects to a professor
 
-## 8. DTO design and API shape
+## 9. DTO design and API shape
 
 DTOs are in `src/main/java/.../dto`.
 
@@ -203,7 +256,7 @@ Examples:
 
 This is the main recursion-avoidance strategy in the project.
 
-## 9. Key architectural decisions learned from code comments
+## 10. Key architectural decisions learned from code comments
 
 This section consolidates the design notes written in code comments and tests.
 
@@ -333,7 +386,7 @@ Takeaway:
 - Existing subject detection fetches only subject titles instead of full entities.
 - This keeps the duplicate-check path lighter.
 
-## 10. What the tests show the project is intended to guarantee
+## 11. What the tests show the project is intended to guarantee
 
 From the test suite, the intended guarantees are:
 
@@ -348,7 +401,7 @@ From the test suite, the intended guarantees are:
 - Deleting a professor should remove linked subjects and clean student relationships
 - Deleting a subject should leave student subject sets clean after refresh
 
-## 11. Known limitations and gaps
+## 12. Known limitations and gaps
 
 ### Implemented but not exposed
 
@@ -368,7 +421,7 @@ From the test suite, the intended guarantees are:
 - There is no explicit exception handling layer for validation or database integrity errors.
 - `assignNewSubjectsOnly` silently ignores existing titles instead of returning a conflict report.
 
-## 12. Suggested future improvements
+## 13. Suggested future improvements
 
 - Add a `README` or API guide with sample request/response payloads.
 - Add an `AdmissionController` for fee management and admission-specific workflows.
@@ -381,7 +434,7 @@ From the test suite, the intended guarantees are:
   - searching/filtering resources
 - Add explicit transaction and fetch-strategy review to reduce possible N+1 issues in larger datasets.
 
-## 13. Summary
+## 14. Summary
 
 This project already supports a meaningful college management workflow centered on:
 
