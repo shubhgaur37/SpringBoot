@@ -64,6 +64,13 @@
 			<artifactId>modelmapper</artifactId>
 			<version>3.2.4</version>
 		</dependency>
+		<!--	Spring Boot Devtools dependency to trigger server auto-restart on detecting
+		code changes in compiled classes[not in source-code]	-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
