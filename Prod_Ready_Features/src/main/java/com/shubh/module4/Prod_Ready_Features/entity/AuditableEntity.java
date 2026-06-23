@@ -34,6 +34,7 @@ public class AuditableEntity {
     LocalDateTime updatedDate;
 
     @CreatedBy
+    @Column(nullable = false, updatable = false)
     String createdBy;
 
     @LastModifiedBy
