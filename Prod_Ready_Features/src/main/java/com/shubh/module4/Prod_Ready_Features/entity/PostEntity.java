@@ -12,14 +12,15 @@ import org.hibernate.envers.Audited;
 @NoArgsConstructor
 @Entity
 @Table(name = "posts")
-@Audited // all fields present in the audit table of this entity[created after adding @Audited to any field in the entity]
+@Audited
+// all fields present in the audit table of this entity[created after adding @Audited to any field in the entity]
 public class PostEntity extends AuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     String title;
-//    @NotAudited // can be used to exclude the field from the entity audit table
+    //    @NotAudited // can be used to exclude the field from the entity audit table
     String description;
 
     /*
