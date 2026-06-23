@@ -26,20 +26,20 @@ public class PostServiceImpl implements PostService {
         return postRepository
                 .findAll()
                 .stream()
-                .map(post -> modelMapper.map(post,PostDTO.class))
+                .map(post -> modelMapper.map(post, PostDTO.class))
                 .toList();
     }
 
     @Override
     public PostDTO createNewPost(PostDTO inputPost) {
-        PostEntity postEntity = modelMapper.map(inputPost,PostEntity.class);
-        return modelMapper.map(postRepository.save(postEntity),PostDTO.class);
+        PostEntity postEntity = modelMapper.map(inputPost, PostEntity.class);
+        return modelMapper.map(postRepository.save(postEntity), PostDTO.class);
     }
 
     @Override
     public PostDTO getPostById(Long id) {
-        PostEntity post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post not found with id: "+ id));
-        return modelMapper.map(post,PostDTO.class);
+        PostEntity post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + id));
+        return modelMapper.map(post, PostDTO.class);
     }
 
 }

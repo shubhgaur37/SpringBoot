@@ -14,10 +14,11 @@ public class ApiError {
     String error;
     HttpStatus statusCode;
 
-    public ApiError(){
+    public ApiError() {
         timestamp = LocalDateTime.now();
     }
-    public ApiError(String error, HttpStatus statusCode){
+
+    public ApiError(String error, HttpStatus statusCode) {
         this();
         this.error = error;
         this.statusCode = statusCode;
