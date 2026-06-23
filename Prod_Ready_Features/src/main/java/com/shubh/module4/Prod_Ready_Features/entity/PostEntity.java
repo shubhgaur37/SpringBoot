@@ -30,6 +30,7 @@ public class PostEntity {
 
     // Entity Listener Annotations
     @CreatedDate
+    @Column(nullable = false, updatable = false) // enforce that this column can only be changed once during creation
     LocalDateTime createdDate;
 
     @LastModifiedDate
