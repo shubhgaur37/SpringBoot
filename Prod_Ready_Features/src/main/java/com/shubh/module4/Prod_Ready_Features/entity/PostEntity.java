@@ -3,6 +3,7 @@ package com.shubh.module4.Prod_Ready_Features.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.envers.Audited;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
@@ -11,13 +12,14 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Entity
 @Table(name = "posts")
+@Audited // all fields present in the audit table of this entity[created after adding @Audited to any field in the entity]
 public class PostEntity extends AuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     String title;
-
+//    @NotAudited // can be used to exclude the field from the entity audit table
     String description;
 
     /*

@@ -9,7 +9,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create # flag changed to update to see updated by behavior by changing auditor aware modifier value
+      ddl-auto: create # flag changed to update to see updated by / enver auditing behavior by changing auditor aware modifier value
 
     show-sql: true
 
