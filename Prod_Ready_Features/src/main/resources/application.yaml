@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: Prod_Ready_Features
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/Prod_Ready_Features
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+    show-sql: true
+
+    properties:
+      hibernate:
+        format_sql: true
