@@ -38,7 +38,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDTO getPostById(Long id) {
-        PostEntity post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post not found with id:"+ id));
+        PostEntity post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post not found with id: "+ id));
         return modelMapper.map(post,PostDTO.class);
     }
 
