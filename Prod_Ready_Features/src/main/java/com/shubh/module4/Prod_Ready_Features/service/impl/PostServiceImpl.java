@@ -51,7 +51,7 @@ public class PostServiceImpl implements PostService {
         // update older post entity with new changes
         modelMapper.map(inputPost, olderPost);
         PostEntity savedPostUpdated = postRepository.save(olderPost);
-        return modelMapper.map(savedPostUpdated,PostDTO.class);
+        return modelMapper.map(savedPostUpdated, PostDTO.class);
     }
 
 }

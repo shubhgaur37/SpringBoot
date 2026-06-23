@@ -19,7 +19,7 @@ public class AppConfig {
     }
 
     @Bean
-    AuditorAware<String> getAuditorAwareImplementation(){
+    AuditorAware<String> getAuditorAwareImplementation() {
         return new AuditorAwareImpl();
     }
 }
