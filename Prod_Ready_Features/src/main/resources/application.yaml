@@ -16,3 +16,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+    devtools:
+      restart:
+        enabled: true
+        exclude: com/shubh/module4/Prod_Ready_Features/dto
