@@ -27,8 +27,10 @@ import java.time.LocalDateTime;
 public class AuditableEntity {
     // Entity Listener Annotations
     @CreatedDate
-    @Column(nullable = false, updatable = false) // enforce that this column can only be changed once during creation
-            LocalDateTime createdDate;
+    // enforce that this column only gets the value set once, if updatable is not set to false, then service layer
+    // can manually set this field using setters. but with updatable false the query would fail
+    @Column(nullable = false, updatable = false)
+    LocalDateTime createdDate;
 
     @LastModifiedDate
     LocalDateTime updatedDate;

@@ -23,12 +23,17 @@ public class PostController {
     }
 
     @GetMapping(path = "/{id}")
-    public PostDTO getPostById(@PathVariable(name = "id") Long id) {
-        return postService.getPostById(id);
+    public PostDTO getPostById(@PathVariable(name = "id") Long postId) {
+        return postService.getPostById(postId);
     }
 
     @PostMapping
     public PostDTO createPost(@RequestBody PostDTO inputPost) {
         return postService.createNewPost(inputPost);
+    }
+
+    @PutMapping(path = "{id}")
+    public PostDTO createPost(@RequestBody PostDTO inputPost, @PathVariable(name = "id") Long postId) {
+        return postService.updatePost(inputPost, postId);
     }
 }
