@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDTO {
+    Long id;
 
     String title;
 

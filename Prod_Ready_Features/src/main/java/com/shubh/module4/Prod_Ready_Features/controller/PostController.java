@@ -21,7 +21,10 @@ public class PostController {
     public List<PostDTO> getAllPosts(){
         return postService.getAllPosts();
     }
-
+    @GetMapping(path = "/{id}")
+    public PostDTO getPostById(@PathVariable(name = "id") Long id){
+        return postService.getPostById(id);
+    }
     @PostMapping
     public PostDTO createPost(@RequestBody PostDTO inputPost){
         return postService.createNewPost(inputPost);

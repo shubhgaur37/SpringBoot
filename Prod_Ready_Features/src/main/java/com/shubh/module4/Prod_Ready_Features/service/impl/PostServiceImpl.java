@@ -2,6 +2,7 @@ package com.shubh.module4.Prod_Ready_Features.service.impl;
 
 import com.shubh.module4.Prod_Ready_Features.dto.PostDTO;
 import com.shubh.module4.Prod_Ready_Features.entity.PostEntity;
+import com.shubh.module4.Prod_Ready_Features.exception.ResourceNotFoundException;
 import com.shubh.module4.Prod_Ready_Features.repository.PostRepository;
 import com.shubh.module4.Prod_Ready_Features.service.PostService;
 import lombok.AccessLevel;
@@ -33,6 +34,12 @@ public class PostServiceImpl implements PostService {
     public PostDTO createNewPost(PostDTO inputPost) {
         PostEntity postEntity = modelMapper.map(inputPost,PostEntity.class);
         return modelMapper.map(postRepository.save(postEntity),PostDTO.class);
+    }
+
+    @Override
+    public PostDTO getPostById(Long id) {
+        PostEntity post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post not found with id:"+ id));
+        return modelMapper.map(post,PostDTO.class);
     }
 
 }
