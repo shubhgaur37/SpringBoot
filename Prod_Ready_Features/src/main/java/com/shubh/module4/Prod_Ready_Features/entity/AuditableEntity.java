@@ -16,8 +16,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-// Better to have a common entity base class for editing to avoid adding entity listener in all entities
+// Better to have a common entity base class for audit fields to avoid adding entity listener in all entities
 // then extending all entities from this class
+//base class that shares its mapping information (fields, properties, and annotations) with its inheriting entity subclasses
 @MappedSuperclass
 @Getter
 @Setter
