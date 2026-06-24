@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.toList());
 
         ApiError apiError = ApiError.builder()
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.BAD_REQUEST)
                 // generic error message
                 .message("VALIDATION ERROR")
                 // to return list of suberrors in response
