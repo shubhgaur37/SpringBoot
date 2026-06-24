@@ -30,3 +30,11 @@ spring:
       restart:
         enabled: true
         exclude: com/shubh/module4/Prod_Ready_Features/dto
+
+logging:
+  level:
+#    root: debug
+    # set log level for a package, should correspond to compiled class file path[PATH FROM SOURCE_ROOT]
+    # Specific package path overrides root baseline to capture absolute maximum TRACE details.
+    com.shubh.module4.Prod_Ready_Features.clients: TRACE
+    com.shubh.module4.Prod_Ready_Features.config: INFO

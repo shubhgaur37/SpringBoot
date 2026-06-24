@@ -6,6 +6,8 @@ import com.shubh.module4.Prod_Ready_Features.dto.EmployeeDTO;
 import com.shubh.module4.Prod_Ready_Features.exception.ResourceNotFoundException;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
@@ -21,6 +23,8 @@ public class EmployeeClientImpl implements EmployeeClient {
 
     RestClient restClient;
 
+    Logger log = LoggerFactory.getLogger(EmployeeClientImpl.class);
+
     // To resolve ambiguity when multiple rest clients are available in the context
     public EmployeeClientImpl(@Qualifier("employeeRestClient") RestClient restClient) {
         this.restClient = restClient;
@@ -28,6 +32,12 @@ public class EmployeeClientImpl implements EmployeeClient {
 
     @Override
     public List<EmployeeDTO> getAllEmployees() {
+        log.error("error log");
+        log.warn("warn log");
+        log.info("info log");
+        // these logs are not enabled by default, can be overridden in application.yaml/properties
+        log.debug("debug log");
+        log.trace("trace log");
         try {
             ApiResponse<List<EmployeeDTO>> employeeDTOList = restClient.get()
                     /* * URL CONCATENATION GOTCHA:
