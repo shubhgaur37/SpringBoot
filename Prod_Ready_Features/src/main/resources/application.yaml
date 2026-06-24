@@ -1,3 +1,12 @@
+server:
+  # change the port of the server to see rest client behavior, we need the other service running which also takes port 8080
+  # two applications running on same port are not allowed
+  port: 9000
+
+  # custom property defined using @Value annotation, injected using application.yaml
+employeeService:
+  base:
+    url: http://localhost:8080/
 spring:
   application:
     name: Prod_Ready_Features
@@ -21,13 +30,3 @@ spring:
       restart:
         enabled: true
         exclude: com/shubh/module4/Prod_Ready_Features/dto
-
-    server:
-      # change the port of the server to see rest client behavior, we need the other service running which also takes port 8080
-      # two applications running on same port are not allowed
-      port: 9000
-
-    # custom property defined using @Value annotation, injected using application.yaml
-    employeeService:
-      base:
-        url: http://localhost:8080/
