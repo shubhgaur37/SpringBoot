@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 @Getter
 public class ApiResponse<T> {
     //    specifying custom format for datetime in responses
-    @JsonFormat(pattern = "hh-mm-ss dd-MM-yyyy")
+    //    using military time convention
+    @JsonFormat(pattern = "HH-mm-ss dd-MM-yyyy")
     private LocalDateTime timestamp;
     private T data;
     private ApiError error;
