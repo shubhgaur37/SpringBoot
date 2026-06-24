@@ -3,13 +3,16 @@ package com.shubh.module4.Prod_Ready_Features.clients.impl;
 import com.shubh.module4.Prod_Ready_Features.advice.ApiResponse;
 import com.shubh.module4.Prod_Ready_Features.clients.EmployeeClient;
 import com.shubh.module4.Prod_Ready_Features.dto.EmployeeDTO;
+import com.shubh.module4.Prod_Ready_Features.exception.ResourceNotFoundException;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.util.Arrays;
 import java.util.List;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -63,7 +66,7 @@ public class EmployeeClientImpl implements EmployeeClient {
              * does not need to know the exact internal reasons behind a remote failure.
              * This insulates our system from breaking if the external service changes its error contracts.
              */
-            throw new RuntimeException("Failed to fetch employees from client", e);
+            throw new RuntimeException("Failed to fetch employee from server[rest-client]", e);
         }
     }
 
@@ -78,7 +81,7 @@ public class EmployeeClientImpl implements EmployeeClient {
             return employeeResponse.getData();
         }
         catch (Exception e){
-            throw new RuntimeException("Failed to fetch employees from client", e);
+            throw new RuntimeException("Failed to fetch employee from server[rest-client]", e);
         }
     }
 
@@ -89,12 +92,30 @@ public class EmployeeClientImpl implements EmployeeClient {
                     .uri("employees")
                     .body(inputDTO) // request body
                     .retrieve()
+                    .onStatus(HttpStatusCode::is4xxClientError,
+                            (req,res) -> {
+                            /* 💡 THE STREAM RULE: The body is a transient network stream, not an in-memory container.
+                               Calling readAllBytes() decodes, drains, and permanently closes this connection stream.
+
+                               🟢 WHY IT WORKS PERFECTLY HERE:
+                               We throw 'ResourceNotFoundException' on the very next line. This completely breaks out of
+                               the execution chain, meaning Spring never attempts to read from this closed stream again.
+
+                               🔴 WHEN THIS WILL FAIL:
+                               If you remove the 'throw' line (e.g., trying to log the error and let the execution continue),
+                               the code will crash down at the .body(...) mapper. Spring will try to read the response to
+                               parse it into your DTO, find the stream empty and closed, and throw a "Stream Closed" IOException. */
+                                System.out.println(new String(res.getBody().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8));
+                                throw new ResourceNotFoundException("could not create employee due to client error");
+                            })
                     .body(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
                     }); // response body
             return employeeResponse.getData();
         }
         catch (Exception e){
-            throw new RuntimeException("Failed to fetch employees from client", e);
+        /* ⚠️ Because ResourceNotFoundException isn't caught explicitly above,
+           this generic block will intercept it and wrap it here. */
+            throw new RuntimeException("Failed to fetch employee from server[rest-client]:" + e.getMessage());
         }
     }
 }

@@ -42,6 +42,7 @@ class ProdReadyFeaturesApplicationTests {
 		EmployeeDTO inputEmployee = new EmployeeDTO();
 		inputEmployee.setName("Krishna");
 		inputEmployee.setEmail("kg@gmail.com");
+		// inputEmployee.setAge(2); // throws 4XX Bad Request, to test error handling
 		inputEmployee.setAge(29);
 		inputEmployee.setRole("ADMIN");
 		inputEmployee.setSalary(10000D);
