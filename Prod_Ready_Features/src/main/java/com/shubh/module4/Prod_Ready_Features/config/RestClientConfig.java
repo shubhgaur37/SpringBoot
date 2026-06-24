@@ -16,8 +16,25 @@ public class RestClientConfig {
     private String BASE_URL;
 
     @Bean
-    @Qualifier("employeeRestClient") // unique identifier for bean to help distinguish between multiple Rest Client beans
+    /* * 💡 BEAN QUALIFICATION:
+     * Assigns a unique identifier to this specific RestClient bean instance.
+     * This eliminates ambiguity and prevents injection conflicts when multiple distinct
+     * RestClient beans are registered within the Spring Application Context.
+     */
+    @Qualifier("employeeRestClient")
     RestClient getEmployeeServiceRestClient() {
+        /* * 💡 SYNCHRONOUS / BLOCKING NATURE:
+         * By default, RestClient executes network requests synchronously using a blocking I/O model.
+         * When an outbound call is dispatched, the executing thread drops into a paused (blocked) state,
+         * sitting entirely idle while waiting for the remote server to process the request and return
+         * the HTTP response.
+         *
+         * 🚀 SCALABILITY NOTE:
+         * While blocking calls can bottleneck traditional platform thread pools (like standard Tomcat pools),
+         * this model becomes exceptionally scalable when paired with Java 21+ Virtual Threads (Project Loom).
+         * Virtual threads allow the underlying physical carrier thread to be mounted out to do other work
+         * while this RestClient waits on network I/O.
+         */
         return RestClient.builder()
                 .baseUrl(BASE_URL)
                 .defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
