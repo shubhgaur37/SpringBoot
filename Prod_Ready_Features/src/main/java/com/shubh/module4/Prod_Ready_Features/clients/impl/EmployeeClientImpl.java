@@ -51,9 +51,10 @@ public class EmployeeClientImpl implements EmployeeClient {
                      * the diamond operator (<>) fails to infer type arguments properly. Explicitly specifying the full type
                      * guarantees that Jackson accurately navigates and unwraps every nested generic layer.
                      */
-                    .body(new ParameterizedTypeReference<ApiResponse<List<EmployeeDTO>>>() {});
+                    .body(new ParameterizedTypeReference<ApiResponse<List<EmployeeDTO>>>() {
+                    });
 
-                    return employeeDTOList.getData();
+            return employeeDTOList.getData();
 
         } catch (Exception e) {
             /* * 💡 DECOUPLED & ENCAPSULATED ERROR HANDLING:

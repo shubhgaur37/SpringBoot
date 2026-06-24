@@ -17,10 +17,10 @@ public class RestClientConfig {
 
     @Bean
     @Qualifier("employeeRestClient") // unique identifier for bean to help distinguish between multiple Rest Client beans
-    RestClient getEmployeeServiceRestClient(){
+    RestClient getEmployeeServiceRestClient() {
         return RestClient.builder()
                 .baseUrl(BASE_URL)
-                .defaultHeader(CONTENT_TYPE,APPLICATION_JSON_VALUE)
+                .defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .build();
     }
 }
