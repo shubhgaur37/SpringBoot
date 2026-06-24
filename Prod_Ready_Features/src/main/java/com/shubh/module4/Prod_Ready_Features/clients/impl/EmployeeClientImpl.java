@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -86,7 +87,7 @@ public class EmployeeClientImpl implements EmployeeClient {
     @Override
     public EmployeeDTO createNewEmployee(EmployeeDTO inputDTO) {
         try {
-            ApiResponse<EmployeeDTO> employeeResponse = restClient.post()
+            ResponseEntity<ApiResponse<EmployeeDTO>> employeeResponseEntity = restClient.post()
                     .uri("employees")
                     .body(inputDTO) // request body
                     .retrieve()
@@ -106,9 +107,9 @@ public class EmployeeClientImpl implements EmployeeClient {
                                 System.out.println(new String(res.getBody().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8));
                                 throw new ResourceNotFoundException("could not create employee due to client error");
                             })
-                    .body(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
-                    }); // response body
-            return employeeResponse.getData();
+                    .toEntity(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
+                    }); // response entity, gives full access to status codes and headers if required
+            return employeeResponseEntity.getBody().getData();
         } catch (Exception e) {
         /* ⚠️ Because ResourceNotFoundException isn't caught explicitly above,
            this generic block will intercept it and wrap it here. */
