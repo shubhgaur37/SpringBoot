@@ -66,4 +66,35 @@ public class EmployeeClientImpl implements EmployeeClient {
             throw new RuntimeException("Failed to fetch employees from client", e);
         }
     }
+
+    @Override
+    public EmployeeDTO getEmployeeById(Long id) {
+        try{
+            ApiResponse<EmployeeDTO> employeeResponse = restClient.get()
+                    .uri("employees/{employeeId}",id)
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
+                    });
+            return employeeResponse.getData();
+        }
+        catch (Exception e){
+            throw new RuntimeException("Failed to fetch employees from client", e);
+        }
+    }
+
+    @Override
+    public EmployeeDTO createNewEmployee(EmployeeDTO inputDTO) {
+        try{
+            ApiResponse<EmployeeDTO> employeeResponse = restClient.post()
+                    .uri("employees")
+                    .body(inputDTO) // request body
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
+                    }); // response body
+            return employeeResponse.getData();
+        }
+        catch (Exception e){
+            throw new RuntimeException("Failed to fetch employees from client", e);
+        }
+    }
 }
