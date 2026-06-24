@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class ApiResponse<T> {
     //    specifying custom format for datetime in responses
     //    using military time convention
-    @JsonFormat(pattern = "HH-mm-ss dd-MM-yyyy")
+    @JsonFormat(pattern = "HH:mm:ss dd-MM-yyyy")
     private LocalDateTime timestamp;
     private T data;
     private ApiError error;
