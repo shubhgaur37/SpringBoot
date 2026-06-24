@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.util.Arrays;
 import java.util.List;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -72,28 +71,27 @@ public class EmployeeClientImpl implements EmployeeClient {
 
     @Override
     public EmployeeDTO getEmployeeById(Long id) {
-        try{
+        try {
             ApiResponse<EmployeeDTO> employeeResponse = restClient.get()
-                    .uri("employees/{employeeId}",id)
+                    .uri("employees/{employeeId}", id)
                     .retrieve()
                     .body(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
                     });
             return employeeResponse.getData();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Failed to fetch employee from server[rest-client]", e);
         }
     }
 
     @Override
     public EmployeeDTO createNewEmployee(EmployeeDTO inputDTO) {
-        try{
+        try {
             ApiResponse<EmployeeDTO> employeeResponse = restClient.post()
                     .uri("employees")
                     .body(inputDTO) // request body
                     .retrieve()
                     .onStatus(HttpStatusCode::is4xxClientError,
-                            (req,res) -> {
+                            (req, res) -> {
                             /* 💡 THE STREAM RULE: The body is a transient network stream, not an in-memory container.
                                Calling readAllBytes() decodes, drains, and permanently closes this connection stream.
 
@@ -111,8 +109,7 @@ public class EmployeeClientImpl implements EmployeeClient {
                     .body(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
                     }); // response body
             return employeeResponse.getData();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
         /* ⚠️ Because ResourceNotFoundException isn't caught explicitly above,
            this generic block will intercept it and wrap it here. */
             throw new RuntimeException("Failed to fetch employee from server[rest-client]:" + e.getMessage());
