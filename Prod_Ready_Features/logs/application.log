@@ -1,0 +1,1199 @@
+2026-06-25 19:29:58.970 [INFO] c.s.m.P.ProdReadyFeaturesApplicationTests [main] Starting ProdReadyFeaturesApplicationTests using Java 25.0.2 with PID 25453 (started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features)
+2026-06-25 19:29:58.971 [INFO] c.s.m.P.ProdReadyFeaturesApplicationTests [main] No active profile set, falling back to 1 default profile: "default"
+2026-06-25 19:29:59.289 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-25 19:29:59.317 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 23 ms. Found 1 JPA repository interface.
+2026-06-25 19:29:59.566 [INFO] o.h.o.jpa [main] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-25 19:29:59.596 [INFO] o.h.o.core [main] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-25 19:29:59.716 [INFO] o.h.e.b.i.EnversServiceImpl [main] Envers integration enabled? : true
+2026-06-25 19:29:59.814 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-25 19:29:59.830 [INFO] c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-06-25 19:30:00.026 [INFO] c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@848d9bc
+2026-06-25 19:30:00.028 [INFO] c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-06-25 19:30:00.073 [INFO] o.h.o.c.pooling [main] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/Prod_Ready_Features]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: Prod_Ready_Features/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-25 19:30:00.181 [INFO] o.h.e.c.i.m.AuditMetadataGenerator [main] Adding properties for entity: com.shubh.module4.Prod_Ready_Features.entity.PostEntity
+2026-06-25 19:30:00.592 [INFO] o.h.o.core [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-25 19:30:00.663 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 19:30:00.768 [INFO] o.s.d.j.r.q.QueryEnhancerFactories [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-25 19:30:00.870 [WARN] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-25 19:30:01.076 [INFO] c.s.m.P.ProdReadyFeaturesApplicationTests [main] Started ProdReadyFeaturesApplicationTests in 2.366 seconds (process running for 2.977)
+2026-06-25 19:30:01.338 [TRACE] c.s.m.P.c.i.EmployeeClientImpl [main] Trying to create employee with information: EmployeeDTO(id=null, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true)
+2026-06-25 19:30:01.426 [TRACE] c.s.m.P.c.i.EmployeeClientImpl [main] Sucessfully Created a new employee : EmployeeDTO(id=1012, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true)
+2026-06-25 19:30:01.434 [TRACE] c.s.m.P.c.i.EmployeeClientImpl [main] Trying to get employee by id in getEmployeeById with id : 1
+2026-06-25 19:30:01.438 [TRACE] c.s.m.P.c.i.EmployeeClientImpl [main] Retrieved Employees : EmployeeDTO(id=1, name=Cuty, email=shikshagaur1234@gmail.com, age=22, role=null, salary=null, dateOfJoining=2010-01-01, isActive=true)
+2026-06-25 19:30:01.442 [TRACE] c.s.m.P.c.i.EmployeeClientImpl [main] Trying to retrieve all employees in getAllEmployees
+2026-06-25 19:30:01.452 [DEBUG] c.s.m.P.c.i.EmployeeClientImpl [main] Successfully retrieved the employees in getAllEmployees
+2026-06-25 19:30:01.452 [TRACE] c.s.m.P.c.i.EmployeeClientImpl [main] Retrieved Employees list from getAllEmployees : [EmployeeDTO(id=1, name=Cuty, email=shikshagaur1234@gmail.com, age=22, role=null, salary=null, dateOfJoining=2010-01-01, isActive=true), EmployeeDTO(id=102, name=Shubh Gaur[Updated], email=null, age=30, role=null, salary=null, dateOfJoining=2000-01-01, isActive=true), EmployeeDTO(id=202, name=Shubh Jackson, email=null, age=25, role=null, salary=null, dateOfJoining=2005-01-01, isActive=true), EmployeeDTO(id=203, name=Shubh Jackson false, email=null, age=25, role=null, salary=null, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=252, name=Shubh fsa fsdfs, email=null, age=25, role=null, salary=null, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=302, name=Shubh fsa fsdfs, email=null, age=25, role=null, salary=null, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=303, name=Shubh fsa fsdfs, email=dgsfssdfds, age=25, role=null, salary=null, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=304, name=Shubh fsa fsdfs, email=, age=25, role=null, salary=null, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=305, name=Shubh fsa fsdfs, email=null, age=25, role=null, salary=null, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=352, name=Ssdfg, email=null, age=25, role=null, salary=null, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=402, name=    fsdfds       , email=null, age=25, role=null, salary=null, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=403, name=    fsdfds       fsafsaasfsa , email=null, age=25, role=null, salary=null, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=452, name=hey, email=null, age=25, role=null, salary=null, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=502, name=hey, email=null, age=25, role=USER, salary=null, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=552, name=hdfsey, email=fdshbjfsd@jdsnfj.com, age=25, role=USER, salary=null, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=602, name=hdfsey, email=fdshbjfsd@jdsnfj.com, age=25, role=USER, salary=null, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=652, name=hdfsey, email=fdshbjfsd@jdsnfj.com, age=25, role=USER, salary=1.0E7, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=702, name=hdfsey, email=fdshbjfsd@jdsnfj.com, age=25, role=USER, salary=1000.0, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=703, name=hdfsey, email=fdshbjfsd@jdsnfj.com, age=25, role=USER, salary=1000.0, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=704, name=hdfsey, email=fdshbjfsd@jdsnfj.com, age=25, role=USER, salary=1000.0, dateOfJoining=2005-01-01, isActive=false), EmployeeDTO(id=752, name=fdsfs, email=fdshbjfsd@jdsnfj.com, age=25, role=USER, salary=10012.0, dateOfJoining=2005-01-01, isActive=true), EmployeeDTO(id=802, name=fdsfs, email=fdshbjfsd@jdsnfj.com, age=25, role=USER, salary=10012.0, dateOfJoining=2005-01-01, isActive=true), EmployeeDTO(id=803, name=fdsfs, email=fdshbjfsd@jdsnfj.com, age=25, role=ADMIN, salary=10012.0, dateOfJoining=2005-01-01, isActive=true), EmployeeDTO(id=852, name=fdsfs, email=fdshbjfsd@jdsnfj.com, age=25, role=ADMIN, salary=10012.0, dateOfJoining=2005-01-01, isActive=true), EmployeeDTO(id=853, name=Shubh, email=shubh@gmail.com, age=28, role=ADMIN, salary=10012.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=854, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=855, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=856, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=902, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=952, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=1002, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=1003, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=1004, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=1005, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=1006, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=1007, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=1008, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=1009, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=1010, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=1011, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true), EmployeeDTO(id=1012, name=Krishna, email=kg@gmail.com, age=29, role=ADMIN, salary=10000.0, dateOfJoining=2005-12-01, isActive=true)], Hello, 5
+2026-06-25 19:30:01.459 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 19:30:01.460 [INFO] c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2026-06-25 19:30:01.464 [INFO] c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-06-25 20:06:01.603 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Starting ProdReadyFeaturesApplication using Java 25.0.2 with PID 25737 (/Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features)
+2026-06-25 20:06:01.605 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2026-06-25 20:06:01.626 [INFO] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-25 20:06:01.626 [INFO] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-25 20:06:01.975 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-25 20:06:02.002 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 20 ms. Found 1 JPA repository interface.
+2026-06-25 20:06:02.314 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat initialized with port 9000 (http)
+2026-06-25 20:06:02.321 [INFO] o.a.c.c.StandardService [restartedMain] Starting service [Tomcat]
+2026-06-25 20:06:02.321 [INFO] o.a.c.c.StandardEngine [restartedMain] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-25 20:06:02.336 [INFO] o.s.b.w.c.s.WebApplicationContextInitializer [restartedMain] Root WebApplicationContext: initialization completed in 710 ms
+2026-06-25 20:06:02.457 [INFO] o.h.o.jpa [restartedMain] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-25 20:06:02.492 [INFO] o.h.o.core [restartedMain] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-25 20:06:02.610 [INFO] o.h.e.b.i.EnversServiceImpl [restartedMain] Envers integration enabled? : true
+2026-06-25 20:06:02.697 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo [restartedMain] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-25 20:06:02.714 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-1 - Starting...
+2026-06-25 20:06:02.896 [INFO] c.z.h.p.HikariPool [restartedMain] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5d1ffbdb
+2026-06-25 20:06:02.897 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-1 - Start completed.
+2026-06-25 20:06:02.945 [INFO] o.h.o.c.pooling [restartedMain] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/Prod_Ready_Features]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: Prod_Ready_Features/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-25 20:06:03.061 [INFO] o.h.e.c.i.m.AuditMetadataGenerator [restartedMain] Adding properties for entity: com.shubh.module4.Prod_Ready_Features.entity.PostEntity
+2026-06-25 20:06:03.480 [INFO] o.h.o.core [restartedMain] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-25 20:06:03.558 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 20:06:03.645 [INFO] o.s.d.j.r.q.QueryEnhancerFactories [restartedMain] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-25 20:06:03.730 [WARN] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-25 20:06:03.964 [INFO] o.s.b.a.e.w.EndpointLinksResolver [restartedMain] Exposing 1 endpoint beneath base path '/actuator'
+2026-06-25 20:06:04.010 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat started on port 9000 (http) with context path '/'
+2026-06-25 20:06:04.016 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Started ProdReadyFeaturesApplication in 2.677 seconds (process running for 2.907)
+2026-06-25 20:06:15.093 [INFO] o.a.c.c.C.[.[.[/] [http-nio-9000-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-25 20:06:15.093 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Initializing Servlet 'dispatcherServlet'
+2026-06-25 20:06:15.094 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Completed initialization in 1 ms
+2026-06-25 20:08:27.847 [INFO] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener [File Watcher] Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-25 20:08:27.854 [INFO] o.s.b.t.GracefulShutdown [Thread-1] Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-25 20:08:27.862 [INFO] o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-06-25 20:08:27.868 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-1] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 20:08:27.872 [INFO] c.z.h.HikariDataSource [Thread-1] HikariPool-1 - Shutdown initiated...
+2026-06-25 20:08:27.876 [INFO] c.z.h.HikariDataSource [Thread-1] HikariPool-1 - Shutdown completed.
+2026-06-25 20:08:27.928 [ERROR] o.s.b.SpringApplication [restartedMain] Application run failed
+while scanning an alias
+ in 'reader', line 65, column 18:
+            include: *
+                     ^
+unexpected character found  (0)
+ in 'reader', line 65, column 19:
+            include: *
+                      ^
+
+	at org.yaml.snakeyaml.scanner.ScannerImpl.scanAnchor(ScannerImpl.java:1521)
+	at org.yaml.snakeyaml.scanner.ScannerImpl.fetchAlias(ScannerImpl.java:962)
+	at org.yaml.snakeyaml.scanner.ScannerImpl.fetchMoreTokens(ScannerImpl.java:412)
+	at org.yaml.snakeyaml.scanner.ScannerImpl.checkToken(ScannerImpl.java:239)
+	at org.yaml.snakeyaml.parser.ParserImpl$ParseBlockMappingValue.produce(ParserImpl.java:669)
+	at org.yaml.snakeyaml.parser.ParserImpl.peekEvent(ParserImpl.java:161)
+	at org.yaml.snakeyaml.comments.CommentEventsCollector$1.peek(CommentEventsCollector.java:57)
+	at org.yaml.snakeyaml.comments.CommentEventsCollector$1.peek(CommentEventsCollector.java:43)
+	at org.yaml.snakeyaml.comments.CommentEventsCollector.collectEvents(CommentEventsCollector.java:136)
+	at org.yaml.snakeyaml.comments.CommentEventsCollector.collectEvents(CommentEventsCollector.java:116)
+	at org.yaml.snakeyaml.composer.Composer.composeScalarNode(Composer.java:249)
+	at org.yaml.snakeyaml.composer.Composer.composeNode(Composer.java:214)
+	at org.yaml.snakeyaml.composer.Composer.composeKeyNode(Composer.java:386)
+	at org.yaml.snakeyaml.composer.Composer.composeMappingChildren(Composer.java:357)
+	at org.yaml.snakeyaml.composer.Composer.composeMappingNode(Composer.java:329)
+	at org.yaml.snakeyaml.composer.Composer.composeNode(Composer.java:218)
+	at org.yaml.snakeyaml.composer.Composer.composeValueNode(Composer.java:396)
+	at org.yaml.snakeyaml.composer.Composer.composeMappingChildren(Composer.java:361)
+	at org.yaml.snakeyaml.composer.Composer.composeMappingNode(Composer.java:329)
+	at org.yaml.snakeyaml.composer.Composer.composeNode(Composer.java:218)
+	at org.yaml.snakeyaml.composer.Composer.composeValueNode(Composer.java:396)
+	at org.yaml.snakeyaml.composer.Composer.composeMappingChildren(Composer.java:361)
+	at org.yaml.snakeyaml.composer.Composer.composeMappingNode(Composer.java:329)
+	at org.yaml.snakeyaml.composer.Composer.composeNode(Composer.java:218)
+	at org.yaml.snakeyaml.composer.Composer.composeValueNode(Composer.java:396)
+	at org.yaml.snakeyaml.composer.Composer.composeMappingChildren(Composer.java:361)
+	at org.yaml.snakeyaml.composer.Composer.composeMappingNode(Composer.java:329)
+	at org.yaml.snakeyaml.composer.Composer.composeNode(Composer.java:218)
+	at org.yaml.snakeyaml.composer.Composer.composeValueNode(Composer.java:396)
+	at org.yaml.snakeyaml.composer.Composer.composeMappingChildren(Composer.java:361)
+	at org.yaml.snakeyaml.composer.Composer.composeMappingNode(Composer.java:329)
+	at org.yaml.snakeyaml.composer.Composer.composeNode(Composer.java:218)
+	at org.yaml.snakeyaml.composer.Composer.getNode(Composer.java:141)
+	at org.yaml.snakeyaml.constructor.BaseConstructor.getData(BaseConstructor.java:163)
+	at org.springframework.boot.env.OriginTrackedYamlLoader$OriginTrackingConstructor.getData(OriginTrackedYamlLoader.java:100)
+	at org.yaml.snakeyaml.Yaml$1.next(Yaml.java:530)
+	at org.springframework.beans.factory.config.YamlProcessor.process(YamlProcessor.java:203)
+	at org.springframework.beans.factory.config.YamlProcessor.process(YamlProcessor.java:169)
+	at org.springframework.boot.env.OriginTrackedYamlLoader.load(OriginTrackedYamlLoader.java:85)
+	at org.springframework.boot.env.YamlPropertySourceLoader.load(YamlPropertySourceLoader.java:50)
+	at org.springframework.boot.env.PropertySourceLoader.load(PropertySourceLoader.java:71)
+	at org.springframework.boot.context.config.StandardConfigDataLoader.load(StandardConfigDataLoader.java:55)
+	at org.springframework.boot.context.config.StandardConfigDataLoader.load(StandardConfigDataLoader.java:36)
+	at org.springframework.boot.context.config.ConfigDataLoaders.load(ConfigDataLoaders.java:100)
+	at org.springframework.boot.context.config.ConfigDataImporter.load(ConfigDataImporter.java:133)
+	at org.springframework.boot.context.config.ConfigDataImporter.resolveAndLoad(ConfigDataImporter.java:88)
+	at org.springframework.boot.context.config.ConfigDataEnvironmentContributors.withProcessedImports(ConfigDataEnvironmentContributors.java:130)
+	at org.springframework.boot.context.config.ConfigDataEnvironment.processInitial(ConfigDataEnvironment.java:253)
+	at org.springframework.boot.context.config.ConfigDataEnvironment.processAndApply(ConfigDataEnvironment.java:240)
+	at org.springframework.boot.context.config.ConfigDataEnvironmentPostProcessor.postProcessEnvironment(ConfigDataEnvironmentPostProcessor.java:97)
+	at org.springframework.boot.context.config.ConfigDataEnvironmentPostProcessor.postProcessEnvironment(ConfigDataEnvironmentPostProcessor.java:90)
+	at org.springframework.boot.support.EnvironmentPostProcessorApplicationListener.onApplicationEnvironmentPreparedEvent(EnvironmentPostProcessorApplicationListener.java:137)
+	at org.springframework.boot.support.EnvironmentPostProcessorApplicationListener.onApplicationEvent(EnvironmentPostProcessorApplicationListener.java:120)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:180)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:173)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:151)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:133)
+	at org.springframework.boot.context.event.EventPublishingRunListener.multicastInitialEvent(EventPublishingRunListener.java:137)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:82)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$environmentPrepared$0(SpringApplicationRunListeners.java:66)
+	at java.base/java.util.ImmutableCollections$List12.forEach(ImmutableCollections.java:681)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:123)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:117)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:65)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:356)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at com.shubh.module4.Prod_Ready_Features.ProdReadyFeaturesApplication.main(ProdReadyFeaturesApplication.java:10)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:52)
+2026-06-25 20:08:44.572 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Starting ProdReadyFeaturesApplication using Java 25.0.2 with PID 25737 (/Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features)
+2026-06-25 20:08:44.572 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2026-06-25 20:08:44.658 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-25 20:08:44.664 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 4 ms. Found 1 JPA repository interface.
+2026-06-25 20:08:44.726 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat initialized with port 9000 (http)
+2026-06-25 20:08:44.726 [INFO] o.a.c.c.StandardService [restartedMain] Starting service [Tomcat]
+2026-06-25 20:08:44.726 [INFO] o.a.c.c.StandardEngine [restartedMain] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-25 20:08:44.732 [INFO] o.s.b.w.c.s.WebApplicationContextInitializer [restartedMain] Root WebApplicationContext: initialization completed in 159 ms
+2026-06-25 20:08:44.775 [INFO] o.h.o.jpa [restartedMain] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-25 20:08:44.787 [INFO] o.h.e.b.i.EnversServiceImpl [restartedMain] Envers integration enabled? : true
+2026-06-25 20:08:44.792 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo [restartedMain] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-25 20:08:44.792 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-2 - Starting...
+2026-06-25 20:08:44.806 [INFO] c.z.h.p.HikariPool [restartedMain] HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@887b364
+2026-06-25 20:08:44.806 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-2 - Start completed.
+2026-06-25 20:08:44.807 [INFO] o.h.o.c.pooling [restartedMain] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/Prod_Ready_Features]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: Prod_Ready_Features/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-25 20:08:44.812 [INFO] o.h.e.c.i.m.AuditMetadataGenerator [restartedMain] Adding properties for entity: com.shubh.module4.Prod_Ready_Features.entity.PostEntity
+2026-06-25 20:08:44.835 [INFO] o.h.o.core [restartedMain] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-25 20:08:44.890 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 20:08:44.926 [WARN] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-25 20:08:45.007 [INFO] o.s.b.a.e.w.EndpointLinksResolver [restartedMain] Exposing 13 endpoints beneath base path '/actuator'
+2026-06-25 20:08:45.020 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat started on port 9000 (http) with context path '/'
+2026-06-25 20:08:45.022 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Started ProdReadyFeaturesApplication in 0.479 seconds (process running for 163.912)
+2026-06-25 20:08:45.024 [INFO] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener [restartedMain] Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+   AuditEventsEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   BeansEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   BeansEndpointAutoConfiguration#beansEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.beans.BeansEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   ConditionsReportEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   ConditionsReportEndpointAutoConfiguration#conditionsReportEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.autoconfigure.condition.ConditionsReportEndpoint; SearchStrategy: current) did not find any beans (OnBeanCondition)
+
+   ConfigurationPropertiesReportEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   ConfigurationPropertiesReportEndpointAutoConfiguration#configurationPropertiesReportEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.context.properties.ConfigurationPropertiesReportEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   ConfigurationPropertiesReportEndpointAutoConfiguration#configurationPropertiesReportEndpointWebExtension matched:
+      - @ConditionalOnBean (types: org.springframework.boot.actuate.context.properties.ConfigurationPropertiesReportEndpoint; SearchStrategy: all) found bean 'configurationPropertiesReportEndpoint'; @ConditionalOnMissingBean (types: org.springframework.boot.actuate.context.properties.ConfigurationPropertiesReportEndpointWebExtension; SearchStrategy: all) did not find any beans (OnBeanCondition)
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   EnvironmentEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   EnvironmentEndpointAutoConfiguration#environmentEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.env.EnvironmentEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   EnvironmentEndpointAutoConfiguration#environmentEndpointWebExtension matched:
+      - @ConditionalOnBean (types: org.springframework.boot.actuate.env.EnvironmentEndpoint; SearchStrategy: all) found bean 'environmentEndpoint'; @ConditionalOnMissingBean (types: org.springframework.boot.actuate.env.EnvironmentEndpointWebExtension; SearchStrategy: all) did not find any beans (OnBeanCondition)
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   HttpExchangesEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   InfoEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   InfoEndpointAutoConfiguration#infoEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.info.InfoEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   LogFileWebEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   LogFileWebEndpointAutoConfiguration#logFileWebEndpoint matched:
+      - Log File found logging.file.name application.log (LogFileWebEndpointAutoConfiguration.LogFileCondition)
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.logging.LogFileWebEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   LoggersEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   LoggersEndpointAutoConfiguration#loggersEndpoint matched:
+      - Logging System enabled (LoggersEndpointAutoConfiguration.OnEnabledLoggingSystemCondition)
+      - @ConditionalOnBean (types: org.springframework.boot.logging.LoggingSystem; SearchStrategy: all) found bean 'springBootLoggingSystem'; @ConditionalOnMissingBean (types: org.springframework.boot.actuate.logging.LoggersEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   MappingsEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   MetricsEndpointAutoConfiguration matched:
+      - @ConditionalOnClass found required classes 'org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint', 'io.micrometer.core.annotation.Timed' (OnClassCondition)
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   MetricsEndpointAutoConfiguration#metricsEndpoint matched:
+      - @ConditionalOnBean (types: io.micrometer.core.instrument.MeterRegistry; SearchStrategy: all) found bean 'simpleMeterRegistry'; @ConditionalOnMissingBean (types: org.springframework.boot.micrometer.metrics.actuate.endpoint.MetricsEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   SbomEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   SbomEndpointAutoConfiguration#sbomEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.sbom.SbomEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   SbomEndpointAutoConfiguration#sbomEndpointWebExtension matched:
+      - @ConditionalOnBean (types: org.springframework.boot.actuate.sbom.SbomEndpoint; SearchStrategy: all) found bean 'sbomEndpoint'; @ConditionalOnMissingBean (types: org.springframework.boot.actuate.sbom.SbomEndpointWebExtension; SearchStrategy: all) did not find any beans (OnBeanCondition)
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   ScheduledTasksEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   ScheduledTasksEndpointAutoConfiguration#scheduledTasksEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.scheduling.ScheduledTasksEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   ServletMappingsAutoConfiguration matched:
+      - @ConditionalOnClass found required classes 'org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint', 'org.springframework.boot.actuate.web.mappings.MappingsEndpoint' (OnClassCondition)
+      - found 'session' scope (OnWebApplicationCondition)
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   ThreadDumpEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   ThreadDumpEndpointAutoConfiguration#dumpEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.management.ThreadDumpEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   WebMvcMappingsAutoConfiguration matched:
+      - @ConditionalOnClass found required classes 'org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint', 'org.springframework.web.servlet.DispatcherServlet', 'org.springframework.boot.actuate.web.mappings.MappingsEndpoint' (OnClassCondition)
+      - found 'session' scope (OnWebApplicationCondition)
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+      - @ConditionalOnBean (types: org.springframework.web.servlet.DispatcherServlet; SearchStrategy: all) found bean 'dispatcherServlet' (OnBeanCondition)
+
+
+Negative matches:
+-----------------
+
+   AuditEventsEndpointAutoConfiguration#auditEventsEndpoint:
+      Did not match:
+         - @ConditionalOnBean (types: org.springframework.boot.actuate.audit.AuditEventRepository; SearchStrategy: all) did not find any beans of type org.springframework.boot.actuate.audit.AuditEventRepository (OnBeanCondition)
+
+   HttpExchangesEndpointAutoConfiguration#httpExchangesEndpoint:
+      Did not match:
+         - @ConditionalOnBean (types: org.springframework.boot.actuate.web.exchanges.HttpExchangeRepository; SearchStrategy: all) did not find any beans of type org.springframework.boot.actuate.web.exchanges.HttpExchangeRepository (OnBeanCondition)
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2026-06-25 20:10:55.211 [INFO] o.a.c.c.C.[.[.[/] [http-nio-9000-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-25 20:10:55.212 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Initializing Servlet 'dispatcherServlet'
+2026-06-25 20:10:55.213 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Completed initialization in 1 ms
+2026-06-25 20:24:20.742 [INFO] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener [File Watcher] Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-25 20:24:20.745 [INFO] o.s.b.t.GracefulShutdown [Thread-5] Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-25 20:24:20.748 [INFO] o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-06-25 20:24:20.751 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-5] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 20:24:20.753 [INFO] c.z.h.HikariDataSource [Thread-5] HikariPool-2 - Shutdown initiated...
+2026-06-25 20:24:20.755 [INFO] c.z.h.HikariDataSource [Thread-5] HikariPool-2 - Shutdown completed.
+2026-06-25 20:24:20.803 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Starting ProdReadyFeaturesApplication using Java 25.0.2 with PID 25737 (/Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features)
+2026-06-25 20:24:20.803 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2026-06-25 20:24:20.884 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-25 20:24:20.889 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 4 ms. Found 1 JPA repository interface.
+2026-06-25 20:24:20.952 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat initialized with port 9000 (http)
+2026-06-25 20:24:20.953 [INFO] o.a.c.c.StandardService [restartedMain] Starting service [Tomcat]
+2026-06-25 20:24:20.953 [INFO] o.a.c.c.StandardEngine [restartedMain] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-25 20:24:20.958 [INFO] o.s.b.w.c.s.WebApplicationContextInitializer [restartedMain] Root WebApplicationContext: initialization completed in 154 ms
+2026-06-25 20:24:21.008 [INFO] o.h.o.jpa [restartedMain] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-25 20:24:21.019 [INFO] o.h.e.b.i.EnversServiceImpl [restartedMain] Envers integration enabled? : true
+2026-06-25 20:24:21.023 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo [restartedMain] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-25 20:24:21.024 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-3 - Starting...
+2026-06-25 20:24:21.039 [INFO] c.z.h.p.HikariPool [restartedMain] HikariPool-3 - Added connection com.mysql.cj.jdbc.ConnectionImpl@499544d1
+2026-06-25 20:24:21.039 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-3 - Start completed.
+2026-06-25 20:24:21.040 [INFO] o.h.o.c.pooling [restartedMain] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/Prod_Ready_Features]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: Prod_Ready_Features/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-25 20:24:21.045 [INFO] o.h.e.c.i.m.AuditMetadataGenerator [restartedMain] Adding properties for entity: com.shubh.module4.Prod_Ready_Features.entity.PostEntity
+2026-06-25 20:24:21.066 [INFO] o.h.o.core [restartedMain] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-25 20:24:21.127 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 20:24:21.168 [WARN] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-25 20:24:21.254 [INFO] o.s.b.a.e.w.EndpointLinksResolver [restartedMain] Exposing 13 endpoints beneath base path '/actuator'
+2026-06-25 20:24:21.266 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat started on port 9000 (http) with context path '/'
+2026-06-25 20:24:21.268 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Started ProdReadyFeaturesApplication in 0.481 seconds (process running for 1100.155)
+2026-06-25 20:24:21.272 [INFO] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener [restartedMain] Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+   InfoContributorAutoConfiguration#envInfoContributor matched:
+      - @ConditionalOnEnabledInfoContributor management.info.env.enabled is true (OnEnabledInfoContributorCondition)
+
+
+Negative matches:
+-----------------
+
+    None
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2026-06-25 20:24:23.831 [INFO] o.a.c.c.C.[.[.[/] [http-nio-9000-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-25 20:24:23.834 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Initializing Servlet 'dispatcherServlet'
+2026-06-25 20:24:23.835 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Completed initialization in 1 ms
+2026-06-25 20:25:05.079 [INFO] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener [File Watcher] Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-25 20:25:05.080 [INFO] o.s.b.t.GracefulShutdown [Thread-11] Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-25 20:25:05.082 [INFO] o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-06-25 20:25:05.084 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-11] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 20:25:05.085 [INFO] c.z.h.HikariDataSource [Thread-11] HikariPool-3 - Shutdown initiated...
+2026-06-25 20:25:05.087 [INFO] c.z.h.HikariDataSource [Thread-11] HikariPool-3 - Shutdown completed.
+2026-06-25 20:25:05.134 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Starting ProdReadyFeaturesApplication using Java 25.0.2 with PID 25737 (/Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features)
+2026-06-25 20:25:05.134 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2026-06-25 20:25:05.199 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-25 20:25:05.203 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 3 ms. Found 1 JPA repository interface.
+2026-06-25 20:25:05.254 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat initialized with port 9000 (http)
+2026-06-25 20:25:05.254 [INFO] o.a.c.c.StandardService [restartedMain] Starting service [Tomcat]
+2026-06-25 20:25:05.254 [INFO] o.a.c.c.StandardEngine [restartedMain] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-25 20:25:05.259 [INFO] o.s.b.w.c.s.WebApplicationContextInitializer [restartedMain] Root WebApplicationContext: initialization completed in 125 ms
+2026-06-25 20:25:05.297 [INFO] o.h.o.jpa [restartedMain] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-25 20:25:05.305 [INFO] o.h.e.b.i.EnversServiceImpl [restartedMain] Envers integration enabled? : true
+2026-06-25 20:25:05.309 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo [restartedMain] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-25 20:25:05.309 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-4 - Starting...
+2026-06-25 20:25:05.322 [INFO] c.z.h.p.HikariPool [restartedMain] HikariPool-4 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7fc704c9
+2026-06-25 20:25:05.322 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-4 - Start completed.
+2026-06-25 20:25:05.323 [INFO] o.h.o.c.pooling [restartedMain] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/Prod_Ready_Features]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: Prod_Ready_Features/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-25 20:25:05.328 [INFO] o.h.e.c.i.m.AuditMetadataGenerator [restartedMain] Adding properties for entity: com.shubh.module4.Prod_Ready_Features.entity.PostEntity
+2026-06-25 20:25:05.348 [INFO] o.h.o.core [restartedMain] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-25 20:25:05.408 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 20:25:05.439 [WARN] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-25 20:25:05.507 [INFO] o.s.b.a.e.w.EndpointLinksResolver [restartedMain] Exposing 13 endpoints beneath base path '/actuator'
+2026-06-25 20:25:05.518 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat started on port 9000 (http) with context path '/'
+2026-06-25 20:25:05.520 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Started ProdReadyFeaturesApplication in 0.399 seconds (process running for 1144.407)
+2026-06-25 20:25:05.521 [INFO] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener [restartedMain] Condition evaluation unchanged
+2026-06-25 20:25:08.287 [INFO] o.a.c.c.C.[.[.[/] [http-nio-9000-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-25 20:25:08.287 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Initializing Servlet 'dispatcherServlet'
+2026-06-25 20:25:08.289 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Completed initialization in 2 ms
+2026-06-25 20:25:08.293 [ERROR] o.a.c.c.C.[.[.[.[dispatcherServlet] [http-nio-9000-exec-1] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.springframework.boot.context.properties.bind.BindException: Failed to bind properties under 'info' to java.util.Map<java.lang.String, java.lang.Object>] with root cause
+org.springframework.core.convert.ConverterNotFoundException: No converter found capable of converting from type [java.lang.String] to type [java.util.Map<java.lang.String, java.lang.Object>]
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:123)
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:102)
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:96)
+	at org.springframework.boot.context.properties.bind.MapBinder.bindAggregate(MapBinder.java:67)
+	at org.springframework.boot.context.properties.bind.AggregateBinder.bind(AggregateBinder.java:59)
+	at org.springframework.boot.context.properties.bind.Binder.lambda$bindAggregate$2(Binder.java:472)
+	at org.springframework.boot.context.properties.bind.Binder$Context.withIncreasedDepth(Binder.java:636)
+	at org.springframework.boot.context.properties.bind.Binder.bindAggregate(Binder.java:473)
+	at org.springframework.boot.context.properties.bind.Binder.bindObject(Binder.java:431)
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:374)
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:361)
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:288)
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:249)
+	at org.springframework.boot.actuate.info.EnvironmentInfoContributor.contribute(EnvironmentInfoContributor.java:46)
+	at org.springframework.boot.actuate.info.InfoEndpoint.info(InfoEndpoint.java:53)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:281)
+	at org.springframework.boot.actuate.endpoint.invoke.reflect.ReflectiveOperationInvoker.invoke(ReflectiveOperationInvoker.java:76)
+	at org.springframework.boot.actuate.endpoint.annotation.AbstractDiscoveredOperation.invoke(AbstractDiscoveredOperation.java:62)
+	at org.springframework.boot.webmvc.actuate.endpoint.web.AbstractWebMvcEndpointHandlerMapping$ServletWebOperationAdapter.handle(AbstractWebMvcEndpointHandlerMapping.java:347)
+	at org.springframework.boot.webmvc.actuate.endpoint.web.AbstractWebMvcEndpointHandlerMapping$OperationHandler.handle(AbstractWebMvcEndpointHandlerMapping.java:476)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:252)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:184)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1272)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1801)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-06-25 20:25:09.865 [ERROR] o.a.c.c.C.[.[.[.[dispatcherServlet] [http-nio-9000-exec-2] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.springframework.boot.context.properties.bind.BindException: Failed to bind properties under 'info' to java.util.Map<java.lang.String, java.lang.Object>] with root cause
+org.springframework.core.convert.ConverterNotFoundException: No converter found capable of converting from type [java.lang.String] to type [java.util.Map<java.lang.String, java.lang.Object>]
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:123)
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:102)
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:96)
+	at org.springframework.boot.context.properties.bind.MapBinder.bindAggregate(MapBinder.java:67)
+	at org.springframework.boot.context.properties.bind.AggregateBinder.bind(AggregateBinder.java:59)
+	at org.springframework.boot.context.properties.bind.Binder.lambda$bindAggregate$2(Binder.java:472)
+	at org.springframework.boot.context.properties.bind.Binder$Context.withIncreasedDepth(Binder.java:636)
+	at org.springframework.boot.context.properties.bind.Binder.bindAggregate(Binder.java:473)
+	at org.springframework.boot.context.properties.bind.Binder.bindObject(Binder.java:431)
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:374)
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:361)
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:288)
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:249)
+	at org.springframework.boot.actuate.info.EnvironmentInfoContributor.contribute(EnvironmentInfoContributor.java:46)
+	at org.springframework.boot.actuate.info.InfoEndpoint.info(InfoEndpoint.java:53)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:281)
+	at org.springframework.boot.actuate.endpoint.invoke.reflect.ReflectiveOperationInvoker.invoke(ReflectiveOperationInvoker.java:76)
+	at org.springframework.boot.actuate.endpoint.annotation.AbstractDiscoveredOperation.invoke(AbstractDiscoveredOperation.java:62)
+	at org.springframework.boot.webmvc.actuate.endpoint.web.AbstractWebMvcEndpointHandlerMapping$ServletWebOperationAdapter.handle(AbstractWebMvcEndpointHandlerMapping.java:347)
+	at org.springframework.boot.webmvc.actuate.endpoint.web.AbstractWebMvcEndpointHandlerMapping$OperationHandler.handle(AbstractWebMvcEndpointHandlerMapping.java:476)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:252)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:184)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1272)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1801)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-06-25 20:25:11.994 [ERROR] o.a.c.c.C.[.[.[.[dispatcherServlet] [http-nio-9000-exec-3] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.springframework.boot.context.properties.bind.BindException: Failed to bind properties under 'info' to java.util.Map<java.lang.String, java.lang.Object>] with root cause
+org.springframework.core.convert.ConverterNotFoundException: No converter found capable of converting from type [java.lang.String] to type [java.util.Map<java.lang.String, java.lang.Object>]
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:123)
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:102)
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:96)
+	at org.springframework.boot.context.properties.bind.MapBinder.bindAggregate(MapBinder.java:67)
+	at org.springframework.boot.context.properties.bind.AggregateBinder.bind(AggregateBinder.java:59)
+	at org.springframework.boot.context.properties.bind.Binder.lambda$bindAggregate$2(Binder.java:472)
+	at org.springframework.boot.context.properties.bind.Binder$Context.withIncreasedDepth(Binder.java:636)
+	at org.springframework.boot.context.properties.bind.Binder.bindAggregate(Binder.java:473)
+	at org.springframework.boot.context.properties.bind.Binder.bindObject(Binder.java:431)
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:374)
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:361)
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:288)
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:249)
+	at org.springframework.boot.actuate.info.EnvironmentInfoContributor.contribute(EnvironmentInfoContributor.java:46)
+	at org.springframework.boot.actuate.info.InfoEndpoint.info(InfoEndpoint.java:53)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:281)
+	at org.springframework.boot.actuate.endpoint.invoke.reflect.ReflectiveOperationInvoker.invoke(ReflectiveOperationInvoker.java:76)
+	at org.springframework.boot.actuate.endpoint.annotation.AbstractDiscoveredOperation.invoke(AbstractDiscoveredOperation.java:62)
+	at org.springframework.boot.webmvc.actuate.endpoint.web.AbstractWebMvcEndpointHandlerMapping$ServletWebOperationAdapter.handle(AbstractWebMvcEndpointHandlerMapping.java:347)
+	at org.springframework.boot.webmvc.actuate.endpoint.web.AbstractWebMvcEndpointHandlerMapping$OperationHandler.handle(AbstractWebMvcEndpointHandlerMapping.java:476)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:252)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:184)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1272)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1801)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-06-25 20:25:48.368 [INFO] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener [File Watcher] Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-25 20:25:48.371 [INFO] o.s.b.t.GracefulShutdown [Thread-15] Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-25 20:25:48.375 [INFO] o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-06-25 20:25:48.378 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-15] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 20:25:48.379 [INFO] c.z.h.HikariDataSource [Thread-15] HikariPool-4 - Shutdown initiated...
+2026-06-25 20:25:48.381 [INFO] c.z.h.HikariDataSource [Thread-15] HikariPool-4 - Shutdown completed.
+2026-06-25 20:25:48.431 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Starting ProdReadyFeaturesApplication using Java 25.0.2 with PID 25737 (/Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features)
+2026-06-25 20:25:48.432 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2026-06-25 20:25:48.504 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-25 20:25:48.508 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 3 ms. Found 1 JPA repository interface.
+2026-06-25 20:25:48.564 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat initialized with port 9000 (http)
+2026-06-25 20:25:48.565 [INFO] o.a.c.c.StandardService [restartedMain] Starting service [Tomcat]
+2026-06-25 20:25:48.565 [INFO] o.a.c.c.StandardEngine [restartedMain] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-25 20:25:48.570 [INFO] o.s.b.w.c.s.WebApplicationContextInitializer [restartedMain] Root WebApplicationContext: initialization completed in 138 ms
+2026-06-25 20:25:48.608 [INFO] o.h.o.jpa [restartedMain] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-25 20:25:48.616 [INFO] o.h.e.b.i.EnversServiceImpl [restartedMain] Envers integration enabled? : true
+2026-06-25 20:25:48.620 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo [restartedMain] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-25 20:25:48.620 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-5 - Starting...
+2026-06-25 20:25:48.631 [INFO] c.z.h.p.HikariPool [restartedMain] HikariPool-5 - Added connection com.mysql.cj.jdbc.ConnectionImpl@34fc6671
+2026-06-25 20:25:48.631 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-5 - Start completed.
+2026-06-25 20:25:48.632 [INFO] o.h.o.c.pooling [restartedMain] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/Prod_Ready_Features]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: Prod_Ready_Features/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-25 20:25:48.637 [INFO] o.h.e.c.i.m.AuditMetadataGenerator [restartedMain] Adding properties for entity: com.shubh.module4.Prod_Ready_Features.entity.PostEntity
+2026-06-25 20:25:48.656 [INFO] o.h.o.core [restartedMain] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-25 20:25:48.719 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 20:25:48.752 [WARN] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-25 20:25:48.823 [INFO] o.s.b.a.e.w.EndpointLinksResolver [restartedMain] Exposing 13 endpoints beneath base path '/actuator'
+2026-06-25 20:25:48.834 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat started on port 9000 (http) with context path '/'
+2026-06-25 20:25:48.836 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Started ProdReadyFeaturesApplication in 0.416 seconds (process running for 1187.723)
+2026-06-25 20:25:48.836 [INFO] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener [restartedMain] Condition evaluation unchanged
+2026-06-25 21:12:12.617 [INFO] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener [File Watcher] Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-25 21:12:12.621 [INFO] o.s.b.t.GracefulShutdown [Thread-19] Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-25 21:12:12.625 [INFO] o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-06-25 21:12:12.628 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-19] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 21:12:12.630 [INFO] c.z.h.HikariDataSource [Thread-19] HikariPool-5 - Shutdown initiated...
+2026-06-25 21:12:12.632 [INFO] c.z.h.HikariDataSource [Thread-19] HikariPool-5 - Shutdown completed.
+2026-06-25 21:12:12.688 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Starting ProdReadyFeaturesApplication using Java 25.0.2 with PID 25737 (/Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features)
+2026-06-25 21:12:12.688 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2026-06-25 21:12:12.765 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-25 21:12:12.769 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 3 ms. Found 1 JPA repository interface.
+2026-06-25 21:12:12.827 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat initialized with port 9000 (http)
+2026-06-25 21:12:12.828 [INFO] o.a.c.c.StandardService [restartedMain] Starting service [Tomcat]
+2026-06-25 21:12:12.828 [INFO] o.a.c.c.StandardEngine [restartedMain] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-25 21:12:12.833 [INFO] o.s.b.w.c.s.WebApplicationContextInitializer [restartedMain] Root WebApplicationContext: initialization completed in 144 ms
+2026-06-25 21:12:12.870 [INFO] o.h.o.jpa [restartedMain] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-25 21:12:12.884 [INFO] o.h.e.b.i.EnversServiceImpl [restartedMain] Envers integration enabled? : true
+2026-06-25 21:12:12.893 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo [restartedMain] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-25 21:12:12.893 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-6 - Starting...
+2026-06-25 21:12:12.906 [INFO] c.z.h.p.HikariPool [restartedMain] HikariPool-6 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7a2805c8
+2026-06-25 21:12:12.907 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-6 - Start completed.
+2026-06-25 21:12:12.908 [INFO] o.h.o.c.pooling [restartedMain] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/Prod_Ready_Features]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: Prod_Ready_Features/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-25 21:12:12.914 [INFO] o.h.e.c.i.m.AuditMetadataGenerator [restartedMain] Adding properties for entity: com.shubh.module4.Prod_Ready_Features.entity.PostEntity
+2026-06-25 21:12:12.935 [INFO] o.h.o.core [restartedMain] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-25 21:12:12.984 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 21:12:13.023 [WARN] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-25 21:12:13.101 [INFO] o.s.b.a.e.w.EndpointLinksResolver [restartedMain] Exposing 2 endpoints beneath base path '/actuator'
+2026-06-25 21:12:13.112 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat started on port 9000 (http) with context path '/'
+2026-06-25 21:12:13.114 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Started ProdReadyFeaturesApplication in 0.443 seconds (process running for 3971.981)
+2026-06-25 21:12:13.115 [INFO] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener [restartedMain] Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+    None
+
+
+Negative matches:
+-----------------
+
+   AuditEventsEndpointAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+
+   BeansEndpointAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+
+   ConditionsReportEndpointAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+
+   ConfigurationPropertiesReportEndpointAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+
+   EnvironmentEndpointAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+
+   HttpExchangesEndpointAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+
+   InfoContributorAutoConfiguration#envInfoContributor:
+      Did not match:
+         - @ConditionalOnEnabledInfoContributor management.info.env.enabled is not true (OnEnabledInfoContributorCondition)
+
+   LogFileWebEndpointAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+
+   LoggersEndpointAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+
+   MappingsEndpointAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+
+   MetricsEndpointAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+      Matched:
+         - @ConditionalOnClass found required classes 'org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint', 'io.micrometer.core.annotation.Timed' (OnClassCondition)
+
+   SbomEndpointAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+
+   ScheduledTasksEndpointAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+
+   ServletMappingsAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+      Matched:
+         - @ConditionalOnClass found required classes 'org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint', 'org.springframework.boot.actuate.web.mappings.MappingsEndpoint' (OnClassCondition)
+         - found 'session' scope (OnWebApplicationCondition)
+
+   ThreadDumpEndpointAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+
+   WebMvcMappingsAutoConfiguration:
+      Did not match:
+         - @ConditionalOnAvailableEndpoint not exposed (OnAvailableEndpointCondition)
+      Matched:
+         - @ConditionalOnClass found required classes 'org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint', 'org.springframework.web.servlet.DispatcherServlet', 'org.springframework.boot.actuate.web.mappings.MappingsEndpoint' (OnClassCondition)
+         - found 'session' scope (OnWebApplicationCondition)
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2026-06-25 21:12:23.382 [INFO] o.a.c.c.C.[.[.[/] [http-nio-9000-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-25 21:12:23.383 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Initializing Servlet 'dispatcherServlet'
+2026-06-25 21:12:23.387 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Completed initialization in 4 ms
+2026-06-25 21:12:42.824 [INFO] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener [File Watcher] Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-25 21:12:42.826 [INFO] o.s.b.t.GracefulShutdown [Thread-23] Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-25 21:12:42.829 [INFO] o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-06-25 21:12:42.832 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-23] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 21:12:42.833 [INFO] c.z.h.HikariDataSource [Thread-23] HikariPool-6 - Shutdown initiated...
+2026-06-25 21:12:42.835 [INFO] c.z.h.HikariDataSource [Thread-23] HikariPool-6 - Shutdown completed.
+2026-06-25 21:12:42.882 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Starting ProdReadyFeaturesApplication using Java 25.0.2 with PID 25737 (/Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features)
+2026-06-25 21:12:42.882 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2026-06-25 21:12:42.939 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-25 21:12:42.942 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 2 ms. Found 1 JPA repository interface.
+2026-06-25 21:12:42.986 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat initialized with port 9000 (http)
+2026-06-25 21:12:42.986 [INFO] o.a.c.c.StandardService [restartedMain] Starting service [Tomcat]
+2026-06-25 21:12:42.986 [INFO] o.a.c.c.StandardEngine [restartedMain] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-25 21:12:42.990 [INFO] o.s.b.w.c.s.WebApplicationContextInitializer [restartedMain] Root WebApplicationContext: initialization completed in 107 ms
+2026-06-25 21:12:43.015 [INFO] o.h.o.jpa [restartedMain] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-25 21:12:43.024 [INFO] o.h.e.b.i.EnversServiceImpl [restartedMain] Envers integration enabled? : true
+2026-06-25 21:12:43.027 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo [restartedMain] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-25 21:12:43.028 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-7 - Starting...
+2026-06-25 21:12:43.041 [INFO] c.z.h.p.HikariPool [restartedMain] HikariPool-7 - Added connection com.mysql.cj.jdbc.ConnectionImpl@75dfdba6
+2026-06-25 21:12:43.042 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-7 - Start completed.
+2026-06-25 21:12:43.043 [INFO] o.h.o.c.pooling [restartedMain] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/Prod_Ready_Features]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: Prod_Ready_Features/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-25 21:12:43.048 [INFO] o.h.e.c.i.m.AuditMetadataGenerator [restartedMain] Adding properties for entity: com.shubh.module4.Prod_Ready_Features.entity.PostEntity
+2026-06-25 21:12:43.067 [INFO] o.h.o.core [restartedMain] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-25 21:12:43.124 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 21:12:43.155 [WARN] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-25 21:12:43.208 [INFO] o.s.b.a.e.w.EndpointLinksResolver [restartedMain] Exposing 2 endpoints beneath base path '/actuator'
+2026-06-25 21:12:43.217 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat started on port 9000 (http) with context path '/'
+2026-06-25 21:12:43.219 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Started ProdReadyFeaturesApplication in 0.348 seconds (process running for 4002.085)
+2026-06-25 21:12:43.219 [INFO] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener [restartedMain] Condition evaluation unchanged
+2026-06-25 21:13:42.129 [INFO] o.a.c.c.C.[.[.[/] [http-nio-9000-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-25 21:13:42.129 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Initializing Servlet 'dispatcherServlet'
+2026-06-25 21:13:42.130 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Completed initialization in 1 ms
+2026-06-25 21:14:03.545 [INFO] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener [File Watcher] Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-25 21:14:03.548 [INFO] o.s.b.t.GracefulShutdown [Thread-27] Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-25 21:14:03.551 [INFO] o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-06-25 21:14:03.553 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-27] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 21:14:03.554 [INFO] c.z.h.HikariDataSource [Thread-27] HikariPool-7 - Shutdown initiated...
+2026-06-25 21:14:03.557 [INFO] c.z.h.HikariDataSource [Thread-27] HikariPool-7 - Shutdown completed.
+2026-06-25 21:14:03.609 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Starting ProdReadyFeaturesApplication using Java 25.0.2 with PID 25737 (/Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features)
+2026-06-25 21:14:03.609 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2026-06-25 21:14:03.686 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-25 21:14:03.691 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 4 ms. Found 1 JPA repository interface.
+2026-06-25 21:14:03.744 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat initialized with port 9000 (http)
+2026-06-25 21:14:03.745 [INFO] o.a.c.c.StandardService [restartedMain] Starting service [Tomcat]
+2026-06-25 21:14:03.745 [INFO] o.a.c.c.StandardEngine [restartedMain] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-25 21:14:03.750 [INFO] o.s.b.w.c.s.WebApplicationContextInitializer [restartedMain] Root WebApplicationContext: initialization completed in 140 ms
+2026-06-25 21:14:03.793 [INFO] o.h.o.jpa [restartedMain] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-25 21:14:03.804 [INFO] o.h.e.b.i.EnversServiceImpl [restartedMain] Envers integration enabled? : true
+2026-06-25 21:14:03.808 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo [restartedMain] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-25 21:14:03.808 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-8 - Starting...
+2026-06-25 21:14:03.824 [INFO] c.z.h.p.HikariPool [restartedMain] HikariPool-8 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7ce051e9
+2026-06-25 21:14:03.824 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-8 - Start completed.
+2026-06-25 21:14:03.825 [INFO] o.h.o.c.pooling [restartedMain] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/Prod_Ready_Features]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: Prod_Ready_Features/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-25 21:14:03.830 [INFO] o.h.e.c.i.m.AuditMetadataGenerator [restartedMain] Adding properties for entity: com.shubh.module4.Prod_Ready_Features.entity.PostEntity
+2026-06-25 21:14:03.850 [INFO] o.h.o.core [restartedMain] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-25 21:14:03.904 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 21:14:03.939 [WARN] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-25 21:14:04.010 [INFO] o.s.b.a.e.w.EndpointLinksResolver [restartedMain] Exposing 13 endpoints beneath base path '/actuator'
+2026-06-25 21:14:04.024 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat started on port 9000 (http) with context path '/'
+2026-06-25 21:14:04.026 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Started ProdReadyFeaturesApplication in 0.428 seconds (process running for 4082.892)
+2026-06-25 21:14:04.027 [INFO] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener [restartedMain] Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+   AuditEventsEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   BeansEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   BeansEndpointAutoConfiguration#beansEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.beans.BeansEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   ConditionsReportEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   ConditionsReportEndpointAutoConfiguration#conditionsReportEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.autoconfigure.condition.ConditionsReportEndpoint; SearchStrategy: current) did not find any beans (OnBeanCondition)
+
+   ConfigurationPropertiesReportEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   ConfigurationPropertiesReportEndpointAutoConfiguration#configurationPropertiesReportEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.context.properties.ConfigurationPropertiesReportEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   ConfigurationPropertiesReportEndpointAutoConfiguration#configurationPropertiesReportEndpointWebExtension matched:
+      - @ConditionalOnBean (types: org.springframework.boot.actuate.context.properties.ConfigurationPropertiesReportEndpoint; SearchStrategy: all) found bean 'configurationPropertiesReportEndpoint'; @ConditionalOnMissingBean (types: org.springframework.boot.actuate.context.properties.ConfigurationPropertiesReportEndpointWebExtension; SearchStrategy: all) did not find any beans (OnBeanCondition)
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   EnvironmentEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   EnvironmentEndpointAutoConfiguration#environmentEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.env.EnvironmentEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   EnvironmentEndpointAutoConfiguration#environmentEndpointWebExtension matched:
+      - @ConditionalOnBean (types: org.springframework.boot.actuate.env.EnvironmentEndpoint; SearchStrategy: all) found bean 'environmentEndpoint'; @ConditionalOnMissingBean (types: org.springframework.boot.actuate.env.EnvironmentEndpointWebExtension; SearchStrategy: all) did not find any beans (OnBeanCondition)
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   HttpExchangesEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   LogFileWebEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   LogFileWebEndpointAutoConfiguration#logFileWebEndpoint matched:
+      - Log File found logging.file.name application.log (LogFileWebEndpointAutoConfiguration.LogFileCondition)
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.logging.LogFileWebEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   LoggersEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   LoggersEndpointAutoConfiguration#loggersEndpoint matched:
+      - Logging System enabled (LoggersEndpointAutoConfiguration.OnEnabledLoggingSystemCondition)
+      - @ConditionalOnBean (types: org.springframework.boot.logging.LoggingSystem; SearchStrategy: all) found bean 'springBootLoggingSystem'; @ConditionalOnMissingBean (types: org.springframework.boot.actuate.logging.LoggersEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   MappingsEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   MetricsEndpointAutoConfiguration matched:
+      - @ConditionalOnClass found required classes 'org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint', 'io.micrometer.core.annotation.Timed' (OnClassCondition)
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   MetricsEndpointAutoConfiguration#metricsEndpoint matched:
+      - @ConditionalOnBean (types: io.micrometer.core.instrument.MeterRegistry; SearchStrategy: all) found bean 'simpleMeterRegistry'; @ConditionalOnMissingBean (types: org.springframework.boot.micrometer.metrics.actuate.endpoint.MetricsEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   SbomEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   SbomEndpointAutoConfiguration#sbomEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.sbom.SbomEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   SbomEndpointAutoConfiguration#sbomEndpointWebExtension matched:
+      - @ConditionalOnBean (types: org.springframework.boot.actuate.sbom.SbomEndpoint; SearchStrategy: all) found bean 'sbomEndpoint'; @ConditionalOnMissingBean (types: org.springframework.boot.actuate.sbom.SbomEndpointWebExtension; SearchStrategy: all) did not find any beans (OnBeanCondition)
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   ScheduledTasksEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   ScheduledTasksEndpointAutoConfiguration#scheduledTasksEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.scheduling.ScheduledTasksEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   ServletMappingsAutoConfiguration matched:
+      - @ConditionalOnClass found required classes 'org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint', 'org.springframework.boot.actuate.web.mappings.MappingsEndpoint' (OnClassCondition)
+      - found 'session' scope (OnWebApplicationCondition)
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   ThreadDumpEndpointAutoConfiguration matched:
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+
+   ThreadDumpEndpointAutoConfiguration#dumpEndpoint matched:
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.management.ThreadDumpEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   WebMvcMappingsAutoConfiguration matched:
+      - @ConditionalOnClass found required classes 'org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint', 'org.springframework.web.servlet.DispatcherServlet', 'org.springframework.boot.actuate.web.mappings.MappingsEndpoint' (OnClassCondition)
+      - found 'session' scope (OnWebApplicationCondition)
+      - @ConditionalOnAvailableEndpoint marked as exposed by a 'management.endpoints.web.exposure' property (OnAvailableEndpointCondition)
+      - @ConditionalOnBean (types: org.springframework.web.servlet.DispatcherServlet; SearchStrategy: all) found bean 'dispatcherServlet' (OnBeanCondition)
+
+
+Negative matches:
+-----------------
+
+   AuditEventsEndpointAutoConfiguration#auditEventsEndpoint:
+      Did not match:
+         - @ConditionalOnBean (types: org.springframework.boot.actuate.audit.AuditEventRepository; SearchStrategy: all) did not find any beans of type org.springframework.boot.actuate.audit.AuditEventRepository (OnBeanCondition)
+
+   HttpExchangesEndpointAutoConfiguration#httpExchangesEndpoint:
+      Did not match:
+         - @ConditionalOnBean (types: org.springframework.boot.actuate.web.exchanges.HttpExchangeRepository; SearchStrategy: all) did not find any beans of type org.springframework.boot.actuate.web.exchanges.HttpExchangeRepository (OnBeanCondition)
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2026-06-25 21:14:09.804 [INFO] o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-25 21:14:09.806 [INFO] o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-06-25 21:14:09.807 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 21:14:09.808 [INFO] c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-8 - Shutdown initiated...
+2026-06-25 21:14:09.809 [INFO] c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-8 - Shutdown completed.
+2026-06-25 21:14:11.850 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Starting ProdReadyFeaturesApplication using Java 25.0.2 with PID 26153 (/Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features)
+2026-06-25 21:14:11.851 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2026-06-25 21:14:11.872 [INFO] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-25 21:14:11.872 [INFO] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-25 21:14:12.221 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-25 21:14:12.246 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 19 ms. Found 1 JPA repository interface.
+2026-06-25 21:14:12.537 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat initialized with port 9000 (http)
+2026-06-25 21:14:12.544 [INFO] o.a.c.c.StandardService [restartedMain] Starting service [Tomcat]
+2026-06-25 21:14:12.544 [INFO] o.a.c.c.StandardEngine [restartedMain] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-25 21:14:12.559 [INFO] o.s.b.w.c.s.WebApplicationContextInitializer [restartedMain] Root WebApplicationContext: initialization completed in 687 ms
+2026-06-25 21:14:12.679 [INFO] o.h.o.jpa [restartedMain] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-25 21:14:12.708 [INFO] o.h.o.core [restartedMain] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-25 21:14:12.820 [INFO] o.h.e.b.i.EnversServiceImpl [restartedMain] Envers integration enabled? : true
+2026-06-25 21:14:12.904 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo [restartedMain] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-25 21:14:12.920 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-1 - Starting...
+2026-06-25 21:14:13.081 [INFO] c.z.h.p.HikariPool [restartedMain] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@516ba25
+2026-06-25 21:14:13.082 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-1 - Start completed.
+2026-06-25 21:14:13.125 [INFO] o.h.o.c.pooling [restartedMain] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/Prod_Ready_Features]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: Prod_Ready_Features/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-25 21:14:13.221 [INFO] o.h.e.c.i.m.AuditMetadataGenerator [restartedMain] Adding properties for entity: com.shubh.module4.Prod_Ready_Features.entity.PostEntity
+2026-06-25 21:14:13.586 [INFO] o.h.o.core [restartedMain] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-25 21:14:13.653 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 21:14:13.734 [INFO] o.s.d.j.r.q.QueryEnhancerFactories [restartedMain] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-25 21:14:13.809 [WARN] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-25 21:14:14.029 [INFO] o.s.b.a.e.w.EndpointLinksResolver [restartedMain] Exposing 13 endpoints beneath base path '/actuator'
+2026-06-25 21:14:14.065 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat started on port 9000 (http) with context path '/'
+2026-06-25 21:14:14.070 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Started ProdReadyFeaturesApplication in 2.477 seconds (process running for 2.7)
+2026-06-25 21:14:17.100 [INFO] o.a.c.c.C.[.[.[/] [http-nio-9000-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-25 21:14:17.100 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Initializing Servlet 'dispatcherServlet'
+2026-06-25 21:14:17.101 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Completed initialization in 1 ms
+2026-06-25 21:15:20.088 [INFO] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener [File Watcher] Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-25 21:15:20.096 [INFO] o.s.b.t.GracefulShutdown [Thread-1] Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-25 21:15:20.103 [INFO] o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-06-25 21:15:20.110 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [Thread-1] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 21:15:20.114 [INFO] c.z.h.HikariDataSource [Thread-1] HikariPool-1 - Shutdown initiated...
+2026-06-25 21:15:20.119 [INFO] c.z.h.HikariDataSource [Thread-1] HikariPool-1 - Shutdown completed.
+2026-06-25 21:15:20.170 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Starting ProdReadyFeaturesApplication using Java 25.0.2 with PID 26153 (/Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features)
+2026-06-25 21:15:20.170 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2026-06-25 21:15:20.250 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-25 21:15:20.255 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 4 ms. Found 1 JPA repository interface.
+2026-06-25 21:15:20.312 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat initialized with port 9000 (http)
+2026-06-25 21:15:20.313 [INFO] o.a.c.c.StandardService [restartedMain] Starting service [Tomcat]
+2026-06-25 21:15:20.313 [INFO] o.a.c.c.StandardEngine [restartedMain] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-25 21:15:20.318 [INFO] o.s.b.w.c.s.WebApplicationContextInitializer [restartedMain] Root WebApplicationContext: initialization completed in 147 ms
+2026-06-25 21:15:20.363 [INFO] o.h.o.jpa [restartedMain] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-25 21:15:20.374 [INFO] o.h.e.b.i.EnversServiceImpl [restartedMain] Envers integration enabled? : true
+2026-06-25 21:15:20.379 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo [restartedMain] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-25 21:15:20.380 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-2 - Starting...
+2026-06-25 21:15:20.395 [INFO] c.z.h.p.HikariPool [restartedMain] HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4b005ac3
+2026-06-25 21:15:20.396 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-2 - Start completed.
+2026-06-25 21:15:20.397 [INFO] o.h.o.c.pooling [restartedMain] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/Prod_Ready_Features]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: Prod_Ready_Features/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-25 21:15:20.402 [INFO] o.h.e.c.i.m.AuditMetadataGenerator [restartedMain] Adding properties for entity: com.shubh.module4.Prod_Ready_Features.entity.PostEntity
+2026-06-25 21:15:20.422 [INFO] o.h.o.core [restartedMain] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-25 21:15:20.481 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 21:15:20.518 [WARN] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-25 21:15:20.593 [INFO] o.s.b.a.e.w.EndpointLinksResolver [restartedMain] Exposing 13 endpoints beneath base path '/actuator'
+2026-06-25 21:15:20.606 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat started on port 9000 (http) with context path '/'
+2026-06-25 21:15:20.608 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Started ProdReadyFeaturesApplication in 0.453 seconds (process running for 69.238)
+2026-06-25 21:15:20.610 [INFO] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener [restartedMain] Condition evaluation unchanged
+2026-06-25 21:15:27.015 [INFO] o.a.c.c.C.[.[.[/] [http-nio-9000-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-25 21:15:27.016 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Initializing Servlet 'dispatcherServlet'
+2026-06-25 21:15:27.017 [INFO] o.s.w.s.DispatcherServlet [http-nio-9000-exec-1] Completed initialization in 1 ms
+2026-06-25 21:18:33.863 [INFO] o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-25 21:18:33.864 [INFO] o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-06-25 21:18:33.866 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 21:18:33.867 [INFO] c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-2 - Shutdown initiated...
+2026-06-25 21:18:33.868 [INFO] c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-2 - Shutdown completed.
+2026-06-25 21:18:48.800 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Starting ProdReadyFeaturesApplication using Java 25.0.2 with PID 26509 (/Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/Prod_Ready_Features)
+2026-06-25 21:18:48.801 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2026-06-25 21:18:48.822 [INFO] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-25 21:18:48.823 [INFO] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-25 21:18:49.185 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-25 21:18:49.209 [INFO] o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 19 ms. Found 1 JPA repository interface.
+2026-06-25 21:18:49.517 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat initialized with port 9000 (http)
+2026-06-25 21:18:49.524 [INFO] o.a.c.c.StandardService [restartedMain] Starting service [Tomcat]
+2026-06-25 21:18:49.524 [INFO] o.a.c.c.StandardEngine [restartedMain] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-25 21:18:49.541 [INFO] o.s.b.w.c.s.WebApplicationContextInitializer [restartedMain] Root WebApplicationContext: initialization completed in 718 ms
+2026-06-25 21:18:49.672 [INFO] o.h.o.jpa [restartedMain] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-25 21:18:49.707 [INFO] o.h.o.core [restartedMain] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-25 21:18:49.826 [INFO] o.h.e.b.i.EnversServiceImpl [restartedMain] Envers integration enabled? : true
+2026-06-25 21:18:49.914 [INFO] o.s.o.j.p.SpringPersistenceUnitInfo [restartedMain] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-25 21:18:49.931 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-1 - Starting...
+2026-06-25 21:18:50.098 [INFO] c.z.h.p.HikariPool [restartedMain] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2f985e89
+2026-06-25 21:18:50.099 [INFO] c.z.h.HikariDataSource [restartedMain] HikariPool-1 - Start completed.
+2026-06-25 21:18:50.140 [INFO] o.h.o.c.pooling [restartedMain] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/Prod_Ready_Features]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: Prod_Ready_Features/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-25 21:18:50.239 [INFO] o.h.e.c.i.m.AuditMetadataGenerator [restartedMain] Adding properties for entity: com.shubh.module4.Prod_Ready_Features.entity.PostEntity
+2026-06-25 21:18:50.614 [INFO] o.h.o.core [restartedMain] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-25 21:18:50.688 [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 21:18:50.781 [INFO] o.s.d.j.r.q.QueryEnhancerFactories [restartedMain] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-25 21:18:50.869 [WARN] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-25 21:18:51.118 [INFO] o.s.b.a.e.w.EndpointLinksResolver [restartedMain] Exposing 13 endpoints beneath base path '/actuator'
+2026-06-25 21:18:51.156 [INFO] o.s.b.t.TomcatWebServer [restartedMain] Tomcat started on port 9000 (http) with context path '/'
+2026-06-25 21:18:51.161 [INFO] c.s.m.P.ProdReadyFeaturesApplication [restartedMain] Started ProdReadyFeaturesApplication in 2.625 seconds (process running for 2.84)
