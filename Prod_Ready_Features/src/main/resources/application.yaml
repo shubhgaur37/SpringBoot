@@ -101,3 +101,8 @@ info:
     version: "1.1"
     author: "Shubh"
   abcd: "pqrs"
+
+# OpenAPI / Swagger configuration
+springdoc:
+  api-docs:
+    enabled: false # Disable generation of the OpenAPI specification (/v3/api-docs). Swagger UI will not be able to display the API documentation.
