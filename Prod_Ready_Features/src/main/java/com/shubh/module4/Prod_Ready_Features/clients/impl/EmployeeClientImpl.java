@@ -32,12 +32,7 @@ public class EmployeeClientImpl implements EmployeeClient {
 
     @Override
     public List<EmployeeDTO> getAllEmployees() {
-        log.error("error log");
-        log.warn("warn log");
-        log.info("info log");
-        // these logs are not enabled by default, can be overridden in application.yaml/properties
-        log.debug("debug log");
-        log.trace("trace log");
+        log.trace("Trying to retrieve all employees in getAllEmployees");
         try {
             ApiResponse<List<EmployeeDTO>> employeeDTOList = restClient.get()
                     /* * URL CONCATENATION GOTCHA:
@@ -66,7 +61,9 @@ public class EmployeeClientImpl implements EmployeeClient {
                      */
                     .body(new ParameterizedTypeReference<ApiResponse<List<EmployeeDTO>>>() {
                     });
-
+            log.debug("Successfully retrieved the employees in getAllEmployees");
+            // passing data for placeholders in trace
+            log.trace("Retrieved Employees list from getAllEmployees : {}, {}, {}", employeeDTOList.getData(), "Hello", 5);
             return employeeDTOList.getData();
 
         } catch (Exception e) {
@@ -76,26 +73,36 @@ public class EmployeeClientImpl implements EmployeeClient {
              * does not need to know the exact internal reasons behind a remote failure.
              * This insulates our system from breaking if the external service changes its error contracts.
              */
-            throw new RuntimeException("Failed to fetch employee from server[rest-client]", e);
+            log.error("Exception occurred in getAllEmployess", e);
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public EmployeeDTO getEmployeeById(Long id) {
+        log.trace("Trying to get employee by id in getEmployeeById with id : {}", id);
         try {
             ApiResponse<EmployeeDTO> employeeResponse = restClient.get()
                     .uri("employees/{employeeId}", id)
                     .retrieve()
+                    .onStatus(HttpStatusCode::is4xxClientError, (req, res) -> {
+                        log.error(new String(res.getBody().readAllBytes()));
+                        throw new ResourceNotFoundException("could not find the employee");
+                    })
                     .body(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
                     });
+            log.trace("Retrieved Employees : {}", employeeResponse.getData());
             return employeeResponse.getData();
         } catch (Exception e) {
-            throw new RuntimeException("Failed to fetch employee from server[rest-client]", e);
+            // log stack trace by passing exception object
+            log.error("Exception occurred in getEmployeeById", e);
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public EmployeeDTO createNewEmployee(EmployeeDTO inputDTO) {
+        log.trace("Trying to create employee with information: {}", inputDTO);
         try {
             ResponseEntity<ApiResponse<EmployeeDTO>> employeeResponseEntity = restClient.post()
                     .uri("employees")
@@ -103,6 +110,7 @@ public class EmployeeClientImpl implements EmployeeClient {
                     .retrieve()
                     .onStatus(HttpStatusCode::is4xxClientError,
                             (req, res) -> {
+                                log.debug("4xxClient Error occured in Create New Employee");
                             /* 💡 THE STREAM RULE: The body is a transient network stream, not an in-memory container.
                                Calling readAllBytes() decodes, drains, and permanently closes this connection stream.
 
@@ -114,16 +122,18 @@ public class EmployeeClientImpl implements EmployeeClient {
                                If you remove the 'throw' line (e.g., trying to log the error and let the execution continue),
                                the code will crash down at the .body(...) mapper. Spring will try to read the response to
                                parse it into your DTO, find the stream empty and closed, and throw a "Stream Closed" IOException. */
-                                System.out.println(new String(res.getBody().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8));
+                                log.error(new String(res.getBody().readAllBytes()));
                                 throw new ResourceNotFoundException("could not create employee due to client error");
                             })
                     .toEntity(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
                     }); // response entity, gives full access to status codes and headers if required
+            log.trace("Sucessfully Created a new employee : {}", employeeResponseEntity.getBody().getData());
             return employeeResponseEntity.getBody().getData();
         } catch (Exception e) {
+            log.error("Exception occured in createNewEmployee", e);
         /* ⚠️ Because ResourceNotFoundException isn't caught explicitly above,
            this generic block will intercept it and wrap it here. */
-            throw new RuntimeException("Failed to fetch employee from server[rest-client]:" + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }

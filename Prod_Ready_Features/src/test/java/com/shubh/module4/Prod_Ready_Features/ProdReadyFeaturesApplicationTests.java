@@ -32,7 +32,9 @@ class ProdReadyFeaturesApplicationTests {
 	@Test
 	@Order(2)
 	void getEmployeeByIdTest(){
-		EmployeeDTO employeeDTO = employeeClient.getEmployeeById(1L);
+//		Long id = 1000L // for error logging validation
+		Long id = 1L;
+		EmployeeDTO employeeDTO = employeeClient.getEmployeeById(id);
 		System.out.println(employeeDTO);
 	}
 
@@ -42,7 +44,7 @@ class ProdReadyFeaturesApplicationTests {
 		EmployeeDTO inputEmployee = new EmployeeDTO();
 		inputEmployee.setName("Krishna");
 		inputEmployee.setEmail("kg@gmail.com");
-		// inputEmployee.setAge(2); // throws 4XX Bad Request, to test error handling
+//		inputEmployee.setAge(2); // throws 4XX Bad Request, to test error handling and logging
 		inputEmployee.setAge(29);
 		inputEmployee.setRole("ADMIN");
 		inputEmployee.setSalary(10000D);
