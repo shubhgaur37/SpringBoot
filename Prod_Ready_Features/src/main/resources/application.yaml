@@ -38,3 +38,11 @@ logging:
     # Specific package path overrides root baseline to capture absolute maximum TRACE details.
     com.shubh.module4.Prod_Ready_Features.clients: TRACE
     com.shubh.module4.Prod_Ready_Features.config: INFO
+
+  pattern:
+    # 1. Standard Fallback Pattern: Prints full timestamp, unshortened fully qualified class path (%c), and the message string.
+    # console: "%d [%c] --- %m%n"
+
+    # 2. Optimized Custom Pattern: Formats date safely (MM=Month, mm=Minute), injects log level severity,
+    # and truncates the logger path to show only the final 2 segments (%c{2}) for maximum readability.
+    console: "%d{dd-MM-yy HH:mm:ss} [%level] [%c{2}] --- %m%n"

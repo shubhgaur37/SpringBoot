@@ -32,7 +32,7 @@ class ProdReadyFeaturesApplicationTests {
 	@Test
 	@Order(2)
 	void getEmployeeByIdTest(){
-//		Long id = 1000L // for error logging validation
+//		Long id = 1000L; // for error logging validation
 		Long id = 1L;
 		EmployeeDTO employeeDTO = employeeClient.getEmployeeById(id);
 		System.out.println(employeeDTO);
