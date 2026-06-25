@@ -56,3 +56,48 @@ logging:
 
   file:
     name: application.log # create a file if doesn't exist already to store logs
+
+# ==============================================================================
+# ACTUATOR INFO ENDPOINT CONFIGURATION
+# ==============================================================================
+# 1. management.info.*.enabled enables the built-in InfoContributors
+#    (env, build, git, java, os) exposed by the /actuator/info endpoint.
+#
+# 2. The 'info.*' namespace defines custom application metadata. These
+#    properties are exposed by /actuator/info when
+#    management.info.env.enabled=true.
+#
+# Note:
+# - Build information requires META-INF/build-info.properties.
+# - Git information requires git.properties.
+# ==============================================================================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # Expose all Actuator endpoints (restrict in production).
+
+  info:
+    env:
+      enabled: true    # Expose custom properties defined under the 'info.*' namespace.
+    build:
+      enabled: true    # Expose build metadata (requires build-info.properties).
+    git:
+      enabled: true    # Expose Git commit and branch information (requires git.properties).
+    java:
+      enabled: true    # Expose JVM and Java runtime information.
+    os:
+      enabled: true    # Expose operating system details.
+
+  endpoint:
+    env:
+      show-values: always          # Display actual values instead of sanitizing them.
+    configprops:
+      show-values: always          # Display bound @ConfigurationProperties values without sanitization.
+
+info:
+  app:
+    name: "My Application"
+    version: "1.1"
+    author: "Shubh"
+  abcd: "pqrs"

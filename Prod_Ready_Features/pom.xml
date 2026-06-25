@@ -70,10 +70,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
-		<!--	Hibernate Enver package to set up auditing for all changes in entities	-->
+		<!--	Hibernate Enver dependendency to set up auditing for all changes in entities	-->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-envers</artifactId>
+		</dependency>
+
+		<!--	Actuator dependency to set up metrics, health checks etc.	-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
 
