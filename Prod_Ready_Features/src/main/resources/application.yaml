@@ -46,3 +46,9 @@ logging:
     # 2. Optimized Custom Pattern: Formats date safely (MM=Month, mm=Minute), injects log level severity,
     # and truncates the logger path to show only the final 2 segments (%c{2}) for maximum readability.
     console: "%d{dd-MM-yy HH:mm:ss} [%level] [%c{2}] --- %m%n"
+    # 💾 Independent pattern configuration specifically for file logging.
+    # Injects a green ANSI timestamp, severity level, truncated 2-depth logger path, execution thread, and the message string.
+    file: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){green} [%level] %c{2} [%t] %m%n"
+
+  file:
+    name: application.log # create a file if doesn't exist already to store logs
