@@ -32,6 +32,10 @@ spring:
         exclude: com/shubh/module4/Prod_Ready_Features/dto
 
 logging:
+  # not required, spring automatically looks for this file_name on the classpath, if a custom_file_name is used for config_file
+  # then it needs to be specified here
+  #config: classpath:logback-spring.xml
+  # every setting below will be overriden if logback-spring file is present
   level:
 #    root: debug
     # set log level for a package, should correspond to compiled class file path[PATH FROM SOURCE_ROOT]

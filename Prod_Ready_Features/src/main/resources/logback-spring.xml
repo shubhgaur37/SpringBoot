@@ -1,0 +1,81 @@
+<!--
+===============================================================================
+LOGBACK NOTES
+
+Use "logback-spring.xml" instead of "logback.xml" to enable Spring Boot
+features like <springProperty>, <springProfile>, and Boot's logging converters
+(e.g. %clr). This file acts as the single source of truth for logging
+configuration and overrides Spring Boot's default logging setup.
+
+Log Retention Policy:
+- maxFileSize : Maximum size of the active log file (application.log). Once this
+                limit is reached, the file is archived and a new active log is created.
+- maxHistory  : Retains archived logs for the specified number of days.
+- totalSizeCap: Maximum combined size of all archived logs. If exceeded,
+                Logback deletes the oldest archives, even if they haven't reached
+                maxHistory yet. (Does not include the active log file.)
+===============================================================================
+-->
+<configuration>
+   <!-- Error Without include:
+    * **The Conflict:** Standard Logback (which is what you are using in your `logback-spring.xml`) does not know what `%clr` is;
+     it only understands standard Logback patterns.
+    * **The Solution:** The `defaults.xml` file is a pre-packaged file in the `spring-boot` JAR that defines common Spring Boot logging patterns, including color conversion, date formatting, and log levels. By including it, you "import" those definitions into your custom file.
+
+    Once you add that `<include>` line, your test should pass and your logs will be properly colored again! Does that resolve the `IllegalStateException`?
+-->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <property name="LOG_DIR" value="logs"/>
+    <property name="ARCHIVE_DIR" value="${LOG_DIR}/archives"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{dd-MM-yy HH:mm:ss} [%level] [%c{2}] --- %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ROLLING_FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <file>${LOG_DIR}/application.log</file>
+
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+
+            <fileNamePattern>
+                ${ARCHIVE_DIR}/application.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>300MB</totalSizeCap>
+
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%level] %c{2} [%thread] %msg%n</pattern>
+        </encoder>
+
+    </appender>
+
+    <logger name="com.shubh.module4.Prod_Ready_Features.clients"
+            level="TRACE"
+            additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ROLLING_FILE"/>
+    </logger>
+
+    <logger name="com.shubh.module4.Prod_Ready_Features.config"
+            level="INFO"
+            additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ROLLING_FILE"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ROLLING_FILE"/>
+    </root>
+
+</configuration>
