@@ -27,7 +27,7 @@ public class CurrencyConverterController {
      */
     @GetMapping(path = "/convertCurrency")
     public ResponseEntity<CurrencyConversionResponseDTO> getConversion(@RequestParam String srcCurrency,
-                                                                       @RequestParam String destCurrencies,
+                                                                       @RequestParam(defaultValue = "") String destCurrencies,
                                                                        @RequestParam BigDecimal units) {
         return ResponseEntity.ok(currencyConverterService.convertSourceToDestCurrencies(srcCurrency, destCurrencies, units));
     }
