@@ -12,11 +12,11 @@ public class ApiError {
     LocalDateTime timeStamp;
     String message;
 
-    ApiError(){
+    ApiError() {
         timeStamp = LocalDateTime.now();
     }
 
-    ApiError(String message){
+    ApiError(String message) {
         this();
         this.message = message;
     }

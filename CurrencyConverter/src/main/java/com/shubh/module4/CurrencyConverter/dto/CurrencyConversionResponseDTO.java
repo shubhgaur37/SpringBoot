@@ -1,7 +1,10 @@
 package com.shubh.module4.CurrencyConverter.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;

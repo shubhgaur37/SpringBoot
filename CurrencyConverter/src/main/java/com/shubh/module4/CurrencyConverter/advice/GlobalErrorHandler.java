@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalErrorHandler {
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ApiError> handleRuntimeException(RuntimeException exception){
+    public ResponseEntity<ApiError> handleRuntimeException(RuntimeException exception) {
         ApiError error = new ApiError(exception.getLocalizedMessage());
-        return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }
