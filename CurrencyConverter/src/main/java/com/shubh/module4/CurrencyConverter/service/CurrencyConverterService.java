@@ -1,6 +1,5 @@
 package com.shubh.module4.CurrencyConverter.service;
 
-import com.shubh.module4.CurrencyConverter.dto.CurrencyConversionRequestDTO;
 import com.shubh.module4.CurrencyConverter.dto.CurrencyConversionResponseDTO;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -18,23 +17,20 @@ import java.math.BigDecimal;
 public class CurrencyConverterService {
     RestClient currencyConverterClient;
 
-    public CurrencyConversionResponseDTO convertSourceToDestCurrencies(CurrencyConversionRequestDTO currencyConversionDTO) {
+    public CurrencyConversionResponseDTO convertSourceToDestCurrencies(String srcCurrency, String destCurrencies, BigDecimal units) {
         CurrencyConversionResponseDTO conversionRateResponse = currencyConverterClient.get()
                 .uri("?base_currency={currency}&currencies={currencies}",
-                        currencyConversionDTO.getFromCurrency(),
-                        currencyConversionDTO.getToCurrencies())
+                        srcCurrency,
+                        destCurrencies)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, (req, res) -> {
                     throw new RuntimeException("4XX Client Error: " + new String(res.getBody().readAllBytes()));
                 })
                 .body(new ParameterizedTypeReference<CurrencyConversionResponseDTO>() {
                 });
-        BigDecimal units = currencyConversionDTO.getUnits();
-        conversionRateResponse.getCurrencyConversions().values()
-                .stream()
-                .map(conversionRate -> conversionRate.multiply(units));
 
-        conversionRateResponse.setSourceCurrency(currencyConversionDTO.getFromCurrency());
+        conversionRateResponse.getCurrencyConversions().replaceAll((currency, rate) -> rate.multiply(units));
+        conversionRateResponse.setSourceCurrency(srcCurrency);
         conversionRateResponse.setUnits(units);
         return conversionRateResponse;
     }

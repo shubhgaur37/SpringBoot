@@ -7,12 +7,10 @@ import lombok.experimental.FieldDefaults;
 import java.math.BigDecimal;
 import java.util.Map;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString
 public class CurrencyConversionResponseDTO {
     String sourceCurrency;
     BigDecimal units;
