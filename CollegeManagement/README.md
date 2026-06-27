@@ -21,6 +21,7 @@ The project is designed around JPA entity relationships, DTO-based API responses
 - ModelMapper
 - Jakarta Validation
 - Lombok
+- Springdoc OpenAPI / Swagger UI
 - JUnit / Spring Boot Test
 
 ## 3. Current runtime setup
@@ -218,7 +219,104 @@ Defined in [SubjectController.java](/Users/shubhgaur/Documents/SpringBOOT/Colleg
 - `PATCH /subjects/{subjectId}/students/{studentId}`
   - Enroll a student into a subject
 
-## 8. What is possible in business terms
+## 8. Swagger/OpenAPI integration and usage
+
+Swagger UI is integrated through Springdoc OpenAPI.
+
+Dependency in [pom.xml](/Users/shubhgaur/Documents/SpringBOOT/CollegeManagement/pom.xml:65):
+
+```xml
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    <version>3.0.3</version>
+</dependency>
+```
+
+### Run the application
+
+Make sure MySQL is running and the `College` database exists, then start the app:
+
+```bash
+./mvnw spring-boot:run
+```
+
+On Windows:
+
+```bash
+mvnw.cmd spring-boot:run
+```
+
+By default, the application runs on port `8080`.
+
+### Open Swagger UI
+
+After the app starts, open:
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
+
+Swagger UI provides an interactive browser page for exploring and testing the REST API.
+
+You can use it to:
+
+- View all available controller endpoints grouped by resource
+- Inspect request and response schemas generated from DTOs
+- Try `GET`, `POST`, `PATCH`, and `DELETE` requests directly from the browser
+- Validate required request fields before calling the API
+- Check response status codes and response bodies
+
+### OpenAPI JSON
+
+The generated OpenAPI specification is available at:
+
+```text
+http://localhost:8080/v3/api-docs
+```
+
+This JSON document can be imported into tools such as Postman, Insomnia, or other API clients.
+
+### Suggested Swagger usage flow
+
+1. Create a professor with subjects using `POST /professors`.
+2. Create a student using `POST /students`.
+3. List subjects with `GET /subjects` to find a `subjectId`.
+4. Enroll the student into a subject using `PATCH /subjects/{subjectId}/students/{studentId}`.
+5. Fetch the student, subject, or professor again with the relevant `GET` endpoint to verify the relationship.
+
+Example `POST /professors` request body:
+
+```json
+{
+  "name": "Dr. Sharma",
+  "subjects": [
+    {
+      "title": "Mathematics"
+    },
+    {
+      "title": "Physics"
+    }
+  ]
+}
+```
+
+Example `POST /students` request body:
+
+```json
+{
+  "name": "Aarav Mehta"
+}
+```
+
+Important runtime notes:
+
+- Swagger UI only works while the Spring Boot application is running.
+- Because the app uses MySQL, API calls from Swagger require a reachable local MySQL database.
+- Because `spring.jpa.hibernate.ddl-auto=create`, the schema is recreated each time the app starts.
+- If validation fails, Swagger will show the HTTP error response returned by Spring MVC.
+
+## 9. What is possible in business terms
 
 Using the current codebase, the project can:
 
@@ -234,7 +332,7 @@ Using the current codebase, the project can:
 - Keep student-subject enrollment data in a join table
 - Filter out already-existing subject titles when adding new subjects to a professor
 
-## 9. DTO design and API shape
+## 10. DTO design and API shape
 
 DTOs are in `src/main/java/.../dto`.
 
@@ -256,7 +354,7 @@ Examples:
 
 This is the main recursion-avoidance strategy in the project.
 
-## 10. Key architectural decisions learned from code comments
+## 11. Key architectural decisions learned from code comments
 
 This section consolidates the design notes written in code comments and tests.
 
@@ -386,7 +484,7 @@ Takeaway:
 - Existing subject detection fetches only subject titles instead of full entities.
 - This keeps the duplicate-check path lighter.
 
-## 11. What the tests show the project is intended to guarantee
+## 12. What the tests show the project is intended to guarantee
 
 From the test suite, the intended guarantees are:
 
@@ -401,7 +499,7 @@ From the test suite, the intended guarantees are:
 - Deleting a professor should remove linked subjects and clean student relationships
 - Deleting a subject should leave student subject sets clean after refresh
 
-## 12. Known limitations and gaps
+## 13. Known limitations and gaps
 
 ### Implemented but not exposed
 
@@ -421,9 +519,9 @@ From the test suite, the intended guarantees are:
 - There is no explicit exception handling layer for validation or database integrity errors.
 - `assignNewSubjectsOnly` silently ignores existing titles instead of returning a conflict report.
 
-## 13. Suggested future improvements
+## 14. Suggested future improvements
 
-- Add a `README` or API guide with sample request/response payloads.
+- Add more Swagger examples for update/delete error scenarios.
 - Add an `AdmissionController` for fee management and admission-specific workflows.
 - Add global exception handling with structured error responses.
 - Use a test database profile, ideally H2 or a dedicated MySQL test container.
@@ -434,7 +532,7 @@ From the test suite, the intended guarantees are:
   - searching/filtering resources
 - Add explicit transaction and fetch-strategy review to reduce possible N+1 issues in larger datasets.
 
-## 14. Summary
+## 15. Summary
 
 This project already supports a meaningful college management workflow centered on:
 
