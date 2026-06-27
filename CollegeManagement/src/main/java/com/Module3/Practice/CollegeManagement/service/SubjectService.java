@@ -1,11 +1,14 @@
 package com.Module3.Practice.CollegeManagement.service;
 
 import com.Module3.Practice.CollegeManagement.dto.subject.SubjectResponseDTO;
+import com.Module3.Practice.CollegeManagement.entity.Subject;
 import com.Module3.Practice.CollegeManagement.repository.ProfessorRepository;
 import com.Module3.Practice.CollegeManagement.repository.StudentRepository;
 import com.Module3.Practice.CollegeManagement.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,20 +33,47 @@ public class SubjectService {
      */
     private final ProfessorRepository professorRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(SubjectService.class);
+
     public List<SubjectResponseDTO> getAllSubjects() {
-        return subjectRepository.findAll()
+        // Entry tracking (DEBUG)
+        logger.debug("Request received to fetch all subjects");
+
+        List<SubjectResponseDTO> subjects = subjectRepository.findAll()
                 .stream()
                 .map(s -> modelMapper.map(s, SubjectResponseDTO.class))
                 .toList();
+
+        // Operational Tracking (INFO): Records total count retrieved for performance monitoring
+        logger.info("Successfully retrieved list of all subjects. Total count: {}", subjects.size());
+
+        // Payload State Tracking (TRACE): Detailed item trace for debugging flat DTO structures
+        logger.trace("Full subject list payload: {}", subjects);
+
+        return subjects;
     }
 
+
     public Optional<SubjectResponseDTO> getSubjectById(Long subjectId) {
+        // Entry tracking (DEBUG)
+        logger.debug("Request received to fetch Subject ID: {}", subjectId);
+
         return subjectRepository.findById(subjectId)
-                .map(s -> modelMapper.map(s, SubjectResponseDTO.class));
+                .map(s -> {
+                    SubjectResponseDTO responseDTO = modelMapper.map(s, SubjectResponseDTO.class);
+
+                    // Payload State Tracking (TRACE): Safe to log the flat DTO payload
+                    logger.trace("Retrieved Subject details for ID {}: {}", subjectId, responseDTO);
+
+                    return responseDTO;
+                });
     }
 
     @Transactional
     public Optional<SubjectResponseDTO> assignSubjectToProfessor(Long subjectId, Long professorId) {
+        // Entry tracking (DEBUG)
+        logger.debug("Request received to assign Subject ID: {} to Professor ID: {}", subjectId, professorId);
+
         /*
          * FLATMAP vs MAP:
          * We use flatMap on professorRepository.findById because the lambda function inside
@@ -69,13 +99,27 @@ public class SubjectService {
                     // Syncing the new professor's collection (Updates the object graph in memory)
                     newProfessor.getSubjects().add(subject);
 
-                    return modelMapper.map(subjectRepository.save(subject), SubjectResponseDTO.class);
+                    Subject savedSubject = subjectRepository.save(subject);
+
+                    // Milestone Audit (INFO): Tracks critical data ownership changes
+                    logger.info("Successfully reassigned Subject ID: {} to new Professor ID: {}", subjectId, professorId);
+
+                    SubjectResponseDTO responseDTO = modelMapper.map(savedSubject, SubjectResponseDTO.class);
+
+                    // Payload State Tracking (TRACE): Safe to log flat DTO content
+                    logger.trace("Updated Subject assignment details: {}", responseDTO);
+
+                    return responseDTO;
                 })
         );
     }
 
+
     @Transactional
     public Optional<SubjectResponseDTO> assignSubjectToStudent(Long subjectId, Long studentId) {
+        // Entry tracking (DEBUG)
+        logger.debug("Request received to assign Subject ID: {} to Student ID: {}", subjectId, studentId);
+
         return studentRepository.findById(studentId).flatMap(student ->
                 subjectRepository.findById(subjectId).map(subject -> {
 
@@ -89,12 +133,20 @@ public class SubjectService {
                     subject.getStudents().add(student);
                     student.getSubjects().add(subject);
 
+                    // Milestone Audit (INFO)
+                    logger.info("Successfully associated Student ID: {} with Subject ID: {}", studentId, subjectId);
+
                     /* * RICH DTO MAPPING:
                      * Because SubjectResponseDTO now contains StudentSummaryDTOs, ModelMapper
                      * will automatically convert the newly updated student Set into
                      * summaries for the response.
                      */
-                    return modelMapper.map(subjectRepository.save(subject), SubjectResponseDTO.class);
+                    SubjectResponseDTO responseDTO = modelMapper.map(subjectRepository.save(subject), SubjectResponseDTO.class);
+
+                    // Payload State Tracking (TRACE)
+                    logger.trace("Updated Subject state after mapping: {}", responseDTO);
+
+                    return responseDTO;
                 })
         );
     }

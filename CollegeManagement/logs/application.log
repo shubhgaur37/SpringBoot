@@ -1,0 +1,875 @@
+2026-06-28 01:19:56.94 | [INFO] | [c.M.P.C.s.ProfessorServiceIntegrationTests] ---- Starting ProfessorServiceIntegrationTests using Java 25.0.2 with PID 3975 (started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/CollegeManagement)
+2026-06-28 01:19:56.94 | [DEBUG] | [c.M.P.C.s.ProfessorServiceIntegrationTests] ---- Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-06-28 01:19:56.94 | [INFO] | [c.M.P.C.s.ProfessorServiceIntegrationTests] ---- No active profile set, falling back to 1 default profile: "default"
+2026-06-28 01:19:57.24 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-28 01:19:57.27 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Finished Spring Data repository scanning in 25 ms. Found 4 JPA repository interfaces.
+2026-06-28 01:19:57.48 | [INFO] | [o.h.o.jpa] ---- HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-28 01:19:57.51 | [INFO] | [o.h.o.core] ---- HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-06-28 01:19:57.75 | [INFO] | [o.s.o.j.p.SpringPersistenceUnitInfo] ---- No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-28 01:19:57.77 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Starting...
+2026-06-28 01:19:57.96 | [INFO] | [c.z.h.p.HikariPool] ---- HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5da2966
+2026-06-28 01:19:57.97 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Start completed.
+2026-06-28 01:19:58.02 | [INFO] | [o.h.o.c.pooling] ---- HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/College]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: College/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-28 01:19:58.49 | [INFO] | [o.h.o.core] ---- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-28 01:19:58.63 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:19:58.68 | [INFO] | [o.s.d.j.r.q.QueryEnhancerFactories] ---- Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-28 01:19:59.07 | [WARN] | [o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration] ---- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-28 01:19:59.30 | [INFO] | [c.M.P.C.s.ProfessorServiceIntegrationTests] ---- Started ProfessorServiceIntegrationTests in 2.541 seconds (process running for 3.216)
+2026-06-28 01:19:59.56 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:19:59.60 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=1, name=Gilderoy Lockhart, subjects=[SubjectSummaryDTO(id=1, title=Magical Me)])
+2026-06-28 01:19:59.60 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Hermione Granger
+2026-06-28 01:19:59.60 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:19:59.60 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: com.Module3.Practice.CollegeManagement.entity.Student@5d7efdb4
+2026-06-28 01:19:59.61 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 1, Admission Record ID: 1
+2026-06-28 01:19:59.61 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=1, name=Hermione Granger, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=1, fees=1000))
+2026-06-28 01:19:59.61 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 1 to Student ID: 1
+2026-06-28 01:19:59.61 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 1 with Subject ID: 1
+2026-06-28 01:19:59.61 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=1, title=Magical Me, professor=ProfessorSummaryDTO(id=1, name=Gilderoy Lockhart), students=[StudentSummaryDTO(id=1, name=Hermione Granger)])
+2026-06-28 01:19:59.68 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Deletion Started for Professor id: 1
+2026-06-28 01:19:59.69 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Deletion Complete for Professor id: 1
+2026-06-28 01:19:59.74 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:19:59.74 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=2, name=Minerva McGonagall, subjects=[SubjectSummaryDTO(id=2, title=Transfiguration)])
+2026-06-28 01:19:59.76 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:19:59.76 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=3, name=Remus Lupin, subjects=[SubjectSummaryDTO(id=3, title=DADA)])
+2026-06-28 01:19:59.76 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to remove Subject ID: 3 from Professor ID: 3
+2026-06-28 01:19:59.76 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Successfully disassociated and deleted Subject ID: 3 from Professor ID: 3
+2026-06-28 01:19:59.76 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Updated Professor state after subject removal: ProfessorResponseDTO(id=3, name=Remus Lupin, subjects=[])
+2026-06-28 01:19:59.77 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to remove Subject ID: 1 from Professor ID: 999
+2026-06-28 01:19:59.78 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:19:59.78 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=4, name=Filius Flitwick, subjects=[SubjectSummaryDTO(id=4, title=Charms)])
+2026-06-28 01:19:59.78 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to assign new subjects to Professor ID: 4. Total requested: 2
+2026-06-28 01:19:59.79 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Filter analysis for Professor ID: 4. Requested: [Charms, Duelling], Existing/Skipped: [Charms]
+2026-06-28 01:19:59.79 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Successfully assigned 1 new subjects to Professor ID: 4. Titles: [Duelling]
+2026-06-28 01:19:59.79 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Updated Professor state after subject assignment: ProfessorResponseDTO(id=4, name=Filius Flitwick, subjects=[SubjectSummaryDTO(id=5, title=Duelling), SubjectSummaryDTO(id=4, title=Charms)])
+2026-06-28 01:19:59.80 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:19:59.81 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown initiated...
+2026-06-28 01:19:59.81 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown completed.
+2026-06-28 01:22:28.00 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- Starting CollegeManagementApplication using Java 25.0.2 with PID 4034 (/Users/shubhgaur/Documents/SpringBOOT/CollegeManagement/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/CollegeManagement)
+2026-06-28 01:22:28.00 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- No active profile set, falling back to 1 default profile: "default"
+2026-06-28 01:22:28.28 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-28 01:22:28.30 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Finished Spring Data repository scanning in 19 ms. Found 4 JPA repository interfaces.
+2026-06-28 01:22:28.51 | [INFO] | [o.s.b.t.TomcatWebServer] ---- Tomcat initialized with port 8080 (http)
+2026-06-28 01:22:28.51 | [INFO] | [o.a.c.c.StandardService] ---- Starting service [Tomcat]
+2026-06-28 01:22:28.51 | [INFO] | [o.a.c.c.StandardEngine] ---- Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-06-28 01:22:28.53 | [INFO] | [o.s.b.w.c.s.WebApplicationContextInitializer] ---- Root WebApplicationContext: initialization completed in 512 ms
+2026-06-28 01:22:28.60 | [INFO] | [o.h.o.jpa] ---- HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-28 01:22:28.63 | [INFO] | [o.h.o.core] ---- HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-06-28 01:22:28.83 | [INFO] | [o.s.o.j.p.SpringPersistenceUnitInfo] ---- No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-28 01:22:28.84 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Starting...
+2026-06-28 01:22:29.00 | [INFO] | [c.z.h.p.HikariPool] ---- HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@303fbc4
+2026-06-28 01:22:29.00 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Start completed.
+2026-06-28 01:22:29.04 | [INFO] | [o.h.o.c.pooling] ---- HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/College]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: College/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-28 01:22:29.49 | [INFO] | [o.h.o.core] ---- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-28 01:22:29.62 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:22:29.66 | [INFO] | [o.s.d.j.r.q.QueryEnhancerFactories] ---- Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-28 01:22:29.98 | [WARN] | [o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration] ---- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-28 01:22:30.12 | [INFO] | [o.s.b.t.TomcatWebServer] ---- Tomcat started on port 8080 (http) with context path '/'
+2026-06-28 01:22:30.13 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- Started CollegeManagementApplication in 2.342 seconds (process running for 2.535)
+2026-06-28 01:22:39.59 | [INFO] | [o.a.c.c.C.[.[.[/]] ---- Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-28 01:22:39.59 | [INFO] | [o.s.w.s.DispatcherServlet] ---- Initializing Servlet 'dispatcherServlet'
+2026-06-28 01:22:39.60 | [INFO] | [o.s.w.s.DispatcherServlet] ---- Completed initialization in 1 ms
+2026-06-28 01:23:18.66 | [INFO] | [o.s.b.t.GracefulShutdown] ---- Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-28 01:23:18.66 | [INFO] | [o.s.b.t.GracefulShutdown] ---- Graceful shutdown complete
+2026-06-28 01:23:18.67 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:23:18.67 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown initiated...
+2026-06-28 01:23:18.67 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown completed.
+2026-06-28 01:23:33.51 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- Starting CollegeManagementApplication using Java 25.0.2 with PID 4057 (/Users/shubhgaur/Documents/SpringBOOT/CollegeManagement/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/CollegeManagement)
+2026-06-28 01:23:33.51 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- No active profile set, falling back to 1 default profile: "default"
+2026-06-28 01:23:33.84 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-28 01:23:33.86 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Finished Spring Data repository scanning in 18 ms. Found 4 JPA repository interfaces.
+2026-06-28 01:23:34.06 | [INFO] | [o.s.b.t.TomcatWebServer] ---- Tomcat initialized with port 8080 (http)
+2026-06-28 01:23:34.07 | [INFO] | [o.a.c.c.StandardService] ---- Starting service [Tomcat]
+2026-06-28 01:23:34.07 | [INFO] | [o.a.c.c.StandardEngine] ---- Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-06-28 01:23:34.09 | [INFO] | [o.s.b.w.c.s.WebApplicationContextInitializer] ---- Root WebApplicationContext: initialization completed in 555 ms
+2026-06-28 01:23:34.16 | [INFO] | [o.h.o.jpa] ---- HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-28 01:23:34.18 | [INFO] | [o.h.o.core] ---- HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-06-28 01:23:34.36 | [INFO] | [o.s.o.j.p.SpringPersistenceUnitInfo] ---- No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-28 01:23:34.38 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Starting...
+2026-06-28 01:23:34.53 | [INFO] | [c.z.h.p.HikariPool] ---- HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@cea67b1
+2026-06-28 01:23:34.53 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Start completed.
+2026-06-28 01:23:34.57 | [INFO] | [o.h.o.c.pooling] ---- HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/College]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: College/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-28 01:23:35.01 | [INFO] | [o.h.o.core] ---- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-28 01:23:35.11 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:23:35.15 | [INFO] | [o.s.d.j.r.q.QueryEnhancerFactories] ---- Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-28 01:23:35.51 | [WARN] | [o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration] ---- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-28 01:23:35.71 | [INFO] | [o.s.b.t.TomcatWebServer] ---- Tomcat started on port 8080 (http) with context path '/'
+2026-06-28 01:23:35.71 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- Started CollegeManagementApplication in 2.412 seconds (process running for 2.594)
+2026-06-28 01:23:35.71 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-06-28 01:23:35.71 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-06-28 01:23:39.53 | [INFO] | [o.a.c.c.C.[.[.[/]] ---- Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-28 01:23:39.53 | [INFO] | [o.s.w.s.DispatcherServlet] ---- Initializing Servlet 'dispatcherServlet'
+2026-06-28 01:23:39.53 | [INFO] | [o.s.w.s.DispatcherServlet] ---- Completed initialization in 1 ms
+2026-06-28 01:23:39.74 | [INFO] | [o.s.a.AbstractOpenApiResource] ---- Init duration for springdoc-openapi is: 137 ms
+2026-06-28 01:24:07.12 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to fetch all students
+2026-06-28 01:24:07.19 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully retrieved list of all students. Total count: 0
+2026-06-28 01:24:07.19 | [TRACE] | [c.M.P.C.s.StudentService] ---- Full student list payload: []
+2026-06-28 01:24:47.62 | [WARN] | [o.s.w.s.m.s.DefaultHandlerExceptionResolver] ---- Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Unrecognized token 'lallu': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')]
+2026-06-28 01:25:17.97 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: LALLU
+2026-06-28 01:25:17.98 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:25:17.98 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: com.Module3.Practice.CollegeManagement.entity.Student@6f2b84c6
+2026-06-28 01:25:18.01 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 1, Admission Record ID: 1
+2026-06-28 01:25:18.01 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=1, name=LALLU, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=1, fees=1000))
+2026-06-28 01:26:15.65 | [INFO] | [o.s.b.t.GracefulShutdown] ---- Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-28 01:26:15.65 | [INFO] | [o.s.b.t.GracefulShutdown] ---- Graceful shutdown complete
+2026-06-28 01:26:15.65 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:26:15.65 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown initiated...
+2026-06-28 01:26:15.66 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown completed.
+2026-06-28 01:26:19.13 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- Starting CollegeManagementApplication using Java 25.0.2 with PID 4091 (/Users/shubhgaur/Documents/SpringBOOT/CollegeManagement/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/CollegeManagement)
+2026-06-28 01:26:19.13 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- No active profile set, falling back to 1 default profile: "default"
+2026-06-28 01:26:19.48 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-28 01:26:19.50 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Finished Spring Data repository scanning in 19 ms. Found 4 JPA repository interfaces.
+2026-06-28 01:26:19.70 | [INFO] | [o.s.b.t.TomcatWebServer] ---- Tomcat initialized with port 8080 (http)
+2026-06-28 01:26:19.71 | [INFO] | [o.a.c.c.StandardService] ---- Starting service [Tomcat]
+2026-06-28 01:26:19.71 | [INFO] | [o.a.c.c.StandardEngine] ---- Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-06-28 01:26:19.73 | [INFO] | [o.s.b.w.c.s.WebApplicationContextInitializer] ---- Root WebApplicationContext: initialization completed in 575 ms
+2026-06-28 01:26:19.80 | [INFO] | [o.h.o.jpa] ---- HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-28 01:26:19.83 | [INFO] | [o.h.o.core] ---- HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-06-28 01:26:20.01 | [INFO] | [o.s.o.j.p.SpringPersistenceUnitInfo] ---- No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-28 01:26:20.02 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Starting...
+2026-06-28 01:26:20.19 | [INFO] | [c.z.h.p.HikariPool] ---- HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2aeb7c4c
+2026-06-28 01:26:20.19 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Start completed.
+2026-06-28 01:26:20.24 | [INFO] | [o.h.o.c.pooling] ---- HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/College]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: College/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-28 01:26:20.67 | [INFO] | [o.h.o.core] ---- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-28 01:26:20.78 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:26:20.82 | [INFO] | [o.s.d.j.r.q.QueryEnhancerFactories] ---- Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-28 01:26:21.18 | [WARN] | [o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration] ---- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-28 01:26:21.39 | [INFO] | [o.s.b.t.TomcatWebServer] ---- Tomcat started on port 8080 (http) with context path '/'
+2026-06-28 01:26:21.39 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- Started CollegeManagementApplication in 2.474 seconds (process running for 2.653)
+2026-06-28 01:26:21.39 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-06-28 01:26:21.39 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-06-28 01:26:36.76 | [INFO] | [o.s.b.t.GracefulShutdown] ---- Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-28 01:26:36.76 | [INFO] | [o.s.b.t.GracefulShutdown] ---- Graceful shutdown complete
+2026-06-28 01:26:36.76 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:26:36.77 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown initiated...
+2026-06-28 01:26:36.77 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown completed.
+2026-06-28 01:26:44.33 | [INFO] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- Starting SubjectServiceIntegrationTests using Java 25.0.2 with PID 4123 (started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/CollegeManagement)
+2026-06-28 01:26:44.33 | [DEBUG] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-06-28 01:26:44.33 | [INFO] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- No active profile set, falling back to 1 default profile: "default"
+2026-06-28 01:26:44.69 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-28 01:26:44.71 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Finished Spring Data repository scanning in 22 ms. Found 4 JPA repository interfaces.
+2026-06-28 01:26:44.91 | [INFO] | [o.h.o.jpa] ---- HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-28 01:26:44.93 | [INFO] | [o.h.o.core] ---- HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-06-28 01:26:45.15 | [INFO] | [o.s.o.j.p.SpringPersistenceUnitInfo] ---- No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-28 01:26:45.16 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Starting...
+2026-06-28 01:26:45.39 | [INFO] | [c.z.h.p.HikariPool] ---- HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@c4ca86a
+2026-06-28 01:26:45.40 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Start completed.
+2026-06-28 01:26:45.44 | [INFO] | [o.h.o.c.pooling] ---- HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/College]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: College/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-28 01:26:45.92 | [INFO] | [o.h.o.core] ---- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-28 01:26:46.07 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:26:46.11 | [INFO] | [o.s.d.j.r.q.QueryEnhancerFactories] ---- Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-28 01:26:46.55 | [WARN] | [o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration] ---- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-28 01:26:46.83 | [INFO] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- Started SubjectServiceIntegrationTests in 2.665 seconds (process running for 3.298)
+2026-06-28 01:26:46.83 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-06-28 01:26:46.83 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-06-28 01:26:47.11 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:47.16 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=1, name=Alastor Moody, subjects=[SubjectSummaryDTO(id=1, title=Defense Against the Dark Arts)])
+2026-06-28 01:26:47.16 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Neville Longbottom
+2026-06-28 01:26:47.16 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:26:47.16 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@24af33a1)
+2026-06-28 01:26:47.16 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 1, Admission Record ID: 1
+2026-06-28 01:26:47.16 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=1, name=Neville Longbottom, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=1, fees=1000))
+2026-06-28 01:26:47.17 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 1 to Student ID: 1
+2026-06-28 01:26:47.19 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 1 with Subject ID: 1
+2026-06-28 01:26:47.19 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=1, title=Defense Against the Dark Arts, professor=ProfessorSummaryDTO(id=1, name=Alastor Moody), students=[StudentSummaryDTO(id=1, name=Neville Longbottom)])
+2026-06-28 01:26:47.22 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to fetch Student ID: 1
+2026-06-28 01:26:47.22 | [TRACE] | [c.M.P.C.s.StudentService] ---- Retrieved Student details for ID 1: StudentResponseDTO(id=1, name=Neville Longbottom, subjects=[SubjectSummaryDTO(id=1, title=Defense Against the Dark Arts)], admissionRecord=AdmissionRecordSummaryDTO(id=1, fees=1000))
+2026-06-28 01:26:47.23 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:47.24 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=2, name=Pomona Sprout, subjects=[SubjectSummaryDTO(id=2, title=Herbology)])
+2026-06-28 01:26:47.24 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to fetch Subject ID: 2
+2026-06-28 01:26:47.24 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Retrieved Subject details for ID 2: SubjectResponseDTO(id=2, title=Herbology, professor=ProfessorSummaryDTO(id=2, name=Pomona Sprout), students=[])
+2026-06-28 01:26:47.25 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:47.25 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=3, name=Severus Snape, subjects=[SubjectSummaryDTO(id=3, title=Potions)])
+2026-06-28 01:26:47.25 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:47.26 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=4, name=Horace Slughorn, subjects=[SubjectSummaryDTO(id=4, title=Advanced Potions)])
+2026-06-28 01:26:47.26 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 3 to Professor ID: 4
+2026-06-28 01:26:47.26 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully reassigned Subject ID: 3 to new Professor ID: 4
+2026-06-28 01:26:47.26 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject assignment details: SubjectResponseDTO(id=3, title=Potions, professor=ProfessorSummaryDTO(id=4, name=Horace Slughorn), students=[])
+2026-06-28 01:26:47.28 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests]: ProfessorServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:26:47.28 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests
+2026-06-28 01:26:47.28 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests]: ProfessorServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:26:47.28 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests
+2026-06-28 01:26:47.29 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:47.29 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=5, name=Gilderoy Lockhart, subjects=[SubjectSummaryDTO(id=5, title=Magical Me)])
+2026-06-28 01:26:47.29 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Hermione Granger
+2026-06-28 01:26:47.29 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:26:47.29 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@4e492c7d)
+2026-06-28 01:26:47.29 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 2, Admission Record ID: 2
+2026-06-28 01:26:47.29 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=2, name=Hermione Granger, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=2, fees=1000))
+2026-06-28 01:26:47.29 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 5 to Student ID: 2
+2026-06-28 01:26:47.29 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 2 with Subject ID: 5
+2026-06-28 01:26:47.29 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=5, title=Magical Me, professor=ProfessorSummaryDTO(id=5, name=Gilderoy Lockhart), students=[StudentSummaryDTO(id=2, name=Hermione Granger)])
+2026-06-28 01:26:47.33 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Deletion Started for Professor id: 5
+2026-06-28 01:26:47.34 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Deletion Complete for Professor id: 5
+2026-06-28 01:26:47.36 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:47.36 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=6, name=Minerva McGonagall, subjects=[SubjectSummaryDTO(id=6, title=Transfiguration)])
+2026-06-28 01:26:47.38 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:47.38 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=7, name=Remus Lupin, subjects=[SubjectSummaryDTO(id=7, title=DADA)])
+2026-06-28 01:26:47.38 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to remove Subject ID: 7 from Professor ID: 7
+2026-06-28 01:26:47.38 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Successfully disassociated and deleted Subject ID: 7 from Professor ID: 7
+2026-06-28 01:26:47.38 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Updated Professor state after subject removal: ProfessorResponseDTO(id=7, name=Remus Lupin, subjects=[])
+2026-06-28 01:26:47.39 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to remove Subject ID: 1 from Professor ID: 999
+2026-06-28 01:26:47.40 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:47.40 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=8, name=Filius Flitwick, subjects=[SubjectSummaryDTO(id=8, title=Charms)])
+2026-06-28 01:26:47.40 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to assign new subjects to Professor ID: 8. Total requested: 2
+2026-06-28 01:26:47.41 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Filter analysis for Professor ID: 8. Requested: [Charms, Duelling], Existing/Skipped: [Charms]
+2026-06-28 01:26:47.41 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Successfully assigned 1 new subjects to Professor ID: 8. Titles: [Duelling]
+2026-06-28 01:26:47.41 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Updated Professor state after subject assignment: ProfessorResponseDTO(id=8, name=Filius Flitwick, subjects=[SubjectSummaryDTO(id=8, title=Charms), SubjectSummaryDTO(id=9, title=Duelling)])
+2026-06-28 01:26:47.42 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests]: StudentServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:26:47.42 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests
+2026-06-28 01:26:47.42 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests]: StudentServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:26:47.42 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests
+2026-06-28 01:26:47.43 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Draco Malfoy
+2026-06-28 01:26:47.43 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:26:47.43 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@3b00a7b9)
+2026-06-28 01:26:47.43 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 3, Admission Record ID: 3
+2026-06-28 01:26:47.43 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=3, name=Draco Malfoy, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=3, fees=1000))
+2026-06-28 01:26:47.43 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 10 to Student ID: 3
+2026-06-28 01:26:47.43 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 3 with Subject ID: 10
+2026-06-28 01:26:47.43 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=10, title=Defense Against the Dark Arts, professor=ProfessorSummaryDTO(id=9, name=Professor Remus Lupin), students=[StudentSummaryDTO(id=3, name=Draco Malfoy)])
+2026-06-28 01:26:47.44 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Cedric Diggory
+2026-06-28 01:26:47.44 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:26:47.44 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@3f3b50df)
+2026-06-28 01:26:47.44 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 4, Admission Record ID: 4
+2026-06-28 01:26:47.44 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=4, name=Cedric Diggory, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=4, fees=1000))
+2026-06-28 01:26:47.44 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Cho Chang
+2026-06-28 01:26:47.44 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:26:47.44 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@35537fe)
+2026-06-28 01:26:47.44 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 5, Admission Record ID: 5
+2026-06-28 01:26:47.44 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=5, name=Cho Chang, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=5, fees=1000))
+2026-06-28 01:26:47.44 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to fetch all students
+2026-06-28 01:26:47.44 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully retrieved list of all students. Total count: 2
+2026-06-28 01:26:47.44 | [TRACE] | [c.M.P.C.s.StudentService] ---- Full student list payload: [StudentResponseDTO(id=4, name=Cedric Diggory, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=4, fees=1000)), StudentResponseDTO(id=5, name=Cho Chang, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=5, fees=1000))]
+2026-06-28 01:26:47.45 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Luna Lovegood
+2026-06-28 01:26:47.45 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:26:47.45 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@53e7ef2d)
+2026-06-28 01:26:47.45 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 6, Admission Record ID: 6
+2026-06-28 01:26:47.45 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=6, name=Luna Lovegood, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=6, fees=1000))
+2026-06-28 01:26:47.45 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 12 to Student ID: 6
+2026-06-28 01:26:47.45 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 6 with Subject ID: 12
+2026-06-28 01:26:47.45 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=12, title=Defense Against the Dark Arts, professor=ProfessorSummaryDTO(id=11, name=Professor Remus Lupin), students=[StudentSummaryDTO(id=6, name=Luna Lovegood)])
+2026-06-28 01:26:47.45 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to delete student with ID: 6
+2026-06-28 01:26:47.45 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully requested database deletion for Student ID: 6
+2026-06-28 01:26:47.46 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests]: AdmissionServiceTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:26:47.46 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests
+2026-06-28 01:26:47.46 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests]: AdmissionServiceTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:26:47.46 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests
+2026-06-28 01:26:47.47 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: 1
+2026-06-28 01:26:47.47 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@2f110efa)
+2026-06-28 01:26:47.47 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:26:47.47 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown initiated...
+2026-06-28 01:26:47.48 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown completed.
+2026-06-28 01:26:50.65 | [INFO] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- Starting SubjectServiceIntegrationTests using Java 25.0.2 with PID 4137 (started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/CollegeManagement)
+2026-06-28 01:26:50.65 | [DEBUG] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-06-28 01:26:50.65 | [INFO] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- No active profile set, falling back to 1 default profile: "default"
+2026-06-28 01:26:51.02 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-28 01:26:51.05 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Finished Spring Data repository scanning in 23 ms. Found 4 JPA repository interfaces.
+2026-06-28 01:26:51.26 | [INFO] | [o.h.o.jpa] ---- HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-28 01:26:51.29 | [INFO] | [o.h.o.core] ---- HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-06-28 01:26:51.51 | [INFO] | [o.s.o.j.p.SpringPersistenceUnitInfo] ---- No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-28 01:26:51.52 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Starting...
+2026-06-28 01:26:51.73 | [INFO] | [c.z.h.p.HikariPool] ---- HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6f926d01
+2026-06-28 01:26:51.73 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Start completed.
+2026-06-28 01:26:51.77 | [INFO] | [o.h.o.c.pooling] ---- HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/College]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: College/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-28 01:26:52.23 | [INFO] | [o.h.o.core] ---- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-28 01:26:52.36 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:26:52.41 | [INFO] | [o.s.d.j.r.q.QueryEnhancerFactories] ---- Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-28 01:26:52.85 | [WARN] | [o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration] ---- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-28 01:26:53.16 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:26:53.16 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown initiated...
+2026-06-28 01:26:53.16 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown completed.
+2026-06-28 01:26:56.03 | [INFO] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- Starting SubjectServiceIntegrationTests using Java 25.0.2 with PID 4148 (started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/CollegeManagement)
+2026-06-28 01:26:56.03 | [DEBUG] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-06-28 01:26:56.03 | [INFO] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- No active profile set, falling back to 1 default profile: "default"
+2026-06-28 01:26:56.39 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-28 01:26:56.41 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Finished Spring Data repository scanning in 22 ms. Found 4 JPA repository interfaces.
+2026-06-28 01:26:56.62 | [INFO] | [o.h.o.jpa] ---- HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-28 01:26:56.64 | [INFO] | [o.h.o.core] ---- HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-06-28 01:26:56.85 | [INFO] | [o.s.o.j.p.SpringPersistenceUnitInfo] ---- No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-28 01:26:56.86 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Starting...
+2026-06-28 01:26:57.07 | [INFO] | [c.z.h.p.HikariPool] ---- HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@406decb2
+2026-06-28 01:26:57.07 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Start completed.
+2026-06-28 01:26:57.12 | [INFO] | [o.h.o.c.pooling] ---- HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/College]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: College/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-28 01:26:57.57 | [INFO] | [o.h.o.core] ---- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-28 01:26:57.69 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:26:57.73 | [INFO] | [o.s.d.j.r.q.QueryEnhancerFactories] ---- Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-28 01:26:58.16 | [WARN] | [o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration] ---- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-28 01:26:58.44 | [INFO] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- Started SubjectServiceIntegrationTests in 2.571 seconds (process running for 3.208)
+2026-06-28 01:26:58.44 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-06-28 01:26:58.44 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-06-28 01:26:58.70 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:58.75 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=1, name=Alastor Moody, subjects=[SubjectSummaryDTO(id=1, title=Defense Against the Dark Arts)])
+2026-06-28 01:26:58.75 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Neville Longbottom
+2026-06-28 01:26:58.75 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:26:58.75 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@ba1f5d1)
+2026-06-28 01:26:58.75 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 1, Admission Record ID: 1
+2026-06-28 01:26:58.76 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=1, name=Neville Longbottom, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=1, fees=1000))
+2026-06-28 01:26:58.76 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 1 to Student ID: 1
+2026-06-28 01:26:58.78 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 1 with Subject ID: 1
+2026-06-28 01:26:58.79 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=1, title=Defense Against the Dark Arts, professor=ProfessorSummaryDTO(id=1, name=Alastor Moody), students=[StudentSummaryDTO(id=1, name=Neville Longbottom)])
+2026-06-28 01:26:58.81 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to fetch Student ID: 1
+2026-06-28 01:26:58.81 | [TRACE] | [c.M.P.C.s.StudentService] ---- Retrieved Student details for ID 1: StudentResponseDTO(id=1, name=Neville Longbottom, subjects=[SubjectSummaryDTO(id=1, title=Defense Against the Dark Arts)], admissionRecord=AdmissionRecordSummaryDTO(id=1, fees=1000))
+2026-06-28 01:26:58.83 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:58.83 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=2, name=Pomona Sprout, subjects=[SubjectSummaryDTO(id=2, title=Herbology)])
+2026-06-28 01:26:58.83 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to fetch Subject ID: 2
+2026-06-28 01:26:58.83 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Retrieved Subject details for ID 2: SubjectResponseDTO(id=2, title=Herbology, professor=ProfessorSummaryDTO(id=2, name=Pomona Sprout), students=[])
+2026-06-28 01:26:58.84 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:58.84 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=3, name=Severus Snape, subjects=[SubjectSummaryDTO(id=3, title=Potions)])
+2026-06-28 01:26:58.84 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:58.84 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=4, name=Horace Slughorn, subjects=[SubjectSummaryDTO(id=4, title=Advanced Potions)])
+2026-06-28 01:26:58.84 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 3 to Professor ID: 4
+2026-06-28 01:26:58.85 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully reassigned Subject ID: 3 to new Professor ID: 4
+2026-06-28 01:26:58.85 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject assignment details: SubjectResponseDTO(id=3, title=Potions, professor=ProfessorSummaryDTO(id=4, name=Horace Slughorn), students=[])
+2026-06-28 01:26:58.86 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests]: ProfessorServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:26:58.87 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests
+2026-06-28 01:26:58.87 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests]: ProfessorServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:26:58.87 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests
+2026-06-28 01:26:58.87 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:58.87 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=5, name=Gilderoy Lockhart, subjects=[SubjectSummaryDTO(id=5, title=Magical Me)])
+2026-06-28 01:26:58.87 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Hermione Granger
+2026-06-28 01:26:58.87 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:26:58.87 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@391dfe82)
+2026-06-28 01:26:58.87 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 2, Admission Record ID: 2
+2026-06-28 01:26:58.87 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=2, name=Hermione Granger, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=2, fees=1000))
+2026-06-28 01:26:58.88 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 5 to Student ID: 2
+2026-06-28 01:26:58.88 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 2 with Subject ID: 5
+2026-06-28 01:26:58.88 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=5, title=Magical Me, professor=ProfessorSummaryDTO(id=5, name=Gilderoy Lockhart), students=[StudentSummaryDTO(id=2, name=Hermione Granger)])
+2026-06-28 01:26:58.91 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Deletion Started for Professor id: 5
+2026-06-28 01:26:58.92 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Deletion Complete for Professor id: 5
+2026-06-28 01:26:58.94 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:58.94 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=6, name=Minerva McGonagall, subjects=[SubjectSummaryDTO(id=6, title=Transfiguration)])
+2026-06-28 01:26:58.96 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:58.96 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=7, name=Remus Lupin, subjects=[SubjectSummaryDTO(id=7, title=DADA)])
+2026-06-28 01:26:58.96 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to remove Subject ID: 7 from Professor ID: 7
+2026-06-28 01:26:58.96 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Successfully disassociated and deleted Subject ID: 7 from Professor ID: 7
+2026-06-28 01:26:58.96 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Updated Professor state after subject removal: ProfessorResponseDTO(id=7, name=Remus Lupin, subjects=[])
+2026-06-28 01:26:58.97 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to remove Subject ID: 1 from Professor ID: 999
+2026-06-28 01:26:58.97 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:26:58.97 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=8, name=Filius Flitwick, subjects=[SubjectSummaryDTO(id=8, title=Charms)])
+2026-06-28 01:26:58.97 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to assign new subjects to Professor ID: 8. Total requested: 2
+2026-06-28 01:26:58.99 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Filter analysis for Professor ID: 8. Requested: [Charms, Duelling], Existing/Skipped: [Charms]
+2026-06-28 01:26:58.99 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Successfully assigned 1 new subjects to Professor ID: 8. Titles: [Duelling]
+2026-06-28 01:26:58.99 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Updated Professor state after subject assignment: ProfessorResponseDTO(id=8, name=Filius Flitwick, subjects=[SubjectSummaryDTO(id=8, title=Charms), SubjectSummaryDTO(id=9, title=Duelling)])
+2026-06-28 01:26:59.00 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests]: StudentServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:26:59.00 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests
+2026-06-28 01:26:59.00 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests]: StudentServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:26:59.00 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests
+2026-06-28 01:26:59.00 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Draco Malfoy
+2026-06-28 01:26:59.00 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:26:59.00 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@1d05cbae)
+2026-06-28 01:26:59.01 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 3, Admission Record ID: 3
+2026-06-28 01:26:59.01 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=3, name=Draco Malfoy, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=3, fees=1000))
+2026-06-28 01:26:59.01 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 10 to Student ID: 3
+2026-06-28 01:26:59.01 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 3 with Subject ID: 10
+2026-06-28 01:26:59.01 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=10, title=Defense Against the Dark Arts, professor=ProfessorSummaryDTO(id=9, name=Professor Remus Lupin), students=[StudentSummaryDTO(id=3, name=Draco Malfoy)])
+2026-06-28 01:26:59.02 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Cedric Diggory
+2026-06-28 01:26:59.02 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:26:59.02 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@642f1d22)
+2026-06-28 01:26:59.02 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 4, Admission Record ID: 4
+2026-06-28 01:26:59.02 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=4, name=Cedric Diggory, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=4, fees=1000))
+2026-06-28 01:26:59.02 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Cho Chang
+2026-06-28 01:26:59.02 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:26:59.02 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@426786ee)
+2026-06-28 01:26:59.02 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 5, Admission Record ID: 5
+2026-06-28 01:26:59.02 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=5, name=Cho Chang, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=5, fees=1000))
+2026-06-28 01:26:59.02 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to fetch all students
+2026-06-28 01:26:59.02 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully retrieved list of all students. Total count: 2
+2026-06-28 01:26:59.02 | [TRACE] | [c.M.P.C.s.StudentService] ---- Full student list payload: [StudentResponseDTO(id=4, name=Cedric Diggory, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=4, fees=1000)), StudentResponseDTO(id=5, name=Cho Chang, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=5, fees=1000))]
+2026-06-28 01:26:59.03 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Luna Lovegood
+2026-06-28 01:26:59.03 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:26:59.03 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@1f116973)
+2026-06-28 01:26:59.03 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 6, Admission Record ID: 6
+2026-06-28 01:26:59.03 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=6, name=Luna Lovegood, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=6, fees=1000))
+2026-06-28 01:26:59.03 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 12 to Student ID: 6
+2026-06-28 01:26:59.03 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 6 with Subject ID: 12
+2026-06-28 01:26:59.03 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=12, title=Defense Against the Dark Arts, professor=ProfessorSummaryDTO(id=11, name=Professor Remus Lupin), students=[StudentSummaryDTO(id=6, name=Luna Lovegood)])
+2026-06-28 01:26:59.03 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to delete student with ID: 6
+2026-06-28 01:26:59.03 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully requested database deletion for Student ID: 6
+2026-06-28 01:26:59.05 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests]: AdmissionServiceTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:26:59.05 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests
+2026-06-28 01:26:59.05 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests]: AdmissionServiceTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:26:59.05 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests
+2026-06-28 01:26:59.05 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: 1
+2026-06-28 01:26:59.05 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@554bb231)
+2026-06-28 01:26:59.06 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:26:59.06 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown initiated...
+2026-06-28 01:26:59.06 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown completed.
+2026-06-28 01:27:03.85 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- Starting CollegeManagementApplication using Java 25.0.2 with PID 4159 (/Users/shubhgaur/Documents/SpringBOOT/CollegeManagement/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/CollegeManagement)
+2026-06-28 01:27:03.85 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- No active profile set, falling back to 1 default profile: "default"
+2026-06-28 01:27:04.19 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-28 01:27:04.21 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Finished Spring Data repository scanning in 19 ms. Found 4 JPA repository interfaces.
+2026-06-28 01:27:04.41 | [INFO] | [o.s.b.t.TomcatWebServer] ---- Tomcat initialized with port 8080 (http)
+2026-06-28 01:27:04.42 | [INFO] | [o.a.c.c.StandardService] ---- Starting service [Tomcat]
+2026-06-28 01:27:04.42 | [INFO] | [o.a.c.c.StandardEngine] ---- Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-06-28 01:27:04.44 | [INFO] | [o.s.b.w.c.s.WebApplicationContextInitializer] ---- Root WebApplicationContext: initialization completed in 571 ms
+2026-06-28 01:27:04.52 | [INFO] | [o.h.o.jpa] ---- HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-28 01:27:04.54 | [INFO] | [o.h.o.core] ---- HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-06-28 01:27:04.72 | [INFO] | [o.s.o.j.p.SpringPersistenceUnitInfo] ---- No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-28 01:27:04.73 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Starting...
+2026-06-28 01:27:04.92 | [INFO] | [c.z.h.p.HikariPool] ---- HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4fd63c43
+2026-06-28 01:27:04.92 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Start completed.
+2026-06-28 01:27:04.96 | [INFO] | [o.h.o.c.pooling] ---- HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/College]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: College/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-28 01:27:05.40 | [INFO] | [o.h.o.core] ---- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-28 01:27:05.49 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:27:05.53 | [INFO] | [o.s.d.j.r.q.QueryEnhancerFactories] ---- Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-28 01:27:05.88 | [WARN] | [o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration] ---- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-28 01:27:06.09 | [INFO] | [o.s.b.t.TomcatWebServer] ---- Tomcat started on port 8080 (http) with context path '/'
+2026-06-28 01:27:06.10 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- Started CollegeManagementApplication in 2.462 seconds (process running for 2.646)
+2026-06-28 01:27:06.10 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-06-28 01:27:06.10 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-06-28 01:27:13.61 | [INFO] | [o.a.c.c.C.[.[.[/]] ---- Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-28 01:27:13.61 | [INFO] | [o.s.w.s.DispatcherServlet] ---- Initializing Servlet 'dispatcherServlet'
+2026-06-28 01:27:13.61 | [INFO] | [o.s.w.s.DispatcherServlet] ---- Completed initialization in 1 ms
+2026-06-28 01:27:13.69 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: LALLU
+2026-06-28 01:27:13.69 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for studentId: null
+2026-06-28 01:27:13.69 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@540f5d21)
+2026-06-28 01:27:13.73 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 1, Admission Record ID: 1
+2026-06-28 01:27:13.73 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=1, name=LALLU, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=1, fees=1000))
+2026-06-28 01:28:09.58 | [INFO] | [o.s.b.t.GracefulShutdown] ---- Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-28 01:28:09.58 | [INFO] | [o.s.b.t.GracefulShutdown] ---- Graceful shutdown complete
+2026-06-28 01:28:09.58 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:28:09.58 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown initiated...
+2026-06-28 01:28:09.59 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown completed.
+2026-06-28 01:29:00.22 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- Starting CollegeManagementApplication using Java 25.0.2 with PID 4209 (/Users/shubhgaur/Documents/SpringBOOT/CollegeManagement/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/CollegeManagement)
+2026-06-28 01:29:00.23 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- No active profile set, falling back to 1 default profile: "default"
+2026-06-28 01:29:00.57 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-28 01:29:00.59 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Finished Spring Data repository scanning in 19 ms. Found 4 JPA repository interfaces.
+2026-06-28 01:29:00.79 | [INFO] | [o.s.b.t.TomcatWebServer] ---- Tomcat initialized with port 8080 (http)
+2026-06-28 01:29:00.80 | [INFO] | [o.a.c.c.StandardService] ---- Starting service [Tomcat]
+2026-06-28 01:29:00.80 | [INFO] | [o.a.c.c.StandardEngine] ---- Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-06-28 01:29:00.82 | [INFO] | [o.s.b.w.c.s.WebApplicationContextInitializer] ---- Root WebApplicationContext: initialization completed in 574 ms
+2026-06-28 01:29:00.90 | [INFO] | [o.h.o.jpa] ---- HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-28 01:29:00.92 | [INFO] | [o.h.o.core] ---- HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-06-28 01:29:01.10 | [INFO] | [o.s.o.j.p.SpringPersistenceUnitInfo] ---- No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-28 01:29:01.11 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Starting...
+2026-06-28 01:29:01.28 | [INFO] | [c.z.h.p.HikariPool] ---- HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4fd63c43
+2026-06-28 01:29:01.28 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Start completed.
+2026-06-28 01:29:01.33 | [INFO] | [o.h.o.c.pooling] ---- HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/College]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: College/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-28 01:29:01.76 | [INFO] | [o.h.o.core] ---- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-28 01:29:01.87 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:29:01.91 | [INFO] | [o.s.d.j.r.q.QueryEnhancerFactories] ---- Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-28 01:29:02.26 | [WARN] | [o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration] ---- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-28 01:29:02.47 | [INFO] | [o.s.b.t.TomcatWebServer] ---- Tomcat started on port 8080 (http) with context path '/'
+2026-06-28 01:29:02.48 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- Started CollegeManagementApplication in 2.466 seconds (process running for 2.645)
+2026-06-28 01:29:02.48 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-06-28 01:29:02.48 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-06-28 01:29:06.93 | [INFO] | [o.a.c.c.C.[.[.[/]] ---- Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-28 01:29:06.93 | [INFO] | [o.s.w.s.DispatcherServlet] ---- Initializing Servlet 'dispatcherServlet'
+2026-06-28 01:29:06.93 | [INFO] | [o.s.w.s.DispatcherServlet] ---- Completed initialization in 1 ms
+2026-06-28 01:29:07.00 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: LALLU
+2026-06-28 01:29:07.01 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for student: LALLU
+2026-06-28 01:29:07.01 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: AdmissionRecord(id=null, fees=1000, student=com.Module3.Practice.CollegeManagement.entity.Student@540f5d21)
+2026-06-28 01:29:07.04 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 1, Admission Record ID: 1
+2026-06-28 01:29:07.05 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=1, name=LALLU, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=1, fees=1000))
+2026-06-28 01:29:44.13 | [INFO] | [o.s.b.t.GracefulShutdown] ---- Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-28 01:29:44.14 | [INFO] | [o.s.b.t.GracefulShutdown] ---- Graceful shutdown complete
+2026-06-28 01:29:44.14 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:29:44.14 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown initiated...
+2026-06-28 01:29:44.14 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown completed.
+2026-06-28 01:31:38.35 | [INFO] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- Starting SubjectServiceIntegrationTests using Java 25.0.2 with PID 4319 (started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/CollegeManagement)
+2026-06-28 01:31:38.35 | [DEBUG] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-06-28 01:31:38.35 | [INFO] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- No active profile set, falling back to 1 default profile: "default"
+2026-06-28 01:31:38.71 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-28 01:31:38.74 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Finished Spring Data repository scanning in 21 ms. Found 4 JPA repository interfaces.
+2026-06-28 01:31:38.94 | [INFO] | [o.h.o.jpa] ---- HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-28 01:31:38.97 | [INFO] | [o.h.o.core] ---- HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-06-28 01:31:39.22 | [INFO] | [o.s.o.j.p.SpringPersistenceUnitInfo] ---- No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-28 01:31:39.24 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Starting...
+2026-06-28 01:31:39.45 | [INFO] | [c.z.h.p.HikariPool] ---- HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6166aac5
+2026-06-28 01:31:39.45 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Start completed.
+2026-06-28 01:31:39.50 | [INFO] | [o.h.o.c.pooling] ---- HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/College]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: College/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-28 01:31:40.00 | [INFO] | [o.h.o.core] ---- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-28 01:31:40.15 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:31:40.19 | [INFO] | [o.s.d.j.r.q.QueryEnhancerFactories] ---- Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-28 01:31:40.64 | [WARN] | [o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration] ---- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-28 01:31:40.90 | [INFO] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- Started SubjectServiceIntegrationTests in 2.728 seconds (process running for 3.391)
+2026-06-28 01:31:40.91 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-06-28 01:31:40.91 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-06-28 01:31:41.18 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:31:41.23 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=1, name=Alastor Moody, subjects=[SubjectSummaryDTO(id=1, title=Defense Against the Dark Arts)])
+2026-06-28 01:31:41.23 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Neville Longbottom
+2026-06-28 01:31:41.23 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for student: Neville Longbottom
+2026-06-28 01:31:41.23 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: com.Module3.Practice.CollegeManagement.entity.AdmissionRecord@52743ef2
+2026-06-28 01:31:41.24 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 1, Admission Record ID: 1
+2026-06-28 01:31:41.24 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=1, name=Neville Longbottom, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=1, fees=1000))
+2026-06-28 01:31:41.25 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 1 to Student ID: 1
+2026-06-28 01:31:41.27 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 1 with Subject ID: 1
+2026-06-28 01:31:41.27 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=1, title=Defense Against the Dark Arts, professor=ProfessorSummaryDTO(id=1, name=Alastor Moody), students=[StudentSummaryDTO(id=1, name=Neville Longbottom)])
+2026-06-28 01:31:41.31 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to fetch Student ID: 1
+2026-06-28 01:31:41.31 | [TRACE] | [c.M.P.C.s.StudentService] ---- Retrieved Student details for ID 1: StudentResponseDTO(id=1, name=Neville Longbottom, subjects=[SubjectSummaryDTO(id=1, title=Defense Against the Dark Arts)], admissionRecord=AdmissionRecordSummaryDTO(id=1, fees=1000))
+2026-06-28 01:31:41.32 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:31:41.32 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=2, name=Pomona Sprout, subjects=[SubjectSummaryDTO(id=2, title=Herbology)])
+2026-06-28 01:31:41.32 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to fetch Subject ID: 2
+2026-06-28 01:31:41.33 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Retrieved Subject details for ID 2: SubjectResponseDTO(id=2, title=Herbology, professor=ProfessorSummaryDTO(id=2, name=Pomona Sprout), students=[])
+2026-06-28 01:31:41.33 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:31:41.33 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=3, name=Severus Snape, subjects=[SubjectSummaryDTO(id=3, title=Potions)])
+2026-06-28 01:31:41.33 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:31:41.34 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=4, name=Horace Slughorn, subjects=[SubjectSummaryDTO(id=4, title=Advanced Potions)])
+2026-06-28 01:31:41.34 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 3 to Professor ID: 4
+2026-06-28 01:31:41.34 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully reassigned Subject ID: 3 to new Professor ID: 4
+2026-06-28 01:31:41.34 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject assignment details: SubjectResponseDTO(id=3, title=Potions, professor=ProfessorSummaryDTO(id=4, name=Horace Slughorn), students=[])
+2026-06-28 01:31:41.36 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests]: ProfessorServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:31:41.36 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests
+2026-06-28 01:31:41.36 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests]: ProfessorServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:31:41.36 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests
+2026-06-28 01:31:41.36 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:31:41.37 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=5, name=Gilderoy Lockhart, subjects=[SubjectSummaryDTO(id=5, title=Magical Me)])
+2026-06-28 01:31:41.37 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Hermione Granger
+2026-06-28 01:31:41.37 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for student: Hermione Granger
+2026-06-28 01:31:41.37 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: com.Module3.Practice.CollegeManagement.entity.AdmissionRecord@17f856a3
+2026-06-28 01:31:41.37 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 2, Admission Record ID: 2
+2026-06-28 01:31:41.37 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=2, name=Hermione Granger, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=2, fees=1000))
+2026-06-28 01:31:41.37 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 5 to Student ID: 2
+2026-06-28 01:31:41.37 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 2 with Subject ID: 5
+2026-06-28 01:31:41.37 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=5, title=Magical Me, professor=ProfessorSummaryDTO(id=5, name=Gilderoy Lockhart), students=[StudentSummaryDTO(id=2, name=Hermione Granger)])
+2026-06-28 01:31:41.42 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Deletion Started for Professor id: 5
+2026-06-28 01:31:41.42 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Deletion Complete for Professor id: 5
+2026-06-28 01:31:41.44 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:31:41.44 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=6, name=Minerva McGonagall, subjects=[SubjectSummaryDTO(id=6, title=Transfiguration)])
+2026-06-28 01:31:41.46 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:31:41.46 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=7, name=Remus Lupin, subjects=[SubjectSummaryDTO(id=7, title=DADA)])
+2026-06-28 01:31:41.46 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to remove Subject ID: 7 from Professor ID: 7
+2026-06-28 01:31:41.46 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Successfully disassociated and deleted Subject ID: 7 from Professor ID: 7
+2026-06-28 01:31:41.46 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Updated Professor state after subject removal: ProfessorResponseDTO(id=7, name=Remus Lupin, subjects=[])
+2026-06-28 01:31:41.47 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to remove Subject ID: 1 from Professor ID: 999
+2026-06-28 01:31:41.47 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:31:41.47 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=8, name=Filius Flitwick, subjects=[SubjectSummaryDTO(id=8, title=Charms)])
+2026-06-28 01:31:41.48 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to assign new subjects to Professor ID: 8. Total requested: 2
+2026-06-28 01:31:41.48 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Filter analysis for Professor ID: 8. Requested: [Charms, Duelling], Existing/Skipped: [Charms]
+2026-06-28 01:31:41.48 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Successfully assigned 1 new subjects to Professor ID: 8. Titles: [Duelling]
+2026-06-28 01:31:41.49 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Updated Professor state after subject assignment: ProfessorResponseDTO(id=8, name=Filius Flitwick, subjects=[SubjectSummaryDTO(id=9, title=Duelling), SubjectSummaryDTO(id=8, title=Charms)])
+2026-06-28 01:31:41.49 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests]: StudentServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:31:41.49 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests
+2026-06-28 01:31:41.49 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests]: StudentServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:31:41.49 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests
+2026-06-28 01:31:41.50 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Draco Malfoy
+2026-06-28 01:31:41.50 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for student: Draco Malfoy
+2026-06-28 01:31:41.50 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: com.Module3.Practice.CollegeManagement.entity.AdmissionRecord@257a59c
+2026-06-28 01:31:41.50 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 3, Admission Record ID: 3
+2026-06-28 01:31:41.50 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=3, name=Draco Malfoy, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=3, fees=1000))
+2026-06-28 01:31:41.50 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 10 to Student ID: 3
+2026-06-28 01:31:41.50 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 3 with Subject ID: 10
+2026-06-28 01:31:41.50 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=10, title=Defense Against the Dark Arts, professor=ProfessorSummaryDTO(id=9, name=Professor Remus Lupin), students=[StudentSummaryDTO(id=3, name=Draco Malfoy)])
+2026-06-28 01:31:41.51 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Cedric Diggory
+2026-06-28 01:31:41.51 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for student: Cedric Diggory
+2026-06-28 01:31:41.51 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: com.Module3.Practice.CollegeManagement.entity.AdmissionRecord@296a6a10
+2026-06-28 01:31:41.52 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 4, Admission Record ID: 4
+2026-06-28 01:31:41.52 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=4, name=Cedric Diggory, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=4, fees=1000))
+2026-06-28 01:31:41.52 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Cho Chang
+2026-06-28 01:31:41.52 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for student: Cho Chang
+2026-06-28 01:31:41.52 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: com.Module3.Practice.CollegeManagement.entity.AdmissionRecord@52f3859a
+2026-06-28 01:31:41.52 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 5, Admission Record ID: 5
+2026-06-28 01:31:41.52 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=5, name=Cho Chang, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=5, fees=1000))
+2026-06-28 01:31:41.52 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to fetch all students
+2026-06-28 01:31:41.52 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully retrieved list of all students. Total count: 2
+2026-06-28 01:31:41.52 | [TRACE] | [c.M.P.C.s.StudentService] ---- Full student list payload: [StudentResponseDTO(id=4, name=Cedric Diggory, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=4, fees=1000)), StudentResponseDTO(id=5, name=Cho Chang, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=5, fees=1000))]
+2026-06-28 01:31:41.53 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Luna Lovegood
+2026-06-28 01:31:41.53 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for student: Luna Lovegood
+2026-06-28 01:31:41.53 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: com.Module3.Practice.CollegeManagement.entity.AdmissionRecord@1f17fe4c
+2026-06-28 01:31:41.53 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 6, Admission Record ID: 6
+2026-06-28 01:31:41.53 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=6, name=Luna Lovegood, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=6, fees=1000))
+2026-06-28 01:31:41.53 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 12 to Student ID: 6
+2026-06-28 01:31:41.53 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 6 with Subject ID: 12
+2026-06-28 01:31:41.53 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=12, title=Defense Against the Dark Arts, professor=ProfessorSummaryDTO(id=11, name=Professor Remus Lupin), students=[StudentSummaryDTO(id=6, name=Luna Lovegood)])
+2026-06-28 01:31:41.53 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to delete student with ID: 6
+2026-06-28 01:31:41.53 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully requested database deletion for Student ID: 6
+2026-06-28 01:31:41.54 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests]: AdmissionServiceTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:31:41.54 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests
+2026-06-28 01:31:41.54 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests]: AdmissionServiceTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:31:41.54 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests
+2026-06-28 01:31:41.55 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to Initialise Admission Record for student: Test Student
+2026-06-28 01:31:41.55 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised Admission Record: com.Module3.Practice.CollegeManagement.entity.AdmissionRecord@579351d1
+2026-06-28 01:31:41.55 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:31:41.55 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown initiated...
+2026-06-28 01:31:41.56 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown completed.
+2026-06-28 01:33:09.95 | [INFO] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- Starting SubjectServiceIntegrationTests using Java 25.0.2 with PID 4362 (started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/CollegeManagement)
+2026-06-28 01:33:09.95 | [DEBUG] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-06-28 01:33:09.95 | [INFO] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- No active profile set, falling back to 1 default profile: "default"
+2026-06-28 01:33:10.34 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-28 01:33:10.37 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Finished Spring Data repository scanning in 21 ms. Found 4 JPA repository interfaces.
+2026-06-28 01:33:10.58 | [INFO] | [o.h.o.jpa] ---- HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-28 01:33:10.61 | [INFO] | [o.h.o.core] ---- HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-06-28 01:33:10.85 | [INFO] | [o.s.o.j.p.SpringPersistenceUnitInfo] ---- No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-28 01:33:10.87 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Starting...
+2026-06-28 01:33:11.09 | [INFO] | [c.z.h.p.HikariPool] ---- HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@44aa5585
+2026-06-28 01:33:11.09 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Start completed.
+2026-06-28 01:33:11.14 | [INFO] | [o.h.o.c.pooling] ---- HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/College]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: College/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-28 01:33:11.62 | [INFO] | [o.h.o.core] ---- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-28 01:33:11.75 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:33:11.80 | [INFO] | [o.s.d.j.r.q.QueryEnhancerFactories] ---- Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-28 01:33:12.24 | [WARN] | [o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration] ---- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-28 01:33:12.51 | [INFO] | [c.M.P.C.s.SubjectServiceIntegrationTests] ---- Started SubjectServiceIntegrationTests in 2.748 seconds (process running for 3.417)
+2026-06-28 01:33:12.51 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-06-28 01:33:12.51 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-06-28 01:33:12.78 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:33:12.84 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=1, name=Alastor Moody, subjects=[SubjectSummaryDTO(id=1, title=Defense Against the Dark Arts)])
+2026-06-28 01:33:12.84 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Neville Longbottom
+2026-06-28 01:33:12.84 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to initialise admission record for student name: Neville Longbottom
+2026-06-28 01:33:12.84 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised admission record state. Fees: 1000, Student Name: Neville Longbottom
+2026-06-28 01:33:12.85 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 1, Admission Record ID: 1
+2026-06-28 01:33:12.85 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=1, name=Neville Longbottom, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=1, fees=1000))
+2026-06-28 01:33:12.85 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 1 to Student ID: 1
+2026-06-28 01:33:12.87 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 1 with Subject ID: 1
+2026-06-28 01:33:12.87 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=1, title=Defense Against the Dark Arts, professor=ProfessorSummaryDTO(id=1, name=Alastor Moody), students=[StudentSummaryDTO(id=1, name=Neville Longbottom)])
+2026-06-28 01:33:12.90 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to fetch Student ID: 1
+2026-06-28 01:33:12.90 | [TRACE] | [c.M.P.C.s.StudentService] ---- Retrieved Student details for ID 1: StudentResponseDTO(id=1, name=Neville Longbottom, subjects=[SubjectSummaryDTO(id=1, title=Defense Against the Dark Arts)], admissionRecord=AdmissionRecordSummaryDTO(id=1, fees=1000))
+2026-06-28 01:33:12.91 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:33:12.92 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=2, name=Pomona Sprout, subjects=[SubjectSummaryDTO(id=2, title=Herbology)])
+2026-06-28 01:33:12.92 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to fetch Subject ID: 2
+2026-06-28 01:33:12.92 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Retrieved Subject details for ID 2: SubjectResponseDTO(id=2, title=Herbology, professor=ProfessorSummaryDTO(id=2, name=Pomona Sprout), students=[])
+2026-06-28 01:33:12.93 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:33:12.93 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=3, name=Severus Snape, subjects=[SubjectSummaryDTO(id=3, title=Potions)])
+2026-06-28 01:33:12.93 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:33:12.93 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=4, name=Horace Slughorn, subjects=[SubjectSummaryDTO(id=4, title=Advanced Potions)])
+2026-06-28 01:33:12.93 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 3 to Professor ID: 4
+2026-06-28 01:33:12.94 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully reassigned Subject ID: 3 to new Professor ID: 4
+2026-06-28 01:33:12.94 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject assignment details: SubjectResponseDTO(id=3, title=Potions, professor=ProfessorSummaryDTO(id=4, name=Horace Slughorn), students=[])
+2026-06-28 01:33:12.96 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests]: ProfessorServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:33:12.96 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests
+2026-06-28 01:33:12.96 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests]: ProfessorServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:33:12.96 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.ProfessorServiceIntegrationTests
+2026-06-28 01:33:12.97 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:33:12.97 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=5, name=Gilderoy Lockhart, subjects=[SubjectSummaryDTO(id=5, title=Magical Me)])
+2026-06-28 01:33:12.97 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Hermione Granger
+2026-06-28 01:33:12.97 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to initialise admission record for student name: Hermione Granger
+2026-06-28 01:33:12.97 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised admission record state. Fees: 1000, Student Name: Hermione Granger
+2026-06-28 01:33:12.97 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 2, Admission Record ID: 2
+2026-06-28 01:33:12.97 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=2, name=Hermione Granger, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=2, fees=1000))
+2026-06-28 01:33:12.97 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 5 to Student ID: 2
+2026-06-28 01:33:12.97 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 2 with Subject ID: 5
+2026-06-28 01:33:12.97 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=5, title=Magical Me, professor=ProfessorSummaryDTO(id=5, name=Gilderoy Lockhart), students=[StudentSummaryDTO(id=2, name=Hermione Granger)])
+2026-06-28 01:33:13.01 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Deletion Started for Professor id: 5
+2026-06-28 01:33:13.01 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Deletion Complete for Professor id: 5
+2026-06-28 01:33:13.03 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:33:13.03 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=6, name=Minerva McGonagall, subjects=[SubjectSummaryDTO(id=6, title=Transfiguration)])
+2026-06-28 01:33:13.05 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:33:13.05 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=7, name=Remus Lupin, subjects=[SubjectSummaryDTO(id=7, title=DADA)])
+2026-06-28 01:33:13.05 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to remove Subject ID: 7 from Professor ID: 7
+2026-06-28 01:33:13.05 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Successfully disassociated and deleted Subject ID: 7 from Professor ID: 7
+2026-06-28 01:33:13.05 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Updated Professor state after subject removal: ProfessorResponseDTO(id=7, name=Remus Lupin, subjects=[])
+2026-06-28 01:33:13.06 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to remove Subject ID: 1 from Professor ID: 999
+2026-06-28 01:33:13.06 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:33:13.06 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=8, name=Filius Flitwick, subjects=[SubjectSummaryDTO(id=8, title=Charms)])
+2026-06-28 01:33:13.06 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Request received to assign new subjects to Professor ID: 8. Total requested: 2
+2026-06-28 01:33:13.07 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Filter analysis for Professor ID: 8. Requested: [Charms, Duelling], Existing/Skipped: [Charms]
+2026-06-28 01:33:13.07 | [INFO] | [c.M.P.C.s.ProfessorService] ---- Successfully assigned 1 new subjects to Professor ID: 8. Titles: [Duelling]
+2026-06-28 01:33:13.07 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Updated Professor state after subject assignment: ProfessorResponseDTO(id=8, name=Filius Flitwick, subjects=[SubjectSummaryDTO(id=9, title=Duelling), SubjectSummaryDTO(id=8, title=Charms)])
+2026-06-28 01:33:13.08 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests]: StudentServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:33:13.08 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests
+2026-06-28 01:33:13.08 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests]: StudentServiceIntegrationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:33:13.08 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.StudentServiceIntegrationTests
+2026-06-28 01:33:13.09 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Draco Malfoy
+2026-06-28 01:33:13.09 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to initialise admission record for student name: Draco Malfoy
+2026-06-28 01:33:13.09 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised admission record state. Fees: 1000, Student Name: Draco Malfoy
+2026-06-28 01:33:13.09 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 3, Admission Record ID: 3
+2026-06-28 01:33:13.09 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=3, name=Draco Malfoy, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=3, fees=1000))
+2026-06-28 01:33:13.09 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 10 to Student ID: 3
+2026-06-28 01:33:13.09 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 3 with Subject ID: 10
+2026-06-28 01:33:13.09 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=10, title=Defense Against the Dark Arts, professor=ProfessorSummaryDTO(id=9, name=Professor Remus Lupin), students=[StudentSummaryDTO(id=3, name=Draco Malfoy)])
+2026-06-28 01:33:13.10 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Cedric Diggory
+2026-06-28 01:33:13.10 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to initialise admission record for student name: Cedric Diggory
+2026-06-28 01:33:13.10 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised admission record state. Fees: 1000, Student Name: Cedric Diggory
+2026-06-28 01:33:13.10 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 4, Admission Record ID: 4
+2026-06-28 01:33:13.10 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=4, name=Cedric Diggory, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=4, fees=1000))
+2026-06-28 01:33:13.10 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Cho Chang
+2026-06-28 01:33:13.10 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to initialise admission record for student name: Cho Chang
+2026-06-28 01:33:13.10 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised admission record state. Fees: 1000, Student Name: Cho Chang
+2026-06-28 01:33:13.11 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 5, Admission Record ID: 5
+2026-06-28 01:33:13.11 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=5, name=Cho Chang, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=5, fees=1000))
+2026-06-28 01:33:13.11 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to fetch all students
+2026-06-28 01:33:13.11 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully retrieved list of all students. Total count: 2
+2026-06-28 01:33:13.11 | [TRACE] | [c.M.P.C.s.StudentService] ---- Full student list payload: [StudentResponseDTO(id=4, name=Cedric Diggory, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=4, fees=1000)), StudentResponseDTO(id=5, name=Cho Chang, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=5, fees=1000))]
+2026-06-28 01:33:13.12 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: Luna Lovegood
+2026-06-28 01:33:13.12 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to initialise admission record for student name: Luna Lovegood
+2026-06-28 01:33:13.12 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised admission record state. Fees: 1000, Student Name: Luna Lovegood
+2026-06-28 01:33:13.12 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 6, Admission Record ID: 6
+2026-06-28 01:33:13.12 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=6, name=Luna Lovegood, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=6, fees=1000))
+2026-06-28 01:33:13.12 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to assign Subject ID: 12 to Student ID: 6
+2026-06-28 01:33:13.12 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully associated Student ID: 6 with Subject ID: 12
+2026-06-28 01:33:13.12 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Updated Subject state after mapping: SubjectResponseDTO(id=12, title=Defense Against the Dark Arts, professor=ProfessorSummaryDTO(id=11, name=Professor Remus Lupin), students=[StudentSummaryDTO(id=6, name=Luna Lovegood)])
+2026-06-28 01:33:13.12 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to delete student with ID: 6
+2026-06-28 01:33:13.12 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully requested database deletion for Student ID: 6
+2026-06-28 01:33:13.13 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests]: AdmissionServiceTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:33:13.13 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests
+2026-06-28 01:33:13.13 | [INFO] | [o.s.t.c.s.AnnotationConfigContextLoaderUtils] ---- Could not detect default configuration classes for test class [com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests]: AdmissionServiceTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-28 01:33:13.13 | [INFO] | [o.s.b.t.c.SpringBootTestContextBootstrapper] ---- Found @SpringBootConfiguration com.Module3.Practice.CollegeManagement.CollegeManagementApplication for test class com.Module3.Practice.CollegeManagement.service.AdmissionServiceTests
+2026-06-28 01:33:13.13 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to initialise admission record for student name: Test Student
+2026-06-28 01:33:13.13 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised admission record state. Fees: 1000, Student Name: Test Student
+2026-06-28 01:33:13.14 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:33:13.14 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown initiated...
+2026-06-28 01:33:13.14 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown completed.
+2026-06-28 01:33:16.97 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- Starting CollegeManagementApplication using Java 25.0.2 with PID 4374 (/Users/shubhgaur/Documents/SpringBOOT/CollegeManagement/target/classes started by shubhgaur in /Users/shubhgaur/Documents/SpringBOOT/CollegeManagement)
+2026-06-28 01:33:16.97 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- No active profile set, falling back to 1 default profile: "default"
+2026-06-28 01:33:17.30 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-28 01:33:17.33 | [INFO] | [o.s.d.r.c.RepositoryConfigurationDelegate] ---- Finished Spring Data repository scanning in 18 ms. Found 4 JPA repository interfaces.
+2026-06-28 01:33:17.53 | [INFO] | [o.s.b.t.TomcatWebServer] ---- Tomcat initialized with port 8080 (http)
+2026-06-28 01:33:17.54 | [INFO] | [o.a.c.c.StandardService] ---- Starting service [Tomcat]
+2026-06-28 01:33:17.54 | [INFO] | [o.a.c.c.StandardEngine] ---- Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-06-28 01:33:17.56 | [INFO] | [o.s.b.w.c.s.WebApplicationContextInitializer] ---- Root WebApplicationContext: initialization completed in 569 ms
+2026-06-28 01:33:17.64 | [INFO] | [o.h.o.jpa] ---- HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-28 01:33:17.66 | [INFO] | [o.h.o.core] ---- HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-06-28 01:33:17.84 | [INFO] | [o.s.o.j.p.SpringPersistenceUnitInfo] ---- No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-28 01:33:17.85 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Starting...
+2026-06-28 01:33:18.01 | [INFO] | [c.z.h.p.HikariPool] ---- HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2aeb7c4c
+2026-06-28 01:33:18.01 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Start completed.
+2026-06-28 01:33:18.05 | [INFO] | [o.h.o.c.pooling] ---- HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/College]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.6
+	Default catalog/schema: College/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-28 01:33:18.47 | [INFO] | [o.h.o.core] ---- HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-28 01:33:18.58 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:33:18.62 | [INFO] | [o.s.d.j.r.q.QueryEnhancerFactories] ---- Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-28 01:33:18.96 | [WARN] | [o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration] ---- spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-28 01:33:19.17 | [INFO] | [o.s.b.t.TomcatWebServer] ---- Tomcat started on port 8080 (http) with context path '/'
+2026-06-28 01:33:19.18 | [INFO] | [c.M.P.C.CollegeManagementApplication] ---- Started CollegeManagementApplication in 2.42 seconds (process running for 2.602)
+2026-06-28 01:33:19.18 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-06-28 01:33:19.18 | [WARN] | [o.s.c.e.SpringDocAppInitializer] ---- SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-06-28 01:33:28.60 | [INFO] | [o.a.c.c.C.[.[.[/]] ---- Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-28 01:33:28.60 | [INFO] | [o.s.w.s.DispatcherServlet] ---- Initializing Servlet 'dispatcherServlet'
+2026-06-28 01:33:28.60 | [INFO] | [o.s.w.s.DispatcherServlet] ---- Completed initialization in 1 ms
+2026-06-28 01:33:28.68 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to create a new student with Name: LALLU
+2026-06-28 01:33:28.69 | [DEBUG] | [c.M.P.C.s.AdmissionService] ---- Attempting to initialise admission record for student name: LALLU
+2026-06-28 01:33:28.69 | [TRACE] | [c.M.P.C.s.AdmissionService] ---- Finalised admission record state. Fees: 1000, Student Name: LALLU
+2026-06-28 01:33:28.72 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully created student record. Assigned ID: 1, Admission Record ID: 1
+2026-06-28 01:33:28.72 | [TRACE] | [c.M.P.C.s.StudentService] ---- Created Student full response details: StudentResponseDTO(id=1, name=LALLU, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=1, fees=1000))
+2026-06-28 01:34:07.64 | [DEBUG] | [c.M.P.C.s.SubjectService] ---- Request received to fetch all subjects
+2026-06-28 01:34:07.69 | [INFO] | [c.M.P.C.s.SubjectService] ---- Successfully retrieved list of all subjects. Total count: 0
+2026-06-28 01:34:07.69 | [TRACE] | [c.M.P.C.s.SubjectService] ---- Full subject list payload: []
+2026-06-28 01:36:36.11 | [DEBUG] | [c.M.P.C.s.ProfessorService] ---- Attempting to create professor
+2026-06-28 01:36:36.11 | [TRACE] | [c.M.P.C.s.ProfessorService] ---- Saved Professor Information: ProfessorResponseDTO(id=1, name=SHUBH, subjects=[SubjectSummaryDTO(id=1, title=Programming)])
+2026-06-28 01:37:40.62 | [DEBUG] | [c.M.P.C.s.StudentService] ---- Request received to fetch all students
+2026-06-28 01:37:40.64 | [INFO] | [c.M.P.C.s.StudentService] ---- Successfully retrieved list of all students. Total count: 1
+2026-06-28 01:37:40.64 | [TRACE] | [c.M.P.C.s.StudentService] ---- Full student list payload: [StudentResponseDTO(id=1, name=LALLU, subjects=[], admissionRecord=AdmissionRecordSummaryDTO(id=1, fees=1000))]
+2026-06-28 01:38:00.25 | [INFO] | [o.s.b.t.GracefulShutdown] ---- Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-28 01:38:00.25 | [INFO] | [o.s.b.t.GracefulShutdown] ---- Graceful shutdown complete
+2026-06-28 01:38:00.26 | [INFO] | [o.s.o.j.LocalContainerEntityManagerFactoryBean] ---- Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28 01:38:00.26 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown initiated...
+2026-06-28 01:38:00.26 | [INFO] | [c.z.h.HikariDataSource] ---- HikariPool-1 - Shutdown completed.
