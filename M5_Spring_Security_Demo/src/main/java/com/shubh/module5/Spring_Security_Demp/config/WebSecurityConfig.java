@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,7 +35,6 @@ public class WebSecurityConfig {
                 .formLogin(Customizer.withDefaults()) // Configures form login with default settings
 
                 // Intercepts and filters incoming HTTP requests based on roles and paths before reaching the controllers.
-                // Maintains stateful session tracking by passing a JSESSIONID cookie in request headers.
                 .authorizeHttpRequests(auth -> auth
 
                         // Public Endpoint: Permits all unauthenticated users to access the main /posts route.
@@ -43,15 +43,25 @@ public class WebSecurityConfig {
                         // Role-Based Authorization: Restricts access to matching sub-routes.
                         // User 'yash' can access this because he carries the 'MANAGER' role.
                         // User 'kalu' will receive an HTTP 403 Forbidden error because he only carries 'USER'.
-                        .requestMatchers("/posts/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers("/posts/**", "/error", "/public").hasAnyRole("ADMIN", "MANAGER")
 
-                        // Catch-All Guard: Mandates authentication for any remaining unmapped endpoints.
+                        // Catch-All Guard: Mandates authentication for every remaining unmapped endpoint.
                         .anyRequest().authenticated()
                 )
+
+                // Disables Cross-Site Request Forgery (CSRF) protection.
+                // Safe to disable for stateless APIs using JWTs, allowing non-GET requests (POST, PUT, DELETE) from Postman without a token.
+                .csrf(csrfConfig -> csrfConfig.disable())
+
+                // Changes session tracking management from Stateful to Stateless.
+                // CRITICAL: This is the exact reason your standard browser form login is now failing.
+                // Stateless policy prevents Spring Security from saving user context in a HTTP Session or generating JSESSIONID cookies.
+                .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 // Builds and compiles the finalized SecurityFilterChain bean instance
                 .build();
     }
+
 
     // Configures an In-Memory User Store for testing user credentials
     @Bean
