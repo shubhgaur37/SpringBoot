@@ -21,3 +21,12 @@ spring:
       restart:
         enabled: true
         exclude: com/shubh/module5/Spring_Security_Demp/dto
+
+  security:
+    # Create a single user's login and pass, for multiple users, configuration is defined
+    # in a java class
+    # roles ADMIN, USER, MANAGER
+    user:
+      name: shubh
+      password: shubh
+      roles: ADMIN, USER, MANAGER
