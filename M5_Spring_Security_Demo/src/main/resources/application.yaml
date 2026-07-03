@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: "Spring Security Demo"
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/Spring_Security_Demo
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+    show-sql: true
+
+    properties:
+      hibernate:
+        format_sql: true
+
+    devtools:
+      restart:
+        enabled: true
+        exclude: com/shubh/module5/Spring_Security_Demp/dto
