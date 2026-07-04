@@ -37,16 +37,16 @@ public class WebSecurityConfig {
                 // Intercepts and filters incoming HTTP requests based on roles and paths before reaching the controllers.
                 .authorizeHttpRequests(auth -> auth
 
-                                // Public Endpoint: Permits all unauthenticated users to access the main /posts route.
-                                .requestMatchers("/posts", "/error", "/auth/**").permitAll()
+                        // Public Endpoint: Permits all unauthenticated users to access the main /posts route.
+                        .requestMatchers("/posts", "/error", "/auth/**").permitAll()
 
-                                // Role-Based Authorization: Restricts access to matching sub-routes.
-                                // User 'yash' can access this because he carries the 'MANAGER' role.
-                                // User 'kalu' will receive an HTTP 403 Forbidden error because he only carries 'USER'.
-                                // .requestMatchers("/posts/**").hasAnyRole("ADMIN", "MANAGER")
+                        // Role-Based Authorization: Restricts access to matching sub-routes.
+                        // User 'yash' can access this because he carries the 'MANAGER' role.
+                        // User 'kalu' will receive an HTTP 403 Forbidden error because he only carries 'USER'.
+                        // .requestMatchers("/posts/**").hasAnyRole("ADMIN", "MANAGER")
 
-                                // Catch-All Guard: Mandates authentication for every remaining unmapped endpoint.
-                                .anyRequest().authenticated()
+                        // Catch-All Guard: Mandates authentication for every remaining unmapped endpoint.
+                        .anyRequest().authenticated()
                 )
 
                 // Disables Cross-Site Request Forgery (CSRF) protection.

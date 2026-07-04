@@ -1,7 +1,6 @@
 package com.shubh.module5.Spring_Security_Demo.filter;
 
 import com.shubh.module5.Spring_Security_Demo.dto.UserDTO;
-import com.shubh.module5.Spring_Security_Demo.entity.UserEntity;
 import com.shubh.module5.Spring_Security_Demo.service.JWTService;
 import com.shubh.module5.Spring_Security_Demo.service.UserService;
 import jakarta.servlet.FilterChain;
@@ -72,7 +71,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
          * access the user via SecurityContextHolder.
          */
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDTO user = modelMapper.map(userService.findUserById(userId),UserDTO.class);
+            UserDTO user = modelMapper.map(userService.findUserById(userId), UserDTO.class);
 
             // Populate token with user details and authorities
             UsernamePasswordAuthenticationToken authenticationToken =
@@ -106,18 +105,18 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
 
 /* FILTER CHAIN BEHAVIOR (JWTAuthFilter):
-        *
-        * - GLOBAL SCOPE: Filters are not routes. Even if a path is defined as
+ *
+ * - GLOBAL SCOPE: Filters are not routes. Even if a path is defined as
  *   'permitAll()' in your SecurityFilterChain, your custom 'JWTAuthFilter'
-        *   runs globally for EVERY request because it sits in the Security Filter Chain
+ *   runs globally for EVERY request because it sits in the Security Filter Chain
  *   before authorization logic.
  *
-         * - THE PIPELINE: Think of the filter chain as an airport security gate. Your
+ * - THE PIPELINE: Think of the filter chain as an airport security gate. Your
  *   filter is a checkpoint that every request must pass through first. If it
  *   is a public route, your filter should simply call 'filterChain.doFilter()'
-        *   to pass the request along to the next step in the pipeline.
-        *
-        * - RECURSION WARNING: Never call 'this.doFilterInternal()' from within your
+ *   to pass the request along to the next step in the pipeline.
+ *
+ * - RECURSION WARNING: Never call 'this.doFilterInternal()' from within your
  *   filter. Always call 'filterChain.doFilter(request, response)' to pass the
  *   request to the next filter. Calling your own method will cause an
  *   infinite loop, resulting in a StackOverflowError.

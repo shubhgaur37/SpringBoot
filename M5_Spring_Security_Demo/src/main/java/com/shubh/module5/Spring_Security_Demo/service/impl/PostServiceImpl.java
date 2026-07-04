@@ -3,7 +3,6 @@ package com.shubh.module5.Spring_Security_Demo.service.impl;
 import com.shubh.module5.Spring_Security_Demo.dto.PostDTO;
 import com.shubh.module5.Spring_Security_Demo.dto.UserDTO;
 import com.shubh.module5.Spring_Security_Demo.entity.PostEntity;
-import com.shubh.module5.Spring_Security_Demo.entity.UserEntity;
 import com.shubh.module5.Spring_Security_Demo.exception.ResourceNotFoundException;
 import com.shubh.module5.Spring_Security_Demo.repository.PostRepository;
 import com.shubh.module5.Spring_Security_Demo.service.PostService;
