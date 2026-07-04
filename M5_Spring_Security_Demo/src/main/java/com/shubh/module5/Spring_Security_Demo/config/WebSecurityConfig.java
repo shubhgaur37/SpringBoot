@@ -1,4 +1,4 @@
-package com.shubh.module5.Spring_Security_Demp.config;
+package com.shubh.module5.Spring_Security_Demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

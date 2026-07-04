@@ -1,4 +1,4 @@
-package com.shubh.module5.Spring_Security_Demp.advice;
+package com.shubh.module5.Spring_Security_Demo.advice;
 
 import lombok.AccessLevel;
 import lombok.Data;

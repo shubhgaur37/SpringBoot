@@ -1,6 +1,6 @@
-package com.shubh.module5.Spring_Security_Demp.service;
+package com.shubh.module5.Spring_Security_Demo.service;
 
-import com.shubh.module5.Spring_Security_Demp.repository.UserRepository;
+import com.shubh.module5.Spring_Security_Demo.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

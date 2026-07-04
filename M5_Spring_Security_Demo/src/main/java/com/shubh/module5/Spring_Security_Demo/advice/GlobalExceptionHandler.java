@@ -1,6 +1,6 @@
-package com.shubh.module5.Spring_Security_Demp.advice;
+package com.shubh.module5.Spring_Security_Demo.advice;
 
-import com.shubh.module5.Spring_Security_Demp.exception.ResourceNotFoundException;
+import com.shubh.module5.Spring_Security_Demo.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,10 +1,10 @@
-package com.shubh.module5.Spring_Security_Demp.service.impl;
+package com.shubh.module5.Spring_Security_Demo.service.impl;
 
-import com.shubh.module5.Spring_Security_Demp.dto.PostDTO;
-import com.shubh.module5.Spring_Security_Demp.entity.PostEntity;
-import com.shubh.module5.Spring_Security_Demp.exception.ResourceNotFoundException;
-import com.shubh.module5.Spring_Security_Demp.repository.PostRepository;
-import com.shubh.module5.Spring_Security_Demp.service.PostService;
+import com.shubh.module5.Spring_Security_Demo.dto.PostDTO;
+import com.shubh.module5.Spring_Security_Demo.entity.PostEntity;
+import com.shubh.module5.Spring_Security_Demo.exception.ResourceNotFoundException;
+import com.shubh.module5.Spring_Security_Demo.repository.PostRepository;
+import com.shubh.module5.Spring_Security_Demo.service.PostService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

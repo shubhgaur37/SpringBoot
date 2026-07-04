@@ -1,6 +1,6 @@
-package com.shubh.module5.Spring_Security_Demp.service;
+package com.shubh.module5.Spring_Security_Demo.service;
 
-import com.shubh.module5.Spring_Security_Demp.dto.PostDTO;
+import com.shubh.module5.Spring_Security_Demo.dto.PostDTO;
 
 import java.util.List;
 

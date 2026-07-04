@@ -1,7 +1,7 @@
-package com.shubh.module5.Spring_Security_Demp.controller;
+package com.shubh.module5.Spring_Security_Demo.controller;
 
-import com.shubh.module5.Spring_Security_Demp.dto.PostDTO;
-import com.shubh.module5.Spring_Security_Demp.service.PostService;
+import com.shubh.module5.Spring_Security_Demo.dto.PostDTO;
+import com.shubh.module5.Spring_Security_Demo.service.PostService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

@@ -30,3 +30,6 @@ spring:
       name: shubh
       password: shubh
       roles: ADMIN, USER, MANAGER
+
+jwt:
+  secretKey: HOLA_AMIGO

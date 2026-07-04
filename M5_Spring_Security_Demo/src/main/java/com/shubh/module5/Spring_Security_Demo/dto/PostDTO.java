@@ -1,4 +1,4 @@
-package com.shubh.module5.Spring_Security_Demp.dto;
+package com.shubh.module5.Spring_Security_Demo.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

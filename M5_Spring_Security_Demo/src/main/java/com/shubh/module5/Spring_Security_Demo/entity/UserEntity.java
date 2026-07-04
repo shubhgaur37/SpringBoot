@@ -1,4 +1,4 @@
-package com.shubh.module5.Spring_Security_Demp.entity;
+package com.shubh.module5.Spring_Security_Demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

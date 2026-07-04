@@ -1,4 +1,4 @@
-package com.shubh.module5.Spring_Security_Demp.exception;
+package com.shubh.module5.Spring_Security_Demo.exception;
 
 
 public class ResourceNotFoundException extends RuntimeException {

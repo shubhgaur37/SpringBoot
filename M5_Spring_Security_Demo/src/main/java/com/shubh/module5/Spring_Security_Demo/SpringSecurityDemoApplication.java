@@ -1,4 +1,4 @@
-package com.shubh.module5.Spring_Security_Demp;
+package com.shubh.module5.Spring_Security_Demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
