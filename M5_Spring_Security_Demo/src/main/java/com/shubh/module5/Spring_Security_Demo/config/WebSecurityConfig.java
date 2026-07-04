@@ -1,21 +1,24 @@
 package com.shubh.module5.Spring_Security_Demo.config;
 
+import com.shubh.module5.Spring_Security_Demo.filter.JWTAuthFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
 @EnableWebSecurity // Enables Spring Security and tells Spring Boot to look for a custom security filter chain
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+
+    private final JWTAuthFilter jwtAuthFilter;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -29,21 +32,21 @@ public class WebSecurityConfig {
                 // If this is omitted, the application will not render the default login UI.
                 // For custom UI rendering (e.g., templates/newlogin.html), swap this with:
                 // .formLogin(formLoginConfig -> formLoginConfig.loginPage("/newlogin.html"))
-                .formLogin(Customizer.withDefaults()) // Configures form login with default settings
+                // .formLogin(Customizer.withDefaults()) // Configures form login with default settings
 
                 // Intercepts and filters incoming HTTP requests based on roles and paths before reaching the controllers.
                 .authorizeHttpRequests(auth -> auth
 
-                        // Public Endpoint: Permits all unauthenticated users to access the main /posts route.
-                        .requestMatchers("/posts", "/error", "/auth/**").permitAll()
+                                // Public Endpoint: Permits all unauthenticated users to access the main /posts route.
+                                .requestMatchers("/posts", "/error", "/auth/**").permitAll()
 
-                        // Role-Based Authorization: Restricts access to matching sub-routes.
-                        // User 'yash' can access this because he carries the 'MANAGER' role.
-                        // User 'kalu' will receive an HTTP 403 Forbidden error because he only carries 'USER'.
-                        .requestMatchers("/posts/**").hasAnyRole("ADMIN", "MANAGER")
+                                // Role-Based Authorization: Restricts access to matching sub-routes.
+                                // User 'yash' can access this because he carries the 'MANAGER' role.
+                                // User 'kalu' will receive an HTTP 403 Forbidden error because he only carries 'USER'.
+                                // .requestMatchers("/posts/**").hasAnyRole("ADMIN", "MANAGER")
 
-                        // Catch-All Guard: Mandates authentication for every remaining unmapped endpoint.
-                        .anyRequest().authenticated()
+                                // Catch-All Guard: Mandates authentication for every remaining unmapped endpoint.
+                                .anyRequest().authenticated()
                 )
 
                 // Disables Cross-Site Request Forgery (CSRF) protection.
@@ -54,7 +57,7 @@ public class WebSecurityConfig {
                 // CRITICAL: This is the exact reason your standard browser form login is now failing.
                 // Stateless policy prevents Spring Security from saving user context in a HTTP Session or generating JSESSIONID cookies.
                 .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // add custom filter before Username Password Authentication Filter
                 // Builds and compiles the finalized SecurityFilterChain bean instance
                 .build();
     }
@@ -117,9 +120,16 @@ public class WebSecurityConfig {
 //        return new InMemoryUserDetailsManager(List.of(user1, user2));
 //    }
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        // Uses the BCrypt hashing algorithm to securely encode and verify user passwords
-        return new BCryptPasswordEncoder();
-    }
+
+    /*
+    * Password Encoder moved from here as it created a circular dependency
+    -----─────┐
+    |  JWTAuthFilter defined in file [/Users/shubhgaur/Documents/SpringBOOT/M5_Spring_Security_Demo/target/classes/com/shubh/module5/Spring_Security_Demo/filter/JWTAuthFilter.class]
+    ↑     ↓
+    |  userService defined in file [/Users/shubhgaur/Documents/SpringBOOT/M5_Spring_Security_Demo/target/classes/com/shubh/module5/Spring_Security_Demo/service/UserService.class]
+    ↑     ↓
+    |  webSecurityConfig defined in file [/Users/shubhgaur/Documents/SpringBOOT/M5_Spring_Security_Demo/target/classes/com/shubh/module5/Spring_Security_Demo/config/WebSecurityConfig.class]
+    └─────┘
+
+    * */
 }

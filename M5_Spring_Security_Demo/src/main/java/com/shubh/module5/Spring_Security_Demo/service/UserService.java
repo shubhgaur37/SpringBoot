@@ -33,6 +33,11 @@ public class UserService implements UserDetailsService {
 
     }
 
+    public UserEntity findUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User with id :" + id + " not found"));
+    }
+
     public UserDTO signUp(SignUpDTO signUpRequest) {
         Boolean isUserWithEmailPresent = userRepository.existsByEmail(signUpRequest.getEmail());
         if (isUserWithEmailPresent)
@@ -43,6 +48,7 @@ public class UserService implements UserDetailsService {
         userToBeSaved.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         return modelMapper.map(userRepository.save(userToBeSaved), UserDTO.class);
     }
+
 
     /**
      * Login Logic moved to a separate service because of circular dependency between
