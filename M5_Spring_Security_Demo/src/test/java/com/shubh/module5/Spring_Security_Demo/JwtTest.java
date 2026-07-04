@@ -15,7 +15,7 @@ class JwtTest {
     @Test
     void validateJWTCreationAndValidation() {
         Long id = 153L;
-        UserEntity user = new UserEntity(id,"shubhgaur37","hello");
+        UserEntity user = new UserEntity(id,"shubh","shubhgaur37","hello");
 
         String jwt = jwtService.createToken(user);
         System.out.println(jwt);

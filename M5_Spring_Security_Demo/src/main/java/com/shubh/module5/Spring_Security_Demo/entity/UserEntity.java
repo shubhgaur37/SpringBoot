@@ -22,6 +22,8 @@ public class UserEntity implements UserDetails {
     @Id
     Long id;
 
+    String name;
+
     @Column(nullable = false, unique = true)
     String email;
 

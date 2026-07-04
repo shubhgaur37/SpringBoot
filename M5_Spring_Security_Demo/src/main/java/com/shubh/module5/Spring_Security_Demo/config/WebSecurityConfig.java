@@ -2,19 +2,16 @@ package com.shubh.module5.Spring_Security_Demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity // Enables Spring Security and tells Spring Boot to look for a custom security filter chain
@@ -38,12 +35,12 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         // Public Endpoint: Permits all unauthenticated users to access the main /posts route.
-                        .requestMatchers("/posts").permitAll()
+                        .requestMatchers("/posts", "/error", "/auth/**").permitAll()
 
                         // Role-Based Authorization: Restricts access to matching sub-routes.
                         // User 'yash' can access this because he carries the 'MANAGER' role.
                         // User 'kalu' will receive an HTTP 403 Forbidden error because he only carries 'USER'.
-                        .requestMatchers("/posts/**", "/error", "/public").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers("/posts/**").hasAnyRole("ADMIN", "MANAGER")
 
                         // Catch-All Guard: Mandates authentication for every remaining unmapped endpoint.
                         .anyRequest().authenticated()
@@ -62,28 +59,63 @@ public class WebSecurityConfig {
                 .build();
     }
 
+    /**
+     * Configuration class for Spring Security.
+     * <p>
+     * ARCHITECTURAL NOTE: The link between AuthenticationManager and UserDetailsService
+     * -------------------------------------------------------------------------------
+     * The AuthenticationManager is the central interface for authentication, acting as
+     * the "Engine." However, it is inherently "blind"—it does not know how or where
+     * your users are stored.
+     * <p>
+     * The connection is established via the 'DaoAuthenticationProvider':
+     * <p>
+     * 1. DELEGATION: The AuthenticationManager delegates validation to one or more
+     * AuthenticationProviders.
+     * <p>
+     * 2. THE BRIDGE (DaoAuthenticationProvider): This provider is specifically
+     * designed to use a 'UserDetailsService' (our UserService) as its data source.
+     * <p>
+     * 3. THE WORKFLOW:
+     * - When a login request occurs, the AuthenticationManager calls the provider.
+     * - The provider calls 'loadUserByUsername()' on our UserDetailsService.
+     * - Our UserDetailsService retrieves the user record from the database.
+     * - The provider then compares the provided password with the password
+     * loaded from the database using a PasswordEncoder.
+     * <p>
+     * NOTE: If your service class also tries to inject the AuthenticationManager
+     * (e.g., to handle manual logins), you will create a Circular Dependency.
+     * This is why we separate Authentication logic into a dedicated AuthService
+     * or use @Lazy injection.
+     */
 
-    // Configures an In-Memory User Store for testing user credentials
     @Bean
-    UserDetailsService myInMemoryUserDetailsService() {
-
-        // Passwords must be hashed using the PasswordEncoder bean to prevent plain-text storage vulnerabilities.
-        // User 1 profile: Assigned a single authority role.
-        UserDetails user1 = User.withUsername("kalu")
-                .password(passwordEncoder().encode("hello"))
-                .roles("USER")
-                .build();
-
-        // User 2 profile: Assigned multiple roles using Java's varargs (String...) feature.
-        // This generates both ROLE_USER and ROLE_MANAGER authorities internally.
-        UserDetails user2 = User.withUsername("yash")
-                .password(passwordEncoder().encode("yash"))
-                .roles("USER", "MANAGER")
-                .build();
-
-        // Returns the memory-mapped manager initialized with the list of users
-        return new InMemoryUserDetailsManager(List.of(user1, user2));
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) {
+        return authConfig.getAuthenticationManager();
     }
+
+    
+    // Configures an In-Memory User Store for testing user credentials
+//    @Bean
+//    UserDetailsService myInMemoryUserDetailsService() {
+//
+//        // Passwords must be hashed using the PasswordEncoder bean to prevent plain-text storage vulnerabilities.
+//        // User 1 profile: Assigned a single authority role.
+//        UserDetails user1 = User.withUsername("kalu")
+//                .password(passwordEncoder().encode("hello"))
+//                .roles("USER")
+//                .build();
+//
+//        // User 2 profile: Assigned multiple roles using Java's varargs (String...) feature.
+//        // This generates both ROLE_USER and ROLE_MANAGER authorities internally.
+//        UserDetails user2 = User.withUsername("yash")
+//                .password(passwordEncoder().encode("yash"))
+//                .roles("USER", "MANAGER")
+//                .build();
+//
+//        // Returns the memory-mapped manager initialized with the list of users
+//        return new InMemoryUserDetailsManager(List.of(user1, user2));
+//    }
 
     @Bean
     PasswordEncoder passwordEncoder() {
