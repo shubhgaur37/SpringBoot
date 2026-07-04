@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
@@ -32,6 +33,10 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     JWTService jwtService;
     UserService userService;
     ModelMapper modelMapper;
+
+    // required for intercepting exceptions before they reach dispatcher servlet
+    // jwt exceptions in this case
+    HandlerExceptionResolver handlerExceptionResolver;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -61,45 +66,54 @@ public class JWTAuthFilter extends OncePerRequestFilter {
          * it using the JWTService.
          */
         String token = authHeader.substring(7);
-        Long userId = jwtService.validateToken(token);
 
-        /*
-         * 4. SECURITY CONTEXT POPULATION:
-         * If the token is valid and no authentication exists in the current
-         * SecurityContext, we load the user from the database and set the
-         * authentication object. This allows downstream controllers to
-         * access the user via SecurityContextHolder.
-         */
-        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDTO user = modelMapper.map(userService.findUserById(userId), UserDTO.class);
-
-            // Populate token with user details and authorities
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(user, null, null);
+        // handling jwt exceptions
+        try {
+            Long userId = jwtService.validateToken(token);
 
             /*
-             * DETAIL BINDING:
-             * We bind request metadata (such as the remote IP address) to the
-             * authentication object. This is highly useful for downstream
-             * security logic, such as:
-             * - Rate-limiting requests based on IP address.
-             * - Security auditing and logging of access patterns.
-             * Note: While WebAuthenticationDetails also captures Session IDs,
-             * we are in a stateless flow, so that field will be null.
+             * 4. SECURITY CONTEXT POPULATION:
+             * If the token is valid and no authentication exists in the current
+             * SecurityContext, we load the user from the database and set the
+             * authentication object. This allows downstream controllers to
+             * access the user via SecurityContextHolder.
              */
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDTO user = modelMapper.map(userService.findUserById(userId), UserDTO.class);
 
-            // Finalize: Set the context so Spring Security treats this request as authenticated
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                // Populate token with user details and authorities
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(user, null, null);
+
+                /*
+                 * DETAIL BINDING:
+                 * We bind request metadata (such as the remote IP address) to the
+                 * authentication object. This is highly useful for downstream
+                 * security logic, such as:
+                 * - Rate-limiting requests based on IP address.
+                 * - Security auditing and logging of access patterns.
+                 * Note: While WebAuthenticationDetails also captures Session IDs,
+                 * we are in a stateless flow, so that field will be null.
+                 */
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                // Finalize: Set the context so Spring Security treats this request as authenticated
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
+
+            /*
+             * 5. CHAIN CONTINUATION:
+             * IMPORTANT: Always call filterChain.doFilter() to pass the request
+             * to the next component in the security pipeline. Do not call this
+             * filter again (no recursion), or it will cause a StackOverflowError.
+             */
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            // needs Jwt Exception in GlobalExceptionHandler, otherwise the request passes with 200 OK
+            // Delegate this exception to Spring MVC’s exception resolution mechanism,
+            // exactly as if it had been thrown from a controller.
+            handlerExceptionResolver.resolveException(request, response, null, e);
         }
-
-        /*
-         * 5. CHAIN CONTINUATION:
-         * IMPORTANT: Always call filterChain.doFilter() to pass the request
-         * to the next component in the security pipeline. Do not call this
-         * filter again (no recursion), or it will cause a StackOverflowError.
-         */
-        filterChain.doFilter(request, response);
     }
 }
 
