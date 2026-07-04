@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiError, apiError.getStatusCode());
     }
 
-    @ExceptionHandler (Exception.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleOtherExceptions(Exception exception) {
         ApiError apiError = new ApiError(exception.getMessage(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(apiError, apiError.getStatusCode());

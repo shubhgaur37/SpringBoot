@@ -1,6 +1,5 @@
 package com.shubh.module5.Spring_Security_Demo.service;
 
-import com.shubh.module5.Spring_Security_Demo.dto.LoginDTO;
 import com.shubh.module5.Spring_Security_Demo.dto.SignUpDTO;
 import com.shubh.module5.Spring_Security_Demo.dto.UserDTO;
 import com.shubh.module5.Spring_Security_Demo.entity.UserEntity;
@@ -10,10 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

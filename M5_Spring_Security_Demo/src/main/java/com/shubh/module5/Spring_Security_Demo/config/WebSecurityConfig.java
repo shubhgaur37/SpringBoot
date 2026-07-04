@@ -94,7 +94,7 @@ public class WebSecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
-    
+
     // Configures an In-Memory User Store for testing user credentials
 //    @Bean
 //    UserDetailsService myInMemoryUserDetailsService() {
