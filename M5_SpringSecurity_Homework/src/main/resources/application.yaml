@@ -9,7 +9,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
     show-sql: true
 
@@ -25,3 +25,6 @@ spring:
 logging:
   level:
     com.shubh.module5.Spring_Security_Practice: TRACE
+
+jwt:
+  secretKey: a-string-secret-at-least-256-bits-long-YO

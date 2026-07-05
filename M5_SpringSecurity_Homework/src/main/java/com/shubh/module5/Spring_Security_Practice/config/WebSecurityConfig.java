@@ -1,9 +1,12 @@
 package com.shubh.module5.Spring_Security_Practice.config;
 
+import com.shubh.module5.Spring_Security_Practice.filter.JWTAuthFilter;
 import com.shubh.module5.Spring_Security_Practice.filter.LoggingFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -16,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     private final LoggingFilter loggingFilter;
+    private final JWTAuthFilter jwtAuthFilter;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -58,17 +62,21 @@ public class WebSecurityConfig {
                  *   -> Falls back to anyRequest()
                  */
                 .authorizeHttpRequests(auth -> auth
+                                .requestMatchers("/posts", "/error", "/auth/**")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
 
-                                /*
-                                 * Catch-all rule.
-                                 *
-                                 * anyRequest() matches EVERYTHING that has not matched
-                                 * one of the requestMatchers above.
-                                 *
-                                 * Since it matches every remaining request, it MUST
-                                 * always be the LAST authorization rule.
-                                 */
-                                .anyRequest().permitAll()
+                        /*
+                         * Catch-all rule.
+                         *
+                         * anyRequest() matches EVERYTHING that has not matched
+                         * one of the requestMatchers above.
+                         *
+                         * Since it matches every remaining request, it MUST
+                         * always be the LAST authorization rule.
+                         */
+                        //.anyRequest().permitAll()
 
                         /*
                          * Using permitAll() means:
@@ -90,7 +98,12 @@ public class WebSecurityConfig {
                          * permitAll() only skips the authorization requirement.
                          */
                 )
-                .addFilterAfter(loggingFilter, UsernamePasswordAuthenticationFilter.class)
+                // Register filters in an explicit order.
+                // If multiple filters are added relative to the same anchor filter,
+                // Spring Security guarantees they execute before/after the anchor,
+                // but their relative order is not guaranteed.
+                .addFilterBefore(loggingFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 /*                // Test filter that throws an exception before the request reaches Spring MVC.
                 //
                 // Observations:
@@ -119,6 +132,11 @@ public class WebSecurityConfig {
 
                 }, LoggingFilter.class)*/
                 .build();
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) {
+        return authConfig.getAuthenticationManager();
     }
 
 }

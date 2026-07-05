@@ -43,6 +43,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		<!--	JWT Dependency	-->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.13.0</version>
+			<scope>compile</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>com.mysql</groupId>
