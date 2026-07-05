@@ -21,3 +21,7 @@ spring:
       restart:
         enabled: true
         exclude: com/shubh/module5/Spring_Security_Practice/dto
+
+logging:
+  level:
+    com.shubh.module5.Spring_Security_Practice: TRACE
