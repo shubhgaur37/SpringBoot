@@ -17,10 +17,10 @@ class JwtTest {
         Long id = 153L;
         UserEntity user = new UserEntity(id,"shubh","shubhgaur37","hello");
 
-        String jwt = jwtService.createToken(user);
+        String jwt = jwtService.createAccessToken(user);
         System.out.println(jwt);
 
-        System.out.println("UserId Decoded from JWT:" + jwtService.validateToken(jwt));
+        System.out.println("UserId Decoded from JWT:" + jwtService.validateTokenGetUserId(jwt));
     }
 
 

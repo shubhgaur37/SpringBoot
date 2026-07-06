@@ -1,6 +1,7 @@
 package com.shubh.module5.Spring_Security_Demo.service;
 
 import com.shubh.module5.Spring_Security_Demo.dto.LoginDTO;
+import com.shubh.module5.Spring_Security_Demo.dto.LoginResponseDTO;
 import com.shubh.module5.Spring_Security_Demo.entity.UserEntity;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +18,13 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     AuthenticationManager authenticationManager;
     JWTService jwtService;
+    UserService userService;
+
     // Login:
     // Spring Security's DaoAuthenticationProvider automatically calls
     // PasswordEncoder.matches(rawPassword, storedHash) using the
     // PasswordEncoder bean configured in the application.
-    public String login(LoginDTO loginRequest) {
+    public LoginResponseDTO login(LoginDTO loginRequest) {
         // principal is used in user details implementation to get the entity from DB
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
@@ -29,43 +32,73 @@ public class AuthService {
         // returns the email, principal passed in the request and maps it to email field of userEntity
         UserEntity user = (UserEntity) authentication.getPrincipal();
 
-        return jwtService.createToken(user);
+        // Create Access and Refresh Tokens
+        String accessToken = jwtService.createAccessToken(user);
+        String refreshToken = jwtService.createRefreshToken(user);
+
+        LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
+        loginResponseDTO.setAccessToken(accessToken);
+        loginResponseDTO.setRefreshToken(refreshToken);
+        return loginResponseDTO;
+    }
+
+    public LoginResponseDTO refresh(String refreshToken) {
+        // returns error for malformed or expired jwt
+        Long userId = jwtService.validateTokenGetUserId(refreshToken);
+        UserEntity user = userService.findUserById(userId);
+
+        String accessToken = jwtService.createAccessToken(user);
+        LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
+        loginResponseDTO.setAccessToken(accessToken);
+        return loginResponseDTO;
     }
 }
 
 /**
+ * ============================================================================
  * ARCHITECTURAL FLOW: Authentication Mechanism
- * -----------------------------------------------------------------------------
+ * ============================================================================
+ * <p>
  * 1. THE TRIGGER:
  * When authenticationManager.authenticate() is called with a token, the
  * ProviderManager (the default AuthenticationManager implementation) iterates
  * through its list of registered AuthenticationProviders.
  * <p>
  * 2. THE SELECTION:
- * The ProviderManager calls .supports() on providers. The 'DaoAuthenticationProvider'
- * claims responsibility for UsernamePasswordAuthenticationToken.
+ * The ProviderManager calls supports() on each provider. The
+ * DaoAuthenticationProvider claims responsibility for
+ * UsernamePasswordAuthenticationToken.
  * <p>
  * 3. THE BRIDGE (Provider -> Service):
- * - The DaoAuthenticationProvider calls .loadUserByUsername() on your
- * UserService (our UserDetailsService implementation).
- * - This is how the execution flow jumps from framework code into your database logic.
- * - Once your UserEntity (implementing UserDetails) is returned, the provider
- * performs the password verification.
+ * - DaoAuthenticationProvider calls loadUserByUsername() on your
+ * UserService (UserDetailsService implementation).
+ * - This is where execution transitions from Spring Security into your
+ * application code to load the user from the database.
+ * - Once the UserEntity (implementing UserDetails) is returned,
+ * DaoAuthenticationProvider verifies the supplied password using the
+ * configured PasswordEncoder bean.
  * <p>
  * 4. THE RESULT:
- * If valid, the provider returns an authenticated Authentication object where
- * the 'principal' is set to your fully populated UserEntity.
+ * If authentication succeeds, an authenticated Authentication object is
+ * returned with the principal set to your fully populated UserEntity.
  * <p>
- * -----------------------------------------------------------------------------
- * AUTO-CONFIGURATION BEHAVIOR:
- * Spring Boot's 'AuthenticationConfiguration' automatically wires this entire
- * process together if:
+ * ============================================================================
+ * AUTO-CONFIGURATION BEHAVIOR
+ * ============================================================================
  * <p>
- * - A UserDetailsService (your UserService) bean is present.
+ * Spring Boot automatically wires this authentication flow when:
+ * <p>
+ * - A UserDetailsService bean is present.
  * - A PasswordEncoder bean is present.
  * <p>
- * Spring "magically" detects these and automatically instantiates a
- * 'DaoAuthenticationProvider', links your service to it, and registers the
- * whole stack into the primary AuthenticationManager. You do not need to
- * manually configure the DAO as long as these standard components exist.
+ * AuthenticationConfiguration detects these beans, creates a
+ * DaoAuthenticationProvider, injects your UserDetailsService and
+ * PasswordEncoder into it, and registers it with the application's
+ * AuthenticationManager.
+ * <p>
+ * No manual DaoAuthenticationProvider configuration is required when using
+ * Spring Boot's default authentication setup.
+ *
  */
+
+

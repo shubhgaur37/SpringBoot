@@ -1,6 +1,6 @@
 package com.shubh.module5.Spring_Security_Demo.filter;
 
-import com.shubh.module5.Spring_Security_Demo.dto.UserDTO;
+import com.shubh.module5.Spring_Security_Demo.entity.UserEntity;
 import com.shubh.module5.Spring_Security_Demo.service.JWTService;
 import com.shubh.module5.Spring_Security_Demo.service.UserService;
 import jakarta.servlet.FilterChain;
@@ -69,7 +69,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
         // handling jwt exceptions
         try {
-            Long userId = jwtService.validateToken(token);
+            Long userId = jwtService.validateTokenGetUserId(token);
 
             /*
              * 4. SECURITY CONTEXT POPULATION:
@@ -79,7 +79,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
              * access the user via SecurityContextHolder.
              */
             if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDTO user = modelMapper.map(userService.findUserById(userId), UserDTO.class);
+                UserEntity user = userService.findUserById(userId);
 
                 // Populate token with user details and authorities
                 UsernamePasswordAuthenticationToken authenticationToken =

@@ -32,7 +32,7 @@ public class JWTService {
      * @param user The user entity for whom the token is being created.
      * @return A compact, URL-safe JWT string.
      */
-    public String createToken(UserEntity user) {
+    public String createAccessToken(UserEntity user) {
         return Jwts.builder()
                 // Set the 'sub' (subject) claim to identify the user
                 .subject(user.getId().toString())
@@ -47,7 +47,28 @@ public class JWTService {
                  */
                 .issuedAt(new Date())
                 // Set the 'exp' (expiration) timestamp (currently set to 60 seconds)
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 20))
+                // Sign the token using the HMAC SHA algorithm
+                .signWith(getSecretKey())
+                // Build and serialize the token into a JWT string
+                .compact();
+    }
+
+    /**
+     * Generates a signed Refresh JWT for the given user.
+     * <p>
+     * Refresh tokens are long-lived and are used only to obtain new access tokens.
+     * Unlike access tokens, they typically contain only the minimum required claims
+     * (e.g., subject, issued time, expiration).
+     */
+    public String createRefreshToken(UserEntity user) {
+
+        return Jwts.builder()
+                // Set the 'sub' (subject) claim to identify the user
+                .subject(user.getId().toString())
+                .issuedAt(new Date())
+                // Set the 'exp' (expiration) timestamp (currently set to 2 minutes)
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 2))
                 // Sign the token using the HMAC SHA algorithm
                 .signWith(getSecretKey())
                 // Build and serialize the token into a JWT string
@@ -61,14 +82,13 @@ public class JWTService {
      * @return The user ID extracted from the token subject.
      * @throws io.jsonwebtoken.JwtException if the token is invalid, expired, or tampered with.
      */
-    public Long validateToken(String token) {
+    public Long validateTokenGetUserId(String token) {
         // Parse the JWT, verify the signature, and extract the payload (Claims)
         Claims claims = Jwts.parser()
                 .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-
         // Return the user ID stored in the subject
         return Long.valueOf(claims.getSubject());
     }
