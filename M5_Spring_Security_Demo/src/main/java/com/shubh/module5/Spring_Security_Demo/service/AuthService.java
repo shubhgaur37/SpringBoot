@@ -19,6 +19,7 @@ public class AuthService {
     JWTService jwtService;
 
     public String login(LoginDTO loginRequest) {
+        // principal is used in user details implementation to get the entity from DB
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
