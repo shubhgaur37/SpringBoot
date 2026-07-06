@@ -45,7 +45,8 @@ public class UserService implements UserDetailsService {
             throw new BadCredentialsException("User with email " + signUpRequest.getEmail() + " already exists");
 
         UserEntity userToBeSaved = modelMapper.map(signUpRequest, UserEntity.class);
-        // Hash the password[to be verified during sign in]
+        // We manually hash the raw password using PasswordEncoder.encode()
+        // before persisting it to the database.
         userToBeSaved.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         return modelMapper.map(userRepository.save(userToBeSaved), UserDTO.class);
     }

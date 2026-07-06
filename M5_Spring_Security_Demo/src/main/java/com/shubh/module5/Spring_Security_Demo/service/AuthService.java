@@ -17,7 +17,10 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     AuthenticationManager authenticationManager;
     JWTService jwtService;
-
+    // Login:
+    // Spring Security's DaoAuthenticationProvider automatically calls
+    // PasswordEncoder.matches(rawPassword, storedHash) using the
+    // PasswordEncoder bean configured in the application.
     public String login(LoginDTO loginRequest) {
         // principal is used in user details implementation to get the entity from DB
         Authentication authentication = authenticationManager
