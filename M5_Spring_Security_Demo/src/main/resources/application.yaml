@@ -9,7 +9,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
     show-sql: true
 
@@ -35,9 +35,17 @@ spring:
       client:
         registration:
           google:
-            # Inject Values into properties from environment variables
+            # Inject Values into properties from environment variables/vm options(development mode)
             client-id: ${google-client-id}
             client-secret: ${google-client-secret}
+
+# To Add other OAuth Types, No code change required, same flow
+#          github:
+#            client-id: ${google-client-id}
+#            client-secret: ${google-client-secret}
+#          facebook:
+#            client-id: ${google-client-id}
+#            client-secret: ${google-client-secret}
 jwt:
   # should be atleast 256 bits long to be secure, otherwise exception is thrown
   secretKey: HOLA_AMIGOa-string-secret-at-least-256-bits-long

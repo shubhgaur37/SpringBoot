@@ -1,6 +1,7 @@
 package com.shubh.module5.Spring_Security_Demo.config;
 
 import com.shubh.module5.Spring_Security_Demo.filter.JWTAuthFilter;
+import com.shubh.module5.Spring_Security_Demo.handlers.Oauth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,17 +13,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 @Configuration
 @EnableWebSecurity // Enables Spring Security and tells Spring Boot to look for a custom security filter chain
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final JWTAuthFilter jwtAuthFilter;
+    private final Oauth2SuccessHandler oauth2SuccessHandler;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-
         // Configuring the SecurityFilterChain pipeline.
         // Since we defined a custom UserDetailsService Bean below,
         // Spring Boot overrides and ignores the single user credentials from application.yml.
@@ -36,9 +36,15 @@ public class WebSecurityConfig {
 
                 // Intercepts and filters incoming HTTP requests based on roles and paths before reaching the controllers.
                 .authorizeHttpRequests(auth -> auth
+                        // '/login' does not need to be explicitly permitted.
+                        // When formLogin() or oauth2Login() is enabled, Spring Security internally
+                        // registers and permits the login endpoint and related authentication URLs.
+                        // These requests are handled by Spring Security's filters before reaching
+                        // the application's authorization rules.
 
+                        // Added static redirect home page for successful oauth login in endpoints without authorization
                         // Public Endpoint: Permits all unauthenticated users to access the main /posts route.
-                        .requestMatchers("/posts", "/error", "/auth/**").permitAll()
+                        .requestMatchers("/posts", "/error", "/auth/**", "/home.html").permitAll()
 
                         // Role-Based Authorization: Restricts access to matching sub-routes.
                         // User 'yash' can access this because he carries the 'MANAGER' role.
@@ -58,6 +64,10 @@ public class WebSecurityConfig {
                 // Stateless policy prevents Spring Security from saving user context in a HTTP Session or generating JSESSIONID cookies.
                 .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // add custom filter before Username Password Authentication Filter
+                .oauth2Login(oauth2Config ->
+                        oauth2Config.failureUrl("/login?error=true") // Setting up oauth2 failure url for redirection
+                                .successHandler(oauth2SuccessHandler)
+                )
                 // Builds and compiles the finalized SecurityFilterChain bean instance
                 .build();
     }

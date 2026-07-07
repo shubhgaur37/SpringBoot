@@ -39,7 +39,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new ResourceNotFoundException("User with id :" + id + " not found"));
     }
 
-    public UserDTO signUp(SignUpDTO signUpRequest) {
+    public UserDTO signUp(SignUpDTO signUpRequest) throws BadCredentialsException {
         Boolean isUserWithEmailPresent = userRepository.existsByEmail(signUpRequest.getEmail());
         if (isUserWithEmailPresent)
             throw new BadCredentialsException("User with email " + signUpRequest.getEmail() + " already exists");

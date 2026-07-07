@@ -99,7 +99,7 @@ public class AuthController {
         accessTokenCookie.setHttpOnly(true);
 
         // Should be enabled in production to force HTTPS-only transmission, controlled using env variable in yaml
-        accessTokenCookie.setSecure("Production".equals(deploymentType));
+        accessTokenCookie.setSecure("PRODUCTION".equals(deploymentType));
 
         response.addCookie(accessTokenCookie);
 

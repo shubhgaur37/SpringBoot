@@ -69,7 +69,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
-<!--			<scope>test</scope> (cheeky little bug, exposes dependency only during tests) -->
+<!--			<scope>test</scope> (sneaky little bug, exposes dependency only during tests) -->
 		</dependency>
 
 		<dependency>
