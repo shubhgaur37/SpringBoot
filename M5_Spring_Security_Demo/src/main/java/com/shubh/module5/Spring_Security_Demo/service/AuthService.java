@@ -19,6 +19,7 @@ public class AuthService {
     AuthenticationManager authenticationManager;
     JWTService jwtService;
     UserService userService;
+    SessionService sessionService;
 
     // Login:
     // Spring Security's DaoAuthenticationProvider automatically calls
@@ -35,6 +36,8 @@ public class AuthService {
         // Create Access and Refresh Tokens
         String accessToken = jwtService.createAccessToken(user);
         String refreshToken = jwtService.createRefreshToken(user);
+        // create a new session for the user using refreshToken
+        sessionService.createSession(user, refreshToken);
 
         LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
         loginResponseDTO.setAccessToken(accessToken);
@@ -43,11 +46,21 @@ public class AuthService {
     }
 
     public LoginResponseDTO refresh(String refreshToken) {
-        // returns error for malformed or expired jwt
+
+        // 1. Verify the refresh token's signature and expiration.
+        // Throws if the token is malformed, tampered with, or expired.
         Long userId = jwtService.validateTokenGetUserId(refreshToken);
+
+        // 2. Verify that the refresh token still has an active session[maybe logged out due to session limit].
+        // Also updates the session's last_used_at timestamp.
+        sessionService.refreshSession(refreshToken);
+
+        // 3. Load the authenticated user.
         UserEntity user = userService.findUserById(userId);
 
+        // 4. Issue a new access token.
         String accessToken = jwtService.createAccessToken(user);
+
         LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
         loginResponseDTO.setAccessToken(accessToken);
         return loginResponseDTO;
