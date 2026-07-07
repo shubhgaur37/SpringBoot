@@ -83,8 +83,8 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
                 // Populate token with user details and authorities
                 UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(user, null, null);
-
+                        // bug here, forgot to add authorities here
+                        new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 /*
                  * DETAIL BINDING:
                  * We bind request metadata (such as the remote IP address) to the

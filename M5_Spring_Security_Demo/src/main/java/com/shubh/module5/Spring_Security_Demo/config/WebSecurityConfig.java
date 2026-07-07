@@ -5,6 +5,7 @@ import com.shubh.module5.Spring_Security_Demo.handlers.Oauth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +14,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.shubh.module5.Spring_Security_Demo.entity.enums.Role.ADMIN;
+import static com.shubh.module5.Spring_Security_Demo.entity.enums.Role.CREATOR;
+
+
 @Configuration
 @EnableWebSecurity // Enables Spring Security and tells Spring Boot to look for a custom security filter chain
 @RequiredArgsConstructor
@@ -20,6 +25,15 @@ public class WebSecurityConfig {
 
     private final JWTAuthFilter jwtAuthFilter;
     private final Oauth2SuccessHandler oauth2SuccessHandler;
+
+    // Endpoints that do not require authentication.
+    // "/error" is Spring Boot's default error endpoint used as a fallback when
+    // requests cannot be handled or an unhandled exception occurs.
+    private static final String[] PUBLIC_ROUTES = {
+            "/error",
+            "/auth/**",
+            "/home.html"
+    };
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -44,7 +58,43 @@ public class WebSecurityConfig {
 
                         // Added static redirect home page for successful oauth login in endpoints without authorization
                         // Public Endpoint: Permits all unauthenticated users to access the main /posts route.
-                        .requestMatchers("/posts", "/error", "/auth/**", "/home.html").permitAll()
+                        .requestMatchers(PUBLIC_ROUTES).permitAll()
+                        // -------------------------------------------------------------------------
+                        // Endpoint-Based Authorization
+                        // -------------------------------------------------------------------------
+                        // Applies the same authorization rule to all HTTP methods for the matching path.
+                        //
+                        // "/posts/**" matches "/posts" as well as every nested path beneath it:
+                        //
+                        //   /posts              ✓
+                        //   /posts/1            ✓
+                        //   /posts/1/comments   ✓
+                        //   /posts/a/b/c        ✓
+                        //
+                        // Since no HTTP method is specified, GET, POST, PUT, PATCH and DELETE
+                        // requests to these paths all require the configured role(s).
+                        //
+                        // .requestMatchers("/posts/**").hasAnyRole(ADMIN.name())
+
+
+                        // -------------------------------------------------------------------------
+                        // Method + Endpoint-Based Authorization
+                        // -------------------------------------------------------------------------
+                        // Provides finer-grained access control by combining the HTTP method
+                        // with the request path. Different operations on the same resource can
+                        // therefore have different authorization requirements.
+                        //
+                        // Example:
+                        //   GET    /posts/**  -> Public (Read)
+                        //   POST   /posts     -> ADMIN or CREATOR (Create)
+                        //   PUT    /posts/**  -> ADMIN only (Update)
+                        //   DELETE /posts/**  -> ADMIN only (Delete)
+                        // -------------------------------------------------------------------------
+                        .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/posts").hasAnyRole(ADMIN.name(), CREATOR.name())
+
+                        // Only Allow Creator and Admins to use the post route
+                        // .requestMatchers("/posts").hasAnyRole(ADMIN.name(),CREATOR.name())
 
                         // Role-Based Authorization: Restricts access to matching sub-routes.
                         // User 'yash' can access this because he carries the 'MANAGER' role.

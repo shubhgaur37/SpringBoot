@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Service responsible for generating and validating JSON Web Tokens (JWT).
@@ -38,7 +37,12 @@ public class JWTService {
                 .subject(user.getId().toString())
                 // Add custom claims (payload information)
                 .claim("Email", user.getEmail())
-                .claim("Roles", List.of("ADMIN", "USER"))
+                // Store roles as a readable string claim (e.g. "[ADMIN, USER]").
+                // This is sufficient since roles are loaded from the database during JWT authentication.
+                // If authorities need to be reconstructed directly from the JWT (without a DB lookup),
+                // store the collection itself using map() instead of calling toString() so it is serialized as a JSON array.
+                .claim("Roles", user.getRoles().toString())
+                .claim("Roles", user.getRoles())
                 /*
                  * new Date() captures the current system timestamp.
                  * Note: Ensure all servers in a distributed system are synchronized via NTP
