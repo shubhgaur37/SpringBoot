@@ -69,19 +69,13 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
-			<scope>test</scope>
+<!--			<scope>test</scope> (cheeky little bug, exposes dependency only during tests) -->
 		</dependency>
 
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>3.2.4</version>
-		</dependency>
-		<!--	Spring Boot Devtools dependency to trigger server auto-restart on detecting
-		code changes in compiled classes[not in source-code]	-->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
 
 	<!--		JWT Dependency-->
