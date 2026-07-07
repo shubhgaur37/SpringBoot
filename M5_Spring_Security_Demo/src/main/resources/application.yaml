@@ -31,6 +31,13 @@ spring:
       password: shubh
       roles: ADMIN, USER, MANAGER
 
+    oauth2:
+      client:
+        registration:
+          google:
+            # Inject Values into properties from environment variables
+            client-id: ${google-client-id}
+            client-secret: ${google-client-secret}
 jwt:
   # should be atleast 256 bits long to be secure, otherwise exception is thrown
   secretKey: HOLA_AMIGOa-string-secret-at-least-256-bits-long
