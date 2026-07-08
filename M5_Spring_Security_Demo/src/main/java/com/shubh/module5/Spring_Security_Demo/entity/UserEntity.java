@@ -1,7 +1,7 @@
 package com.shubh.module5.Spring_Security_Demo.entity;
 
-import com.shubh.module5.Spring_Security_Demo.entity.enums.Permission;
 import com.shubh.module5.Spring_Security_Demo.entity.enums.Role;
+import com.shubh.module5.Spring_Security_Demo.utils.RolePermissionMapper;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
@@ -94,30 +95,32 @@ public class UserEntity implements UserDetails {
      * would not be required.
      */
 
-    private Set<Permission> permissions;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        // In production, a more common approach is to derive permissions from roles
-        // (Role -> Permissions mapping) instead of assigning permissions directly
-        // to each user.
+        return roles.stream()
 
-        // The current approach allows a user to have additional custom permissions
-        // alongside the permissions inherited from their roles.
+                // Iterate through every role assigned to the user.
+                // Each role expands into multiple authorities:
+                //   1. The role itself (ROLE_ADMIN, ROLE_USER, ...)
+                //   2. All permissions mapped to that role (POST_CREATE, USER_VIEW, ...)
+                // flatMap() combines the authorities generated for every role into
+                // one continuous stream.
+                .flatMap(role -> Stream.concat(
 
-        // Roles are prefixed with "ROLE_" because we explicitly create the
-        // GrantedAuthority in that format. Spring Security's hasRole(...)
-        // internally looks for authorities prefixed with "ROLE_".
-        // Permissions are typically checked directly using hasAuthority(...).
-        Set<SimpleGrantedAuthority> authorities = roles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                        // Add the role as a Spring Security authority.
+                        // hasRole(...) expects authorities prefixed with "ROLE_".
+                        Stream.of(new SimpleGrantedAuthority("ROLE_" + role.name())),
+
+                        // Get all permissions for the current role, convert the
+                        // Set<Permission> into a stream, and map each permission
+                        // to a SimpleGrantedAuthority.
+                        RolePermissionMapper.getRolePermissions(role).stream()
+                                .map(permission -> new SimpleGrantedAuthority(permission.name()))
+                ))
+
+                // Collect all generated authorities into a Set to remove duplicates.
                 .collect(Collectors.toSet());
-
-        permissions.forEach(permission ->
-                authorities.add(new SimpleGrantedAuthority(permission.name())));
-
-        return authorities;
     }
 
     @Override
