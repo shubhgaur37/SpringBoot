@@ -16,4 +16,7 @@ public class PostDTO {
     String title;
 
     String description;
+
+    // added for verifying ownership in Post Security Service
+    UserDTO author;
 }

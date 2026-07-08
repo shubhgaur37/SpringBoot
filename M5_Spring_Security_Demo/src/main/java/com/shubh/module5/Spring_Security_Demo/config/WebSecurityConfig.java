@@ -6,22 +6,19 @@ import com.shubh.module5.Spring_Security_Demo.handlers.Oauth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.shubh.module5.Spring_Security_Demo.entity.enums.Permission.*;
-import static com.shubh.module5.Spring_Security_Demo.entity.enums.Role.ADMIN;
-import static com.shubh.module5.Spring_Security_Demo.entity.enums.Role.CREATOR;
-
 
 @Configuration
 @EnableWebSecurity // Enables Spring Security and tells Spring Boot to look for a custom security filter chain
+@EnableMethodSecurity(securedEnabled = true) // secureEnabled should be true to use @Secured annotation
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
@@ -34,109 +31,64 @@ public class WebSecurityConfig {
     private static final String[] PUBLIC_ROUTES = {
             "/error",
             "/auth/**",
-            "/home.html"
+            "/home.html"  // Added static redirect home page for successful oauth login in endpoints without authorization
     };
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        // Configuring the SecurityFilterChain pipeline.
-        // Since we defined a custom UserDetailsService Bean below,
-        // Spring Boot overrides and ignores the single user credentials from application.yml.
+        // Configures the Spring Security filter chain.
+        //
+        // Best Practice:
+        // Keep the filter chain responsible only for deciding whether an endpoint
+        // is public or requires authentication. Delegate business-specific
+        // authorization (roles, permissions, ownership checks, etc.) to
+        // @Secured/@PreAuthorize on controller or service methods.
+        //
+        // Advantages:
+        // 1. Clear separation of concerns (Authentication vs Authorization).
+        // 2. Keeps the filter chain concise and easier to understand.
+        // 3. Avoids duplicating authorization rules in multiple places.
+        // 4. Enables fine-grained authorization using SpEL expressions,
+        //    custom bean methods, ownership checks, etc.
+        // 5. Security rules remain close to the business methods they protect,
+        //    making them easier to maintain and less error-prone.
         return httpSecurity
 
-                // Enables standard form-based login authentication.
-                // If this is omitted, the application will not render the default login UI.
-                // For custom UI rendering (e.g., templates/newlogin.html), swap this with:
-                // .formLogin(formLoginConfig -> formLoginConfig.loginPage("/newlogin.html"))
-                // .formLogin(Customizer.withDefaults()) // Configures form login with default settings
-
-                // Intercepts and filters incoming HTTP requests based on roles and paths before reaching the controllers.
                 .authorizeHttpRequests(auth -> auth
-                        // '/login' does not need to be explicitly permitted.
-                        // When formLogin() or oauth2Login() is enabled, Spring Security internally
-                        // registers and permits the login endpoint and related authentication URLs.
-                        // These requests are handled by Spring Security's filters before reaching
-                        // the application's authorization rules.
-
-                        // Added static redirect home page for successful oauth login in endpoints without authorization
-                        // Public Endpoint: Permits all unauthenticated users to access the main /posts route.
+                        // Public endpoints accessible without authentication.
                         .requestMatchers(PUBLIC_ROUTES).permitAll()
-                        // -------------------------------------------------------------------------
-                        // Endpoint-Based Authorization
-                        // -------------------------------------------------------------------------
-                        // Applies the same authorization rule to all HTTP methods for the matching path.
-                        //
-                        // "/posts/**" matches "/posts" as well as every nested path beneath it:
-                        //
-                        //   /posts              ✓
-                        //   /posts/1            ✓
-                        //   /posts/1/comments   ✓
-                        //   /posts/a/b/c        ✓
-                        //
-                        // Since no HTTP method is specified, GET, POST, PUT, PATCH and DELETE
-                        // requests to these paths all require the configured role(s).
-                        //
-                        // .requestMatchers("/posts/**").hasAnyRole(ADMIN.name())
 
+                        // All post endpoints require an authenticated user.
+                        // Business-specific authorization is performed later using
+                        // method security annotations (@Secured/@PreAuthorize),
+                        // keeping the filter chain simple and avoiding duplicated
+                        // authorization rules.
+                        .requestMatchers("/posts/**").authenticated()
 
-                        // -------------------------------------------------------------------------
-                        // Method + Endpoint-Based Authorization
-                        // -------------------------------------------------------------------------
-                        // Provides finer-grained access control by combining the HTTP method
-                        // with the request path. Different operations on the same resource can
-                        // therefore have different authorization requirements.
-                        //
-                        // Example:
-                        //   GET    /posts/**  -> Public (Read)
-                        //   POST   /posts     -> ADMIN or CREATOR (Create)
-                        //   PUT    /posts/**  -> ADMIN only (Update)
-                        //   DELETE /posts/**  -> ADMIN only (Delete)
-                        // -------------------------------------------------------------------------
-                        .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/posts").hasAnyRole(ADMIN.name(), CREATOR.name())
-
-                        // Not combined with the previous role check. For POST /posts, the previous
-                        // matcher is selected and Spring stops evaluating further matchers. The
-                        // authority check only applies to requests matching "/posts/**" that were
-                        // not already matched (e.g. POST /posts/1).
-
-                        // Permission check along with roles
-                        .requestMatchers(HttpMethod.POST, "/posts/**").hasAnyAuthority(POST_CREATE.name())
-
-                        // Unreachable rule: the previous GET "/posts/**" matcher already matches
-                        // and authorizes the request. Spring Security evaluates request matchers
-                        // in declaration order and stops at the first matching rule.
-                        .requestMatchers(HttpMethod.GET, "/posts/**").hasAuthority(POST_VIEW.name())
-
-                        .requestMatchers(HttpMethod.PUT, "/posts/**").hasAuthority(POST_UPDATE.name())
-                        .requestMatchers(HttpMethod.DELETE, "/posts").hasAuthority(POST_DELETE.name())
-
-                        // Only Allow Creator and Admins to use the post route
-                        // .requestMatchers("/posts").hasAnyRole(ADMIN.name(),CREATOR.name())
-
-                        // Role-Based Authorization: Restricts access to matching sub-routes.
-                        // User 'yash' can access this because he carries the 'MANAGER' role.
-                        // User 'kalu' will receive an HTTP 403 Forbidden error because he only carries 'USER'.
-                        // .requestMatchers("/posts/**").hasAnyRole("ADMIN", "MANAGER")
-
-                        // Catch-All Guard: Mandates authentication for every remaining unmapped endpoint.
                         .anyRequest().authenticated()
                 )
 
-                // Disables Cross-Site Request Forgery (CSRF) protection.
-                // Safe to disable for stateless APIs using JWTs, allowing non-GET requests (POST, PUT, DELETE) from Postman without a token.
+                // Disables CSRF protection.
+                // Safe for stateless JWT-based APIs since requests are not
+                // authenticated using server-side HTTP sessions.
                 .csrf(csrfConfig -> csrfConfig.disable())
 
-                // Changes session tracking management from Stateful to Stateless.
-                // CRITICAL: This is the exact reason your standard browser form login is now failing.
-                // Stateless policy prevents Spring Security from saving user context in a HTTP Session or generating JSESSIONID cookies.
-                .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // add custom filter before Username Password Authentication Filter
+                // Configure Spring Security to operate in stateless mode.
+                // Every request must authenticate itself (e.g. using a JWT)
+                // because no HttpSession is created or reused.
+                .sessionManagement(sessionConfig ->
+                        sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // Execute JWT authentication before Spring's built-in
+                // UsernamePasswordAuthenticationFilter.
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+
                 .oauth2Login(oauth2Config ->
-                        oauth2Config.failureUrl("/login?error=true") // Setting up oauth2 failure url for redirection
+                        oauth2Config
+                                .failureUrl("/login?error=true")
                                 .successHandler(oauth2SuccessHandler)
                 )
-                // Builds and compiles the finalized SecurityFilterChain bean instance
+
                 .build();
     }
 

@@ -4,6 +4,7 @@ import com.shubh.module5.Spring_Security_Demo.exception.ResourceNotFoundExceptio
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -58,4 +59,15 @@ public class GlobalExceptionHandler {
         ApiError apiError = new ApiError(exception.getMessage(), HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(apiError, apiError.getStatusCode());
     }
+
+    // Handles authorization failures (HTTP 403 Forbidden).
+    // Without this handler, Spring Security redirects the user to the OAuth2
+    // login page because oauth2Login() is configured. Returning a JSON response
+    // is more suitable for REST APIs.
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiError> handleAccessDeniedException(AccessDeniedException exception) {
+        ApiError apiError = new ApiError(exception.getMessage(), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(apiError, apiError.getStatusCode());
+    }
+
 }

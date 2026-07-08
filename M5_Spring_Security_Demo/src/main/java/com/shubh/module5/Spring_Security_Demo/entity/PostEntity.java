@@ -20,4 +20,6 @@ public class PostEntity {
 
     String description;
 
+    @ManyToOne
+    UserEntity author;
 }

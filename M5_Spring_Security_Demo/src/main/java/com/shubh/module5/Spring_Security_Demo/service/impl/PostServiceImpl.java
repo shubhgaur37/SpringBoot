@@ -2,6 +2,7 @@ package com.shubh.module5.Spring_Security_Demo.service.impl;
 
 import com.shubh.module5.Spring_Security_Demo.dto.PostDTO;
 import com.shubh.module5.Spring_Security_Demo.entity.PostEntity;
+import com.shubh.module5.Spring_Security_Demo.entity.UserEntity;
 import com.shubh.module5.Spring_Security_Demo.exception.ResourceNotFoundException;
 import com.shubh.module5.Spring_Security_Demo.repository.PostRepository;
 import com.shubh.module5.Spring_Security_Demo.service.PostService;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,8 +35,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDTO createNewPost(PostDTO inputPost) {
+        // Retrieve the authenticated user from the SecurityContext and
+        // persist it as the author of the newly created post.
+        UserEntity user = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         PostEntity postEntity = modelMapper.map(inputPost, PostEntity.class);
+        postEntity.setAuthor(user);
         return modelMapper.map(postRepository.save(postEntity), PostDTO.class);
+
     }
 
     @Override
