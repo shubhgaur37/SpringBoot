@@ -1,5 +1,6 @@
 package com.shubh.module5.Spring_Security_Demo.config;
 
+
 import com.shubh.module5.Spring_Security_Demo.filter.JWTAuthFilter;
 import com.shubh.module5.Spring_Security_Demo.handlers.Oauth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.shubh.module5.Spring_Security_Demo.entity.enums.Permission.*;
 import static com.shubh.module5.Spring_Security_Demo.entity.enums.Role.ADMIN;
 import static com.shubh.module5.Spring_Security_Demo.entity.enums.Role.CREATOR;
 
@@ -92,6 +94,22 @@ public class WebSecurityConfig {
                         // -------------------------------------------------------------------------
                         .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/posts").hasAnyRole(ADMIN.name(), CREATOR.name())
+
+                        // Not combined with the previous role check. For POST /posts, the previous
+                        // matcher is selected and Spring stops evaluating further matchers. The
+                        // authority check only applies to requests matching "/posts/**" that were
+                        // not already matched (e.g. POST /posts/1).
+
+                        // Permission check along with roles
+                        .requestMatchers(HttpMethod.POST, "/posts/**").hasAnyAuthority(POST_CREATE.name())
+
+                        // Unreachable rule: the previous GET "/posts/**" matcher already matches
+                        // and authorizes the request. Spring Security evaluates request matchers
+                        // in declaration order and stops at the first matching rule.
+                        .requestMatchers(HttpMethod.GET, "/posts/**").hasAuthority(POST_VIEW.name())
+
+                        .requestMatchers(HttpMethod.PUT, "/posts/**").hasAuthority(POST_UPDATE.name())
+                        .requestMatchers(HttpMethod.DELETE, "/posts").hasAuthority(POST_DELETE.name())
 
                         // Only Allow Creator and Admins to use the post route
                         // .requestMatchers("/posts").hasAnyRole(ADMIN.name(),CREATOR.name())

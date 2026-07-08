@@ -2,7 +2,6 @@ package com.shubh.module5.Spring_Security_Demo.service.impl;
 
 import com.shubh.module5.Spring_Security_Demo.dto.PostDTO;
 import com.shubh.module5.Spring_Security_Demo.entity.PostEntity;
-import com.shubh.module5.Spring_Security_Demo.entity.UserEntity;
 import com.shubh.module5.Spring_Security_Demo.exception.ResourceNotFoundException;
 import com.shubh.module5.Spring_Security_Demo.repository.PostRepository;
 import com.shubh.module5.Spring_Security_Demo.service.PostService;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,12 +39,26 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDTO getPostById(Long id) {
-        // getting authenticated user from security context
-        UserEntity user = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("User {} wants to fetch post with id: {}", user, id);
 
-        PostEntity post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + id));
+        // Retrieve the currently authenticated principal from the SecurityContext.
+        // If the endpoint is accessed without authentication (e.g. permitAll()),
+        // Spring Security populates the SecurityContext with an
+        // AnonymousAuthenticationToken whose principal is the String
+        // "anonymousUser" instead of our UserEntity.
+        //
+        // Directly casting the principal to UserEntity in such cases results in
+        // a ClassCastException. This cast is therefore only safe for endpoints
+        // that require authentication or after checking that the Authentication
+        // is not an AnonymousAuthenticationToken.
+//        UserEntity user = (UserEntity) SecurityContextHolder.getContext()
+//                .getAuthentication()
+//                .getPrincipal();
+
+//        log.info("User {} wants to fetch post with id: {}", user, id);
+
+        PostEntity post = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + id));
+
         return modelMapper.map(post, PostDTO.class);
     }
-
 }

@@ -1,5 +1,6 @@
 package com.shubh.module5.Spring_Security_Demo.entity;
 
+import com.shubh.module5.Spring_Security_Demo.entity.enums.Permission;
 import com.shubh.module5.Spring_Security_Demo.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
@@ -91,11 +93,31 @@ public class UserEntity implements UserDetails {
      * If the application instead used hasAuthority("ADMIN"), the prefix
      * would not be required.
      */
+
+    private Set<Permission> permissions;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
+
+        // In production, a more common approach is to derive permissions from roles
+        // (Role -> Permissions mapping) instead of assigning permissions directly
+        // to each user.
+
+        // The current approach allows a user to have additional custom permissions
+        // alongside the permissions inherited from their roles.
+
+        // Roles are prefixed with "ROLE_" because we explicitly create the
+        // GrantedAuthority in that format. Spring Security's hasRole(...)
+        // internally looks for authorities prefixed with "ROLE_".
+        // Permissions are typically checked directly using hasAuthority(...).
+        Set<SimpleGrantedAuthority> authorities = roles.stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
-                .toList();
+                .collect(Collectors.toSet());
+
+        permissions.forEach(permission ->
+                authorities.add(new SimpleGrantedAuthority(permission.name())));
+
+        return authorities;
     }
 
     @Override

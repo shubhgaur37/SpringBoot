@@ -1,5 +1,6 @@
 package com.shubh.module5.Spring_Security_Demo.dto;
 
+import com.shubh.module5.Spring_Security_Demo.entity.enums.Permission;
 import com.shubh.module5.Spring_Security_Demo.entity.enums.Role;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -24,4 +25,6 @@ public class SignUpDTO {
      * are granted later through secured administrative workflows.
      */
     Set<Role> roles;
+
+    Set<Permission> permissions;
 }
