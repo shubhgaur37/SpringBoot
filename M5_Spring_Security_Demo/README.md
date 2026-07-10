@@ -194,6 +194,7 @@ What was learned:
   - The refresh token expiration.
   - Whether the refresh token still represents an active server-side session.
 - The login response returns the access token in the response body and stores only the refresh token in an HttpOnly cookie.
+- The refresh response also returns the new access token in the response body and does not create an access-token cookie.
 - The client sends the access token with `Authorization: Bearer <token>`.
 - Logout deletes the server-side refresh session and expires the refresh token cookie.
 
@@ -222,7 +223,7 @@ sequenceDiagram
     AuthService->>SessionService: refreshSession(refreshToken)
     SessionService->>DB: verify and update lastUsedAt
     AuthService->>JWTService: createAccessToken(user)
-    AuthController-->>Client: new access token
+    AuthController-->>Client: new access token JSON, no access-token cookie
 
     Client->>AuthController: DELETE /auth/logout with refreshToken cookie
     AuthController->>AuthService: logout(refreshToken)
@@ -247,6 +248,7 @@ What was learned:
 - `Secure` cookies should be enabled in production so cookies are sent only over HTTPS.
 - This project controls secure cookie behavior using `deployment.env`.
 - The current login flow keeps the access token out of cookies and returns it in the response body.
+- The refresh flow follows the same rule: it returns the new access token in JSON instead of writing an access-token cookie.
 - The refresh token remains in an HttpOnly cookie because it is longer-lived and more sensitive.
 - Logout sends a replacement `refreshToken` cookie with `Max-Age=0`, which tells the browser to delete it.
 - Cookie invalidation only works when important cookie attributes, especially path and domain, match the original cookie.
@@ -504,7 +506,7 @@ sequenceDiagram
     AuthenticationManager-->>AuthService: principal = UserEntity
     AuthService->>JWTService: create access + refresh tokens
     AuthService-->>AuthController: LoginResponseDTO
-    AuthController-->>Client: tokens + cookies
+    AuthController-->>Client: access token JSON + refreshToken HttpOnly cookie
 ```
 
 ## Request Authorization Strategy

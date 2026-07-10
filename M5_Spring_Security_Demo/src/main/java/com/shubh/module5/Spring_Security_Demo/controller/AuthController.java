@@ -90,23 +90,6 @@ public class AuthController {
 
         LoginResponseDTO loginResponse = authService.refresh(refreshToken);
 
-        // Create a cookie to store the JWT securely
-        Cookie accessTokenCookie = new Cookie("accessToken", loginResponse.getAccessToken());
-        /*
-         * SECURITY NOTE: HttpOnly flag
-         * 'HttpOnly(true)' prevents client-side JavaScript (e.g., document.cookie)
-         * from accessing this cookie. This is a critical defense against
-         * Cross-Site Scripting (XSS) attacks, ensuring that even if an attacker
-         * injects a script, they cannot steal this authentication token.
-         * Note: This has no impact on HTTP vs HTTPS; it restricts script access.
-         */
-        accessTokenCookie.setHttpOnly(true);
-
-        // Should be enabled in production to force HTTPS-only transmission, controlled using env variable in yaml
-        accessTokenCookie.setSecure("PRODUCTION".equals(deploymentType));
-
-        response.addCookie(accessTokenCookie);
-
         return ResponseEntity.ok(loginResponse);
     }
 
