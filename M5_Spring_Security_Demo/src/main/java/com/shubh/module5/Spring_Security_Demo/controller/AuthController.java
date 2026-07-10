@@ -62,7 +62,7 @@ public class AuthController {
          * injects a script, they cannot steal this authentication token.
          * Note: This has no impact on HTTP vs HTTPS; it restricts script access.
          */
-//        accessTokenCookie.setHttpOnly(true);
+        //accessTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setSecure("PRODUCTION".equals(deploymentType));
 
@@ -87,10 +87,16 @@ public class AuthController {
                 .findFirst()
                 .orElseThrow(() -> new AuthenticationServiceException("Refresh token not found inside cookies"))
                 .getValue();
+        LoginResponseDTO refreshResponse = authService.refresh(refreshToken);
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshResponse.getRefreshToken());
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure("PRODUCTION".equals(deploymentType));
+        response.addCookie(refreshTokenCookie);
 
-        LoginResponseDTO loginResponse = authService.refresh(refreshToken);
+        // avoid sending refresh token as a response
+        refreshResponse.setRefreshToken(null);
 
-        return ResponseEntity.ok(loginResponse);
+        return ResponseEntity.ok(refreshResponse);
     }
 
 

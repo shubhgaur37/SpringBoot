@@ -50,7 +50,7 @@ public class JWTService {
                  * Consider using java.time.Instant for better precision in modern applications.
                  */
                 .issuedAt(new Date())
-                // Set the 'exp' (expiration) timestamp (currently set to 60 seconds)
+                // Set the 'exp' (expiration) timestamp (currently set to 20 seconds)
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 20))
                 // Sign the token using the HMAC SHA algorithm
                 .signWith(getSecretKey())

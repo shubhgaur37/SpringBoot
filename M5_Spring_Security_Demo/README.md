@@ -17,6 +17,7 @@ The final application protects a small Posts API and Auth API while demonstratin
 - Reading authenticated user data from `SecurityContextHolder`
 - Centralized handling of authentication and JWT exceptions
 - Refresh token flow
+- Refresh token rotation
 - HttpOnly cookies for refresh tokens
 - Logout flow that invalidates server-side refresh sessions
 - OAuth2 login with Google
@@ -184,6 +185,7 @@ What was learned:
 Commits:
 
 - [`f2c3007`](https://github.com/shubhgaur37/SpringBoot/commit/f2c3007) Adding Support for refreshing jwt token upon expiry
+- [`7129f90`](https://github.com/shubhgaur37/SpringBoot/commit/7129f90) Security Measure: Refresh Token Rotation
 
 What was learned:
 
@@ -194,7 +196,8 @@ What was learned:
   - The refresh token expiration.
   - Whether the refresh token still represents an active server-side session.
 - The login response returns the access token in the response body and stores only the refresh token in an HttpOnly cookie.
-- The refresh response also returns the new access token in the response body and does not create an access-token cookie.
+- The refresh response returns a new access token in the response body and sets a new refresh token cookie.
+- The old refresh token session is deleted during refresh, so every refresh token is single-use.
 - The client sends the access token with `Authorization: Bearer <token>`.
 - Logout deletes the server-side refresh session and expires the refresh token cookie.
 
@@ -210,20 +213,23 @@ sequenceDiagram
     Client->>AuthController: POST /auth/login
     AuthController->>AuthService: login(email, password)
     AuthService->>AuthService: AuthenticationManager.authenticate()
-    AuthService->>JWTService: createAccessToken(user)
-    AuthService->>JWTService: createRefreshToken(user)
-    AuthService->>SessionService: createSession(user, refreshToken)
+    AuthService->>SessionService: createSession(user)
+    SessionService->>JWTService: createAccessToken(user)
+    SessionService->>JWTService: createRefreshToken(user)
     SessionService->>DB: save session
     AuthService-->>AuthController: access token + refresh token
     AuthController-->>Client: access token JSON + refreshToken HttpOnly cookie
 
     Client->>AuthController: POST /auth/refresh with refreshToken cookie
     AuthController->>AuthService: refresh(refreshToken)
-    AuthService->>JWTService: validateTokenGetUserId(refreshToken)
     AuthService->>SessionService: refreshSession(refreshToken)
-    SessionService->>DB: verify and update lastUsedAt
-    AuthService->>JWTService: createAccessToken(user)
-    AuthController-->>Client: new access token JSON, no access-token cookie
+    SessionService->>JWTService: validateTokenGetUserId(refreshToken)
+    SessionService->>DB: verify old refresh session
+    SessionService->>JWTService: createAccessToken(user)
+    SessionService->>JWTService: createRefreshToken(user)
+    SessionService->>DB: save new session
+    SessionService->>DB: delete old session
+    AuthController-->>Client: new access token JSON + rotated refreshToken cookie
 
     Client->>AuthController: DELETE /auth/logout with refreshToken cookie
     AuthController->>AuthService: logout(refreshToken)
@@ -248,7 +254,8 @@ What was learned:
 - `Secure` cookies should be enabled in production so cookies are sent only over HTTPS.
 - This project controls secure cookie behavior using `deployment.env`.
 - The current login flow keeps the access token out of cookies and returns it in the response body.
-- The refresh flow follows the same rule: it returns the new access token in JSON instead of writing an access-token cookie.
+- The refresh flow follows the same access-token rule: it returns the new access token in JSON instead of writing an access-token cookie.
+- Refresh still writes a cookie, but only to replace the old refresh token with the newly rotated refresh token.
 - The refresh token remains in an HttpOnly cookie because it is longer-lived and more sensitive.
 - Logout sends a replacement `refreshToken` cookie with `Max-Age=0`, which tells the browser to delete it.
 - Cookie invalidation only works when important cookie attributes, especially path and domain, match the original cookie.
@@ -296,6 +303,7 @@ flowchart TD
 Commits:
 
 - [`f771064`](https://github.com/shubhgaur37/SpringBoot/commit/f771064) Added a Session Table to prevent session abuse with max_session_limit and lru session eviction
+- [`7129f90`](https://github.com/shubhgaur37/SpringBoot/commit/7129f90) Security Measure: Refresh Token Rotation
 
 What was learned:
 
@@ -304,7 +312,7 @@ What was learned:
 - Every login creates a new refresh-token session.
 - The maximum active session count is capped at `2`.
 - When the limit is reached, the least recently used session is evicted.
-- Refreshing a token updates `lastUsedAt`, making active sessions survive longer than stale ones.
+- Refreshing a token rotates the session by creating a new refresh token session and deleting the old one.
 - Logout deletes the session associated with the refresh token, making that token unusable even if a stale cookie remains in the browser.
 
 ```mermaid
@@ -320,8 +328,10 @@ flowchart TD
     H["Refresh request"] --> I["Find session by refresh token"]
     I --> J{"Found?"}
     J -->|No| K["Reject refresh"]
-    J -->|Yes| L["Update lastUsedAt"]
-    L --> M["Issue new access token"]
+    J -->|Yes| L["Generate new access token and refresh token"]
+    L --> M["Save new session"]
+    M --> T["Delete old session"]
+    T --> U["Return access token and rotated refresh cookie"]
 
     N["Logout request"] --> O["Find session by refresh token"]
     O --> P{"Found?"}
@@ -332,9 +342,9 @@ flowchart TD
 
 ### 8.1 Logout Flow
 
-Current working-tree change:
+Commit:
 
-- Added `DELETE /auth/logout` across `AuthController`, `AuthService`, and `SessionService`.
+- [`7129f90`](https://github.com/shubhgaur37/SpringBoot/commit/7129f90) Security Measure: Refresh Token Rotation
 
 What was learned:
 
@@ -343,6 +353,55 @@ What was learned:
 - The browser is also instructed to delete the `refreshToken` cookie by receiving an empty cookie with `Max-Age=0`.
 - Cookie deletion depends on matching the original cookie identity, especially name, path, and domain.
 - The server-side session remains the source of truth. A stale cookie alone should not be treated as an active login.
+
+### 8.2 Refresh Token Rotation
+
+Commit:
+
+- [`7129f90`](https://github.com/shubhgaur37/SpringBoot/commit/7129f90) Security Measure: Refresh Token Rotation
+
+What was learned:
+
+- Refresh token rotation makes refresh tokens single-use.
+- On every successful refresh, the server validates the presented refresh token, creates a new access token, creates a new refresh token, saves a new session, and deletes the old session.
+- The rotated refresh token is sent back as an HttpOnly cookie. The JSON response contains the new access token but intentionally does not expose the new refresh token.
+- `AuthService` now orchestrates authentication while `SessionService` owns session lifecycle, token generation, refresh validation, token rotation, concurrent session limits, and logout.
+
+Why it matters:
+
+- Limits replay attacks: if an old refresh token is stolen, it stops working after the legitimate client refreshes once.
+- Reduces the value of leaked refresh tokens because each token has a much smaller useful lifetime.
+- Gives the backend a revocation point through the `Session` table instead of trusting token expiration alone.
+- Supports per-device logout because deleting one refresh-token session does not have to remove every session for the same user.
+- Makes suspicious reuse detectable in a production system: a refresh attempt for a previously rotated token is a strong signal that a token may have been stolen.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant AuthController
+    participant AuthService
+    participant SessionService
+    participant JWTService
+    participant DB
+
+    Client->>AuthController: POST /auth/refresh with R1 cookie
+    AuthController->>AuthService: refresh(R1)
+    AuthService->>SessionService: refreshSession(R1)
+    SessionService->>JWTService: validate R1 signature and expiry
+    SessionService->>DB: find Session(R1)
+    SessionService->>JWTService: create access token A2
+    SessionService->>JWTService: create refresh token R2
+    SessionService->>DB: save Session(R2)
+    SessionService->>DB: delete Session(R1)
+    AuthController-->>Client: A2 in JSON + R2 HttpOnly cookie
+
+    Client->>AuthController: Later attempt with old R1
+    AuthController->>AuthService: refresh(R1)
+    AuthService->>SessionService: refreshSession(R1)
+    SessionService->>DB: find Session(R1)
+    DB-->>SessionService: not found
+    AuthController-->>Client: reject refresh
+```
 
 ### 9. RBAC Basics
 
@@ -452,10 +511,10 @@ flowchart LR
 | `WebSecurityConfig` | Defines public routes, authenticated routes, stateless behavior, JWT filter placement, OAuth2 login, and method security. |
 | `AppConfig` | Registers shared beans such as `ModelMapper` and `BCryptPasswordEncoder`. |
 | `UserService` | Implements `UserDetailsService`, signs up users, loads users by email, and finds users by id. |
-| `AuthService` | Performs login, delegates authentication to `AuthenticationManager`, creates JWTs, refreshes access tokens, and logs out refresh sessions. |
+| `AuthService` | Performs credential authentication and delegates session creation, refresh rotation, and logout to `SessionService`. |
 | `JWTService` | Creates and validates access and refresh JWTs. |
 | `JWTAuthFilter` | Extracts bearer tokens, validates JWTs, loads users, and populates `SecurityContextHolder`. |
-| `SessionService` | Stores refresh-token sessions, enforces max session count, updates session usage, and deletes sessions during logout. |
+| `SessionService` | Owns session lifecycle: token generation, refresh-token rotation, max session enforcement, and logout invalidation. |
 | `Oauth2SuccessHandler` | Handles successful Google login and bridges OAuth identity into application JWTs. |
 | `UserEntity` | Implements `UserDetails` and converts roles/permissions into Spring Security authorities. |
 | `RolePermissionMapper` | Maps application roles to permissions. |
@@ -470,7 +529,7 @@ flowchart LR
 | --- | --- | --- | --- |
 | `POST` | `/auth/signup` | Create a user with encoded password and roles. | Public |
 | `POST` | `/auth/login` | Authenticate email/password, return an access token, and set the refresh token cookie. | Public |
-| `POST` | `/auth/refresh` | Use refresh token cookie to issue a new access token. | Public route, validates refresh token |
+| `POST` | `/auth/refresh` | Use refresh token cookie to issue a new access token and rotate the refresh token cookie. | Public route, validates refresh token |
 | `DELETE` | `/auth/logout` | Delete the refresh-token session and expire the refresh token cookie. | Public route, requires refresh token cookie |
 
 ### Posts
@@ -492,7 +551,7 @@ sequenceDiagram
     participant DaoProvider as DaoAuthenticationProvider
     participant UserService
     participant PasswordEncoder
-    participant JWTService
+    participant SessionService
 
     Client->>AuthController: POST /auth/login
     AuthController->>AuthService: login(LoginDTO)
@@ -504,7 +563,8 @@ sequenceDiagram
     PasswordEncoder-->>DaoProvider: valid
     DaoProvider-->>AuthenticationManager: authenticated Authentication
     AuthenticationManager-->>AuthService: principal = UserEntity
-    AuthService->>JWTService: create access + refresh tokens
+    AuthService->>SessionService: createSession(user)
+    SessionService-->>AuthService: access token + refresh token
     AuthService-->>AuthController: LoginResponseDTO
     AuthController-->>Client: access token JSON + refreshToken HttpOnly cookie
 ```
@@ -562,6 +622,8 @@ google-client-secret=...
 - Access tokens currently expire very quickly for learning purposes.
 - Refresh tokens are also short-lived for easier testing.
 - The refresh token is stateful because it is stored in the `Session` table.
+- Refresh tokens are rotated on every successful refresh, so the previous refresh token and session are immediately invalidated.
+- The refresh response returns only the new access token in JSON; the new refresh token is sent as an HttpOnly cookie.
 - Logout does not need to validate the JWT signature because it does not grant access or issue new tokens; it deletes the server-side session for the supplied refresh token.
 - If a browser keeps sending a stale refresh cookie after logout, the backend still rejects refresh because the session row is gone.
 - The app uses enum roles and permissions. This is suitable for a learning project, but production systems often model roles and permissions as database entities.
@@ -602,6 +664,7 @@ google-client-secret=...
 | [`b80d24b`](https://github.com/shubhgaur37/SpringBoot/commit/b80d24b) | Added permissions and explored matcher precedence. |
 | [`58b76ac`](https://github.com/shubhgaur37/SpringBoot/commit/58b76ac) | Linked permissions with roles. |
 | [`557d5ba`](https://github.com/shubhgaur37/SpringBoot/commit/557d5ba) | Moved fine-grained authorization to method security. |
+| [`7129f90`](https://github.com/shubhgaur37/SpringBoot/commit/7129f90) | Added refresh token rotation and moved session lifecycle into `SessionService`. |
 
 ## Mental Model
 

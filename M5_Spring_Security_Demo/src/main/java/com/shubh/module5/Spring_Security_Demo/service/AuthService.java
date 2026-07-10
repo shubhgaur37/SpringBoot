@@ -11,66 +11,66 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 @Service
 public class AuthService {
     AuthenticationManager authenticationManager;
-    JWTService jwtService;
-    UserService userService;
     SessionService sessionService;
 
+    /*
+     * =========================================================================
+     * AuthService
+     * =========================================================================
+     *
+     * Responsible for orchestrating the authentication workflow.
+     *
+     * Responsibilities:
+     * - Authenticate user credentials.
+     * - Delegate session creation to SessionService.
+     * - Delegate Refresh Token validation and rotation to SessionService.
+     * - Delegate logout and session invalidation to SessionService.
+     *
+     * Refactoring Note:
+     * Session lifecycle management (token generation, Refresh Token
+     * validation, Refresh Token Rotation, concurrent session handling and
+     * logout) has been moved entirely into SessionService.
+     *
+     * This keeps AuthService focused solely on authentication while
+     * SessionService owns the complete lifecycle of authenticated sessions.
+     */
+
     // Login:
-    // Spring Security's DaoAuthenticationProvider automatically calls
-    // PasswordEncoder.matches(rawPassword, storedHash) using the
-    // PasswordEncoder bean configured in the application.
+    // Spring Security's DaoAuthenticationProvider automatically invokes
+    // PasswordEncoder.matches(rawPassword, encodedPassword) using the
+    // configured PasswordEncoder bean.
+
     public LoginResponseDTO login(LoginDTO loginRequest) {
-        // principal is used in user details implementation to get the entity from DB
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
-        // returns the email, principal passed in the request and maps it to email field of userEntity
+        // Authenticate the supplied user credentials.
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()));
+
+        // DaoAuthenticationProvider populates the authenticated principal
+        // with our UserEntity (implements UserDetails).
         UserEntity user = (UserEntity) authentication.getPrincipal();
+        // Delegate session creation and token generation.
+        return sessionService.createSession(user);
 
-        // Create Access and Refresh Tokens
-        String accessToken = jwtService.createAccessToken(user);
-        String refreshToken = jwtService.createRefreshToken(user);
-        // create a new session for the user using refreshToken
-        sessionService.createSession(user, refreshToken);
-
-        LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
-        loginResponseDTO.setAccessToken(accessToken);
-        loginResponseDTO.setRefreshToken(refreshToken);
-        return loginResponseDTO;
     }
 
     public LoginResponseDTO refresh(String refreshToken) {
-
-        // 1. Verify the refresh token's signature and expiration.
-        // Throws if the token is malformed, tampered with, or expired.
-        Long userId = jwtService.validateTokenGetUserId(refreshToken);
-
-        // 2. Verify that the refresh token still has an active session[maybe logged out due to session limit].
-        // Also updates the session's last_used_at timestamp.
-        sessionService.refreshSession(refreshToken);
-
-        // 3. Load the authenticated user.
-        UserEntity user = userService.findUserById(userId);
-
-        // 4. Issue a new access token.
-        String accessToken = jwtService.createAccessToken(user);
-
-        LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
-        loginResponseDTO.setAccessToken(accessToken);
-        return loginResponseDTO;
+        // Delegate Refresh Token validation, Refresh Token Rotation and
+        // token generation to SessionService.
+        return sessionService.refreshSession(refreshToken);
     }
 
     public void logout(String refreshToken) {
-        // Logout simply invalidates the server-side session associated with the
-        // refresh token. JWT validation is intentionally skipped since logout
-        // does not issue new tokens or grant access to protected resources.
-        sessionService.deleteSession(refreshToken);
+        // Delegate logout to SessionService, which invalidates the
+        // current authenticated session.
+        sessionService.logout(refreshToken);
     }
 }
 
