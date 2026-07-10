@@ -65,6 +65,13 @@ public class AuthService {
         loginResponseDTO.setAccessToken(accessToken);
         return loginResponseDTO;
     }
+
+    public void logout(String refreshToken) {
+        // Logout simply invalidates the server-side session associated with the
+        // refresh token. JWT validation is intentionally skipped since logout
+        // does not issue new tokens or grant access to protected resources.
+        sessionService.deleteSession(refreshToken);
+    }
 }
 
 /**

@@ -17,10 +17,11 @@ The final application protects a small Posts API and Auth API while demonstratin
 - Reading authenticated user data from `SecurityContextHolder`
 - Centralized handling of authentication and JWT exceptions
 - Refresh token flow
-- HttpOnly cookies for access and refresh tokens
+- HttpOnly cookies for refresh tokens
+- Logout flow that invalidates server-side refresh sessions
 - OAuth2 login with Google
 - OAuth2 success handler, failure redirect, and frontend redirect
-- Refresh-token-backed session records
+- Refresh-token-backed session records used for refresh and logout
 - Maximum active session limit with least-recently-used eviction
 - Role based access control
 - Permission based access control
@@ -192,7 +193,9 @@ What was learned:
   - The refresh token signature.
   - The refresh token expiration.
   - Whether the refresh token still represents an active server-side session.
-- The project returns access and refresh tokens in the login response and also stores them in HttpOnly cookies.
+- The login response returns the access token in the response body and stores only the refresh token in an HttpOnly cookie.
+- The client sends the access token with `Authorization: Bearer <token>`.
+- Logout deletes the server-side refresh session and expires the refresh token cookie.
 
 ```mermaid
 sequenceDiagram
@@ -211,7 +214,7 @@ sequenceDiagram
     AuthService->>SessionService: createSession(user, refreshToken)
     SessionService->>DB: save session
     AuthService-->>AuthController: access token + refresh token
-    AuthController-->>Client: JSON + HttpOnly cookies
+    AuthController-->>Client: access token JSON + refreshToken HttpOnly cookie
 
     Client->>AuthController: POST /auth/refresh with refreshToken cookie
     AuthController->>AuthService: refresh(refreshToken)
@@ -220,6 +223,12 @@ sequenceDiagram
     SessionService->>DB: verify and update lastUsedAt
     AuthService->>JWTService: createAccessToken(user)
     AuthController-->>Client: new access token
+
+    Client->>AuthController: DELETE /auth/logout with refreshToken cookie
+    AuthController->>AuthService: logout(refreshToken)
+    AuthService->>SessionService: deleteSession(refreshToken)
+    SessionService->>DB: delete refresh session
+    AuthController-->>Client: 204 No Content + expired refreshToken cookie
 ```
 
 ### 6. Cookie Security
@@ -237,6 +246,10 @@ What was learned:
 - `HttpOnly` does not mean HTTPS-only.
 - `Secure` cookies should be enabled in production so cookies are sent only over HTTPS.
 - This project controls secure cookie behavior using `deployment.env`.
+- The current login flow keeps the access token out of cookies and returns it in the response body.
+- The refresh token remains in an HttpOnly cookie because it is longer-lived and more sensitive.
+- Logout sends a replacement `refreshToken` cookie with `Max-Age=0`, which tells the browser to delete it.
+- Cookie invalidation only works when important cookie attributes, especially path and domain, match the original cookie.
 
 ### 7. OAuth2 Login
 
@@ -290,23 +303,44 @@ What was learned:
 - The maximum active session count is capped at `2`.
 - When the limit is reached, the least recently used session is evicted.
 - Refreshing a token updates `lastUsedAt`, making active sessions survive longer than stale ones.
+- Logout deletes the session associated with the refresh token, making that token unusable even if a stale cookie remains in the browser.
 
 ```mermaid
 flowchart TD
-    A[User logs in] --> B[Find sessions for user]
-    B --> C{Session count equals max?}
-    C -- No --> F[Save new session]
-    C -- Yes --> D[Sort by lastUsedAt]
-    D --> E[Delete least recently used session]
+    A["User logs in"] --> B["Find sessions for user"]
+    B --> C{"Session count equals max?"}
+    C -->|No| F["Save new session"]
+    C -->|Yes| D["Sort by lastUsedAt"]
+    D --> E["Delete least recently used session"]
     E --> F
-    F --> G[Return refresh token]
+    F --> G["Return refresh token"]
 
-    H[Refresh request] --> I[Find session by refresh token]
-    I --> J{Found?}
-    J -- No --> K[Reject refresh]
-    J -- Yes --> L[Update lastUsedAt]
-    L --> M[Issue new access token]
+    H["Refresh request"] --> I["Find session by refresh token"]
+    I --> J{"Found?"}
+    J -->|No| K["Reject refresh"]
+    J -->|Yes| L["Update lastUsedAt"]
+    L --> M["Issue new access token"]
+
+    N["Logout request"] --> O["Find session by refresh token"]
+    O --> P{"Found?"}
+    P -->|No| Q["Reject logout"]
+    P -->|Yes| R["Delete session"]
+    R --> S["Expire refresh cookie"]
 ```
+
+### 8.1 Logout Flow
+
+Current working-tree change:
+
+- Added `DELETE /auth/logout` across `AuthController`, `AuthService`, and `SessionService`.
+
+What was learned:
+
+- Logout in a refresh-token-backed system is primarily server-side invalidation.
+- The backend deletes the `Session` row for the refresh token, making that refresh token unusable.
+- The browser is also instructed to delete the `refreshToken` cookie by receiving an empty cookie with `Max-Age=0`.
+- Cookie deletion depends on matching the original cookie identity, especially name, path, and domain.
+- The server-side session remains the source of truth. A stale cookie alone should not be treated as an active login.
 
 ### 9. RBAC Basics
 
@@ -416,10 +450,10 @@ flowchart LR
 | `WebSecurityConfig` | Defines public routes, authenticated routes, stateless behavior, JWT filter placement, OAuth2 login, and method security. |
 | `AppConfig` | Registers shared beans such as `ModelMapper` and `BCryptPasswordEncoder`. |
 | `UserService` | Implements `UserDetailsService`, signs up users, loads users by email, and finds users by id. |
-| `AuthService` | Performs login, delegates authentication to `AuthenticationManager`, creates JWTs, and refreshes access tokens. |
+| `AuthService` | Performs login, delegates authentication to `AuthenticationManager`, creates JWTs, refreshes access tokens, and logs out refresh sessions. |
 | `JWTService` | Creates and validates access and refresh JWTs. |
 | `JWTAuthFilter` | Extracts bearer tokens, validates JWTs, loads users, and populates `SecurityContextHolder`. |
-| `SessionService` | Stores refresh-token sessions, enforces max session count, and updates session usage. |
+| `SessionService` | Stores refresh-token sessions, enforces max session count, updates session usage, and deletes sessions during logout. |
 | `Oauth2SuccessHandler` | Handles successful Google login and bridges OAuth identity into application JWTs. |
 | `UserEntity` | Implements `UserDetails` and converts roles/permissions into Spring Security authorities. |
 | `RolePermissionMapper` | Maps application roles to permissions. |
@@ -433,8 +467,9 @@ flowchart LR
 | Method | Endpoint | Description | Auth |
 | --- | --- | --- | --- |
 | `POST` | `/auth/signup` | Create a user with encoded password and roles. | Public |
-| `POST` | `/auth/login` | Authenticate email/password, issue access and refresh tokens. | Public |
+| `POST` | `/auth/login` | Authenticate email/password, return an access token, and set the refresh token cookie. | Public |
 | `POST` | `/auth/refresh` | Use refresh token cookie to issue a new access token. | Public route, validates refresh token |
+| `DELETE` | `/auth/logout` | Delete the refresh-token session and expire the refresh token cookie. | Public route, requires refresh token cookie |
 
 ### Posts
 
@@ -525,6 +560,8 @@ google-client-secret=...
 - Access tokens currently expire very quickly for learning purposes.
 - Refresh tokens are also short-lived for easier testing.
 - The refresh token is stateful because it is stored in the `Session` table.
+- Logout does not need to validate the JWT signature because it does not grant access or issue new tokens; it deletes the server-side session for the supplied refresh token.
+- If a browser keeps sending a stale refresh cookie after logout, the backend still rejects refresh because the session row is gone.
 - The app uses enum roles and permissions. This is suitable for a learning project, but production systems often model roles and permissions as database entities.
 - `@ElementCollection` is used for user roles because roles are enum values, not independent role entities.
 - `AccessDeniedException` is handled explicitly so REST APIs return JSON `403 Forbidden` instead of redirecting to an OAuth login page.
