@@ -87,12 +87,12 @@ src/main/java/com/shubh/module5/Spring_Security_Demo
 
 Commits:
 
-- [`d5f0f01`](https://github.com/shubhgaur37/SpringBoot/commit/d5f0f01) Initialising Project and Adding Spring Security Dependency
-- [`c10afa0`](https://github.com/shubhgaur37/SpringBoot/commit/c10afa0) Adding a single user with some roles in yaml
-- [`5d1c1dc`](https://github.com/shubhgaur37/SpringBoot/commit/5d1c1dc) Adding User Entity with db authentication functionality via service layer
-- [`5c85861`](https://github.com/shubhgaur37/SpringBoot/commit/5c85861) basics of security filter chain
-- [`fbf4342`](https://github.com/shubhgaur37/SpringBoot/commit/fbf4342) Registering Multiple Users using InMemoryUserDetailsService bean
-- [`4f8fe07`](https://github.com/shubhgaur37/SpringBoot/commit/4f8fe07) Security Filter Chain Stateless Mode
+- [`d5f0f01`](https://github.com/shubhgaur37/SpringBoot/commit/d5f0f010de714d83346ab3894b29b6ae2e1a4a39) Initialising Project and Adding Spring Security Dependency
+- [`c10afa0`](https://github.com/shubhgaur37/SpringBoot/commit/c10afa03abc85d74f700eab3ab4382bb814f8198) Adding a single user with some roles in yaml
+- [`5d1c1dc`](https://github.com/shubhgaur37/SpringBoot/commit/5d1c1dc12b44123d6287631d5ffc88670846921d) Adding User Entity with db authentication functionality via service layer
+- [`5c85861`](https://github.com/shubhgaur37/SpringBoot/commit/5c858615628db3378d9a630bfa2db13239f5b82d) basics of security filter chain
+- [`fbf4342`](https://github.com/shubhgaur37/SpringBoot/commit/fbf434236d821b2df781b483dfa1d78d44dc86f3) Registering Multiple Users using InMemoryUserDetailsService bean
+- [`4f8fe07`](https://github.com/shubhgaur37/SpringBoot/commit/4f8fe07da2fc0cb2f2eecd3871010e72888d16d8) Security Filter Chain Stateless Mode
 
 What was learned:
 
@@ -108,13 +108,13 @@ What was learned:
 
 Commits:
 
-- [`bed117a`](https://github.com/shubhgaur37/SpringBoot/commit/bed117a) Adding Login and SignUp Functionality
-- [`02668a5`](https://github.com/shubhgaur37/SpringBoot/commit/02668a5) Sending token as cookie alongwith response in login
-- [`dbd51da`](https://github.com/shubhgaur37/SpringBoot/commit/dbd51da) reformat
-- [`9f2d02f`](https://github.com/shubhgaur37/SpringBoot/commit/9f2d02f) Custom JWT Auth Filter to authenticate all routes except for auth
-- [`41826ff`](https://github.com/shubhgaur37/SpringBoot/commit/41826ff) Getting User Details from Security Filter Context
-- [`c4717c6`](https://github.com/shubhgaur37/SpringBoot/commit/c4717c6) reformat
-- [`61e3d8e`](https://github.com/shubhgaur37/SpringBoot/commit/61e3d8e) Handling Authentication and JWT Exceptions
+- [`bed117a`](https://github.com/shubhgaur37/SpringBoot/commit/bed117abca73d7f63ec18346a5b54bf434268b1f) Adding Login and SignUp Functionality
+- [`02668a5`](https://github.com/shubhgaur37/SpringBoot/commit/02668a5e72673753a3c8dfd7dce2c8f6a7437fc5) Sending token as cookie alongwith response in login
+- [`dbd51da`](https://github.com/shubhgaur37/SpringBoot/commit/dbd51dad988d91f89113766e1a8f13c7ec954cb7) reformat
+- [`9f2d02f`](https://github.com/shubhgaur37/SpringBoot/commit/9f2d02ff153cff03d493c37920fd6d09a1a322b8) Custom JWT Auth Filter to authenticate all routes except for auth
+- [`41826ff`](https://github.com/shubhgaur37/SpringBoot/commit/41826ff89b49161dba02b745d491f47bd18e7dc7) Getting User Details from Security Filter Context
+- [`c4717c6`](https://github.com/shubhgaur37/SpringBoot/commit/c4717c60633b8376c456f6f48d99e24dbc534215) reformat
+- [`61e3d8e`](https://github.com/shubhgaur37/SpringBoot/commit/61e3d8ea963aae477d4135d98c312f32c61e1ec1) Handling Authentication and JWT Exceptions
 
 What was learned:
 
@@ -131,9 +131,9 @@ What was learned:
 
 Commits:
 
-- [`76e4b96`](https://github.com/shubhgaur37/SpringBoot/commit/76e4b96) Basics Of JWT Authentication
-- [`9f2d02f`](https://github.com/shubhgaur37/SpringBoot/commit/9f2d02f) Custom JWT Auth Filter to authenticate all routes except for auth
-- [`61e3d8e`](https://github.com/shubhgaur37/SpringBoot/commit/61e3d8e) Handling Authentication and JWT Exceptions
+- [`76e4b96`](https://github.com/shubhgaur37/SpringBoot/commit/76e4b96c774e6989e95a6d267545b79fa1153a5e) Basics Of JWT Authentication
+- [`9f2d02f`](https://github.com/shubhgaur37/SpringBoot/commit/9f2d02ff153cff03d493c37920fd6d09a1a322b8) Custom JWT Auth Filter to authenticate all routes except for auth
+- [`61e3d8e`](https://github.com/shubhgaur37/SpringBoot/commit/61e3d8ea963aae477d4135d98c312f32c61e1ec1) Handling Authentication and JWT Exceptions
 
 What was learned:
 
@@ -170,8 +170,8 @@ flowchart TD
 
 Commits:
 
-- [`41826ff`](https://github.com/shubhgaur37/SpringBoot/commit/41826ff) Getting User Details from Security Filter Context
-- [`557d5ba`](https://github.com/shubhgaur37/SpringBoot/commit/557d5ba) RBAC: Fine Grained Access Control and avoid request matcher bloat using `@PreAuthorize` and `@Secure`
+- [`41826ff`](https://github.com/shubhgaur37/SpringBoot/commit/41826ff89b49161dba02b745d491f47bd18e7dc7) Getting User Details from Security Filter Context
+- [`969acb7`](https://github.com/shubhgaur37/SpringBoot/commit/969acb79cffb608d98c4617fe3eca888f32299cb) RBAC: Fine Grained Access Control and avoid request matcher bloat using `@PreAuthorize` and `@Secure`
 
 What was learned:
 
@@ -184,8 +184,8 @@ What was learned:
 
 Commits:
 
-- [`f2c3007`](https://github.com/shubhgaur37/SpringBoot/commit/f2c3007) Adding Support for refreshing jwt token upon expiry
-- [`7129f90`](https://github.com/shubhgaur37/SpringBoot/commit/7129f90) Security Measure: Refresh Token Rotation
+- [`f2c3007`](https://github.com/shubhgaur37/SpringBoot/commit/f2c3007fbb9fc69c189b08a7d16d6cdb2fd28052) Adding Support for refreshing jwt token upon expiry
+- [`b873aed`](https://github.com/shubhgaur37/SpringBoot/commit/b873aed2af9943ecb82686311b0e972db90b348d) Security Measure: Refresh Token Rotation
 
 What was learned:
 
@@ -242,9 +242,10 @@ sequenceDiagram
 
 Commits:
 
-- [`02668a5`](https://github.com/shubhgaur37/SpringBoot/commit/02668a5) Sending token as cookie alongwith response in login
-- [`f2c3007`](https://github.com/shubhgaur37/SpringBoot/commit/f2c3007) Adding Support for refreshing jwt token upon expiry
-- [`b1b2445`](https://github.com/shubhgaur37/SpringBoot/commit/b1b2445) OAuth Flow: Failure, Success Handler, Redirects
+- [`02668a5`](https://github.com/shubhgaur37/SpringBoot/commit/02668a5e72673753a3c8dfd7dce2c8f6a7437fc5) Sending token as cookie alongwith response in login
+- [`f2c3007`](https://github.com/shubhgaur37/SpringBoot/commit/f2c3007fbb9fc69c189b08a7d16d6cdb2fd28052) Adding Support for refreshing jwt token upon expiry
+- [`b1b2445`](https://github.com/shubhgaur37/SpringBoot/commit/b1b2445d5f3b1e40bb26f488e1c2c06d43694590) OAuth Flow: Failure, Success Handler, Redirects
+- [`be84c37`](https://github.com/shubhgaur37/SpringBoot/commit/be84c376161bdb1d20a99f22b227b7b053fbf2a1) Removed Adding access token to the cookie during refresh
 
 What was learned:
 
@@ -264,9 +265,9 @@ What was learned:
 
 Commits:
 
-- [`ba560fa`](https://github.com/shubhgaur37/SpringBoot/commit/ba560fa) Adding Oauth2 Client Dependency along with client-id and secret in yaml
-- [`b92c130`](https://github.com/shubhgaur37/SpringBoot/commit/b92c130) removed devtools: A class-loading issue caused by the DevTools restart classloader
-- [`b1b2445`](https://github.com/shubhgaur37/SpringBoot/commit/b1b2445) OAuth Flow: Failure, Success Handler, Redirects
+- [`ba560fa`](https://github.com/shubhgaur37/SpringBoot/commit/ba560fae109c8e0df9931f142530ce23af4fe063) Adding Oauth2 Client Dependency along with client-id and secret in yaml
+- [`b92c130`](https://github.com/shubhgaur37/SpringBoot/commit/b92c130891b67387092eef7407082c0cdcebd5af) removed devtools: A class-loading issue caused by the DevTools restart classloader
+- [`b1b2445`](https://github.com/shubhgaur37/SpringBoot/commit/b1b2445d5f3b1e40bb26f488e1c2c06d43694590) OAuth Flow: Failure, Success Handler, Redirects
 
 What was learned:
 
@@ -302,8 +303,9 @@ flowchart TD
 
 Commits:
 
-- [`f771064`](https://github.com/shubhgaur37/SpringBoot/commit/f771064) Added a Session Table to prevent session abuse with max_session_limit and lru session eviction
-- [`7129f90`](https://github.com/shubhgaur37/SpringBoot/commit/7129f90) Security Measure: Refresh Token Rotation
+- [`f771064`](https://github.com/shubhgaur37/SpringBoot/commit/f771064bce512e547bd21002212944a325a75e28) Added a Session Table to prevent session abuse with max_session_limit and lru session eviction
+- [`486e5ce`](https://github.com/shubhgaur37/SpringBoot/commit/486e5ce2dbc909bb407d4715237e04a08dc6a986) Adding Logout Flow
+- [`b873aed`](https://github.com/shubhgaur37/SpringBoot/commit/b873aed2af9943ecb82686311b0e972db90b348d) Security Measure: Refresh Token Rotation
 
 What was learned:
 
@@ -344,7 +346,7 @@ flowchart TD
 
 Commit:
 
-- [`7129f90`](https://github.com/shubhgaur37/SpringBoot/commit/7129f90) Security Measure: Refresh Token Rotation
+- [`486e5ce`](https://github.com/shubhgaur37/SpringBoot/commit/486e5ce2dbc909bb407d4715237e04a08dc6a986) Adding Logout Flow
 
 What was learned:
 
@@ -358,7 +360,7 @@ What was learned:
 
 Commit:
 
-- [`7129f90`](https://github.com/shubhgaur37/SpringBoot/commit/7129f90) Security Measure: Refresh Token Rotation
+- [`b873aed`](https://github.com/shubhgaur37/SpringBoot/commit/b873aed2af9943ecb82686311b0e972db90b348d) Security Measure: Refresh Token Rotation
 
 What was learned:
 
@@ -407,10 +409,10 @@ sequenceDiagram
 
 Commits:
 
-- [`74e7718`](https://github.com/shubhgaur37/SpringBoot/commit/74e7718) RBAC BASICS
-- [`b80d24b`](https://github.com/shubhgaur37/SpringBoot/commit/b80d24b) RBAC: Adding Permissions along with roles. Check Request Matcher Precedence behaviour
-- [`58b76ac`](https://github.com/shubhgaur37/SpringBoot/commit/58b76ac) RBAC: Linking Permissions with roles, production behaviour
-- [`557d5ba`](https://github.com/shubhgaur37/SpringBoot/commit/557d5ba) RBAC: Fine Grained Access Control and avoid request matcher bloat using `@PreAuthorize` and `@Secure`
+- [`74e7718`](https://github.com/shubhgaur37/SpringBoot/commit/74e77185c3b8c3b126da5502aed7d0ea387846a1) RBAC BASICS
+- [`b80d24b`](https://github.com/shubhgaur37/SpringBoot/commit/b80d24bfcfa40105027864332306049e76601f8e) RBAC: Adding Permissions along with roles. Check Request Matcher Precedence behaviour
+- [`58b76ac`](https://github.com/shubhgaur37/SpringBoot/commit/58b76ac987fa3564fe3a3ee3e816887943ca295f) RBAC: Linking Permissions with roles, production behaviour
+- [`969acb7`](https://github.com/shubhgaur37/SpringBoot/commit/969acb79cffb608d98c4617fe3eca888f32299cb) RBAC: Fine Grained Access Control and avoid request matcher bloat using `@PreAuthorize` and `@Secure`
 
 What was learned:
 
@@ -456,7 +458,7 @@ flowchart TD
 
 Commit:
 
-- [`557d5ba`](https://github.com/shubhgaur37/SpringBoot/commit/557d5ba) RBAC: Fine Grained Access Control and avoid request matcher bloat using `@PreAuthorize` and `@Secure`
+- [`969acb7`](https://github.com/shubhgaur37/SpringBoot/commit/969acb79cffb608d98c4617fe3eca888f32299cb) RBAC: Fine Grained Access Control and avoid request matcher bloat using `@PreAuthorize` and `@Secure`
 
 What was learned:
 
@@ -640,31 +642,33 @@ google-client-secret=...
 
 | Commit | Learning step |
 | --- | --- |
-| [`d5f0f01`](https://github.com/shubhgaur37/SpringBoot/commit/d5f0f01) | Added Spring Security and initial protected application. |
-| [`c10afa0`](https://github.com/shubhgaur37/SpringBoot/commit/c10afa0) | Learned YAML-based default user configuration. |
-| [`5d1c1dc`](https://github.com/shubhgaur37/SpringBoot/commit/5d1c1dc) | Added DB user entity, repository, and service. |
-| [`5c85861`](https://github.com/shubhgaur37/SpringBoot/commit/5c85861) | Introduced custom `SecurityFilterChain`. |
-| [`fbf4342`](https://github.com/shubhgaur37/SpringBoot/commit/fbf4342) | Added multiple in-memory users. |
-| [`4f8fe07`](https://github.com/shubhgaur37/SpringBoot/commit/4f8fe07) | Switched toward stateless security. |
-| [`c50d14f`](https://github.com/shubhgaur37/SpringBoot/commit/c50d14f) | Renamed base package. |
-| [`76e4b96`](https://github.com/shubhgaur37/SpringBoot/commit/76e4b96) | Added basic JWT generation and validation. |
-| [`bed117a`](https://github.com/shubhgaur37/SpringBoot/commit/bed117a) | Added signup and login. |
-| [`02668a5`](https://github.com/shubhgaur37/SpringBoot/commit/02668a5) | Started sending tokens as cookies. |
-| [`9f2d02f`](https://github.com/shubhgaur37/SpringBoot/commit/9f2d02f) | Added custom JWT authentication filter. |
-| [`41826ff`](https://github.com/shubhgaur37/SpringBoot/commit/41826ff) | Read authenticated user from the security context. |
-| [`61e3d8e`](https://github.com/shubhgaur37/SpringBoot/commit/61e3d8e) | Centralized auth and JWT exception handling. |
-| [`f7e4f75`](https://github.com/shubhgaur37/SpringBoot/commit/f7e4f75) | Documented login principal mapping. |
-| [`68d5f13`](https://github.com/shubhgaur37/SpringBoot/commit/68d5f13) | Documented signup/password verification behavior. |
-| [`f2c3007`](https://github.com/shubhgaur37/SpringBoot/commit/f2c3007) | Added refresh token support. |
-| [`ba560fa`](https://github.com/shubhgaur37/SpringBoot/commit/ba560fa) | Added OAuth2 client dependency and Google client config. |
-| [`b92c130`](https://github.com/shubhgaur37/SpringBoot/commit/b92c130) | Removed DevTools due to classloader issues. |
-| [`b1b2445`](https://github.com/shubhgaur37/SpringBoot/commit/b1b2445) | Added OAuth2 success handler, redirects, and frontend success page. |
-| [`f771064`](https://github.com/shubhgaur37/SpringBoot/commit/f771064) | Added session table, max sessions, and LRU eviction. |
-| [`74e7718`](https://github.com/shubhgaur37/SpringBoot/commit/74e7718) | Added RBAC basics. |
-| [`b80d24b`](https://github.com/shubhgaur37/SpringBoot/commit/b80d24b) | Added permissions and explored matcher precedence. |
-| [`58b76ac`](https://github.com/shubhgaur37/SpringBoot/commit/58b76ac) | Linked permissions with roles. |
-| [`557d5ba`](https://github.com/shubhgaur37/SpringBoot/commit/557d5ba) | Moved fine-grained authorization to method security. |
-| [`7129f90`](https://github.com/shubhgaur37/SpringBoot/commit/7129f90) | Added refresh token rotation and moved session lifecycle into `SessionService`. |
+| [`d5f0f01`](https://github.com/shubhgaur37/SpringBoot/commit/d5f0f010de714d83346ab3894b29b6ae2e1a4a39) | Added Spring Security and initial protected application. |
+| [`c10afa0`](https://github.com/shubhgaur37/SpringBoot/commit/c10afa03abc85d74f700eab3ab4382bb814f8198) | Learned YAML-based default user configuration. |
+| [`5d1c1dc`](https://github.com/shubhgaur37/SpringBoot/commit/5d1c1dc12b44123d6287631d5ffc88670846921d) | Added DB user entity, repository, and service. |
+| [`5c85861`](https://github.com/shubhgaur37/SpringBoot/commit/5c858615628db3378d9a630bfa2db13239f5b82d) | Introduced custom `SecurityFilterChain`. |
+| [`fbf4342`](https://github.com/shubhgaur37/SpringBoot/commit/fbf434236d821b2df781b483dfa1d78d44dc86f3) | Added multiple in-memory users. |
+| [`4f8fe07`](https://github.com/shubhgaur37/SpringBoot/commit/4f8fe07da2fc0cb2f2eecd3871010e72888d16d8) | Switched toward stateless security. |
+| [`c50d14f`](https://github.com/shubhgaur37/SpringBoot/commit/c50d14fd7a687e0a7538dda777afd751096d9719) | Renamed base package. |
+| [`76e4b96`](https://github.com/shubhgaur37/SpringBoot/commit/76e4b96c774e6989e95a6d267545b79fa1153a5e) | Added basic JWT generation and validation. |
+| [`bed117a`](https://github.com/shubhgaur37/SpringBoot/commit/bed117abca73d7f63ec18346a5b54bf434268b1f) | Added signup and login. |
+| [`02668a5`](https://github.com/shubhgaur37/SpringBoot/commit/02668a5e72673753a3c8dfd7dce2c8f6a7437fc5) | Started sending tokens as cookies. |
+| [`9f2d02f`](https://github.com/shubhgaur37/SpringBoot/commit/9f2d02ff153cff03d493c37920fd6d09a1a322b8) | Added custom JWT authentication filter. |
+| [`41826ff`](https://github.com/shubhgaur37/SpringBoot/commit/41826ff89b49161dba02b745d491f47bd18e7dc7) | Read authenticated user from the security context. |
+| [`61e3d8e`](https://github.com/shubhgaur37/SpringBoot/commit/61e3d8ea963aae477d4135d98c312f32c61e1ec1) | Centralized auth and JWT exception handling. |
+| [`f7e4f75`](https://github.com/shubhgaur37/SpringBoot/commit/f7e4f75b91fd2e3993e2998ba5208165d6f67c3e) | Documented login principal mapping. |
+| [`68d5f13`](https://github.com/shubhgaur37/SpringBoot/commit/68d5f13f996117ddd8c345c9e68d7f594213d23b) | Documented signup/password verification behavior. |
+| [`f2c3007`](https://github.com/shubhgaur37/SpringBoot/commit/f2c3007fbb9fc69c189b08a7d16d6cdb2fd28052) | Added refresh token support. |
+| [`ba560fa`](https://github.com/shubhgaur37/SpringBoot/commit/ba560fae109c8e0df9931f142530ce23af4fe063) | Added OAuth2 client dependency and Google client config. |
+| [`b92c130`](https://github.com/shubhgaur37/SpringBoot/commit/b92c130891b67387092eef7407082c0cdcebd5af) | Removed DevTools due to classloader issues. |
+| [`b1b2445`](https://github.com/shubhgaur37/SpringBoot/commit/b1b2445d5f3b1e40bb26f488e1c2c06d43694590) | Added OAuth2 success handler, redirects, and frontend success page. |
+| [`f771064`](https://github.com/shubhgaur37/SpringBoot/commit/f771064bce512e547bd21002212944a325a75e28) | Added session table, max sessions, and LRU eviction. |
+| [`74e7718`](https://github.com/shubhgaur37/SpringBoot/commit/74e77185c3b8c3b126da5502aed7d0ea387846a1) | Added RBAC basics. |
+| [`b80d24b`](https://github.com/shubhgaur37/SpringBoot/commit/b80d24bfcfa40105027864332306049e76601f8e) | Added permissions and explored matcher precedence. |
+| [`58b76ac`](https://github.com/shubhgaur37/SpringBoot/commit/58b76ac987fa3564fe3a3ee3e816887943ca295f) | Linked permissions with roles. |
+| [`969acb7`](https://github.com/shubhgaur37/SpringBoot/commit/969acb79cffb608d98c4617fe3eca888f32299cb) | Moved fine-grained authorization to method security. |
+| [`486e5ce`](https://github.com/shubhgaur37/SpringBoot/commit/486e5ce2dbc909bb407d4715237e04a08dc6a986) | Added logout flow with server-side session invalidation. |
+| [`be84c37`](https://github.com/shubhgaur37/SpringBoot/commit/be84c376161bdb1d20a99f22b227b7b053fbf2a1) | Removed access-token cookie creation during refresh. |
+| [`b873aed`](https://github.com/shubhgaur37/SpringBoot/commit/b873aed2af9943ecb82686311b0e972db90b348d) | Added refresh token rotation and moved session lifecycle into `SessionService`. |
 
 ## Mental Model
 
