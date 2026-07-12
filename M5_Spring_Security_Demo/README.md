@@ -1,8 +1,8 @@
 # Spring Security Demo
 
-This repository is an incremental Spring Security learning project. It starts from Spring Boot security defaults, moves through database-backed authentication, JWT-based stateless APIs, refresh tokens, OAuth2 login, session tracking, and ends with role/permission based authorization using method security.
+This repository is an incremental Spring Security learning project. It starts from Spring Boot security defaults, moves through database-backed authentication, JWT-based stateless APIs, refresh tokens, OAuth2 login, session tracking, role/permission based authorization, and subscription-plan based business limits.
 
-The final application protects a small Posts API and Auth API while demonstrating how Spring Security's authentication pipeline, JWT filters, `SecurityContextHolder`, `UserDetailsService`, `AuthenticationManager`, OAuth2 login, and RBAC fit together.
+The final application protects a small Posts API and Auth API while demonstrating how Spring Security's authentication pipeline, JWT filters, `SecurityContextHolder`, `UserDetailsService`, `AuthenticationManager`, OAuth2 login, RBAC, and method-security backed business rules fit together.
 
 ## What This Project Covers
 
@@ -30,6 +30,8 @@ The final application protects a small Posts API and Auth API while demonstratin
 - Method-level authorization with `@Secured` and `@PreAuthorize`
 - Ownership checks through a custom Spring bean in SpEL
 - Avoiding large request matcher configurations by keeping authorization near business methods
+- Subscription plans that control active session limits
+- Subscription-plan based post creation limits with a custom `@PreAuthorize` service
 
 ## Tech Stack
 
@@ -65,6 +67,7 @@ src/main/java/com/shubh/module5/Spring_Security_Demo
 |   +-- enums
 |       +-- Permission.java
 |       +-- Role.java
+|       +-- SubscriptionPlan.java
 +-- filter
 |   +-- JWTAuthFilter.java
 +-- handlers
@@ -79,6 +82,7 @@ src/main/java/com/shubh/module5/Spring_Security_Demo
 +-- utils
     +-- PostSecurityService.java
     +-- RolePermissionMapper.java
+    +-- SubscriptionService.java
 ```
 
 ## Learning Timeline From Commits
@@ -312,7 +316,7 @@ What was learned:
 - Pure JWT access tokens are stateless, but refresh-token tracking can intentionally add server-side state.
 - A `Session` table stores refresh tokens associated with users.
 - Every login creates a new refresh-token session.
-- The maximum active session count is capped at `2`.
+- The maximum active session count is controlled by the user's subscription plan.
 - When the limit is reached, the least recently used session is evicted.
 - Refreshing a token rotates the session by creating a new refresh token session and deleting the old one.
 - Logout deletes the session associated with the refresh token, making that token unusable even if a stale cookie remains in the browser.
@@ -476,6 +480,53 @@ public PostDTO getPostById(@PathVariable Long id) {
 }
 ```
 
+### 11. Subscription Plan Limits
+
+Commits:
+
+- [`39e1b96`](https://github.com/shubhgaur37/SpringBoot/commit/39e1b96d05d47b6f528c1af210010344245ff9c3) Adding a simple sessionLimitCount to User
+- [`2697e0c`](https://github.com/shubhgaur37/SpringBoot/commit/2697e0c643ac54a4b3a2799268f2e1c0b2d3982bc) Adding Plan Based Session and Post Limit and with Subsription Service Security Methods
+
+What was learned:
+
+- Business limits can be enforced through method security, not only through URL matchers.
+- `SubscriptionPlan` models fixed plans: `FREE`, `BASIC`, and `PREMIUM`.
+- New signups default to the `FREE` plan when no plan is supplied.
+- `SubscriptionService.getSessionLimit(plan)` maps each plan to its allowed number of concurrent refresh sessions.
+- `SessionService` now enforces per-plan active session limits instead of a single hardcoded max-session value.
+- `SubscriptionService.canPost()` reads the authenticated user from `SecurityContextHolder`, counts the user's existing posts, and decides whether another post can be created.
+- `PostController#createPost` combines role authorization and subscription business authorization:
+
+```java
+@Secured({"ROLE_ADMIN", "ROLE_CREATOR"})
+@PreAuthorize("@subscriptionService.canPost()")
+public PostDTO createPost(@RequestBody PostDTO inputPost) {
+    return postService.createNewPost(inputPost);
+}
+```
+
+Current subscription limits:
+
+| Plan | Active sessions | Post limit |
+| --- | ---: | ---: |
+| `FREE` | 1 | 2 |
+| `BASIC` | 2 | 4 |
+| `PREMIUM` | 5 | 6 |
+
+Authorization flow for creating a post:
+
+```mermaid
+flowchart TD
+    A["POST /posts"] --> B["JWTAuthFilter authenticates request"]
+    B --> C["@Secured checks ROLE_ADMIN or ROLE_CREATOR"]
+    C --> D["@PreAuthorize calls subscriptionService.canPost()"]
+    D --> E["Read authenticated UserEntity from SecurityContextHolder"]
+    E --> F["Count user's existing posts"]
+    F --> G{"Below plan limit?"}
+    G -->|Yes| H["Create post"]
+    G -->|No| I["403 Forbidden"]
+```
+
 ## Final Architecture
 
 ```mermaid
@@ -490,6 +541,7 @@ flowchart LR
     AuthService --> JWTService["JWTService"]
     AuthService --> SessionService["SessionService"]
     SessionService --> SessionRepository["SessionRepository"]
+    SessionService --> SubscriptionService["SubscriptionService"]
 
     Client --> JWTAuthFilter["JWTAuthFilter"]
     JWTAuthFilter --> JWTService
@@ -498,6 +550,7 @@ flowchart LR
 
     PostController --> MethodSecurity["Method security annotations"]
     MethodSecurity --> PostSecurityService["PostSecurityService"]
+    MethodSecurity --> SubscriptionService
     PostController --> PostService["PostService"]
     PostService --> PostRepository["PostRepository"]
 
@@ -521,6 +574,7 @@ flowchart LR
 | `UserEntity` | Implements `UserDetails` and converts roles/permissions into Spring Security authorities. |
 | `RolePermissionMapper` | Maps application roles to permissions. |
 | `PostSecurityService` | Performs post ownership authorization checks for `@PreAuthorize`. |
+| `SubscriptionService` | Maps subscription plans to session limits and enforces post creation limits through `@PreAuthorize`. |
 | `GlobalExceptionHandler` | Converts resource, authentication, JWT, and access denied exceptions into API responses. |
 
 ## API Overview
@@ -529,7 +583,7 @@ flowchart LR
 
 | Method | Endpoint | Description | Auth |
 | --- | --- | --- | --- |
-| `POST` | `/auth/signup` | Create a user with encoded password and roles. | Public |
+| `POST` | `/auth/signup` | Create a user with encoded password, roles, and a subscription plan that defaults to `FREE`. | Public |
 | `POST` | `/auth/login` | Authenticate email/password, return an access token, and set the refresh token cookie. | Public |
 | `POST` | `/auth/refresh` | Use refresh token cookie to issue a new access token and rotate the refresh token cookie. | Public route, validates refresh token |
 | `DELETE` | `/auth/logout` | Delete the refresh-token session and expire the refresh token cookie. | Public route, requires refresh token cookie |
@@ -540,7 +594,7 @@ flowchart LR
 | --- | --- | --- | --- |
 | `GET` | `/posts` | List posts. | Users with `ROLE_ADMIN` or `POST_VIEW` authority. |
 | `GET` | `/posts/{id}` | Read one post. | Owner check through `PostSecurityService`. |
-| `POST` | `/posts` | Create a post. | `ROLE_ADMIN` or `ROLE_CREATOR` via `@Secured`. |
+| `POST` | `/posts` | Create a post. | `ROLE_ADMIN` or `ROLE_CREATOR` via `@Secured`, plus subscription post limit via `SubscriptionService`. |
 
 ## Authentication Flow
 
@@ -624,11 +678,13 @@ google-client-secret=...
 - Access tokens currently expire very quickly for learning purposes.
 - Refresh tokens are also short-lived for easier testing.
 - The refresh token is stateful because it is stored in the `Session` table.
+- Active refresh session limits are plan-based: `FREE` allows 1, `BASIC` allows 2, and `PREMIUM` allows 5.
 - Refresh tokens are rotated on every successful refresh, so the previous refresh token and session are immediately invalidated.
 - The refresh response returns only the new access token in JSON; the new refresh token is sent as an HttpOnly cookie.
 - Logout does not need to validate the JWT signature because it does not grant access or issue new tokens; it deletes the server-side session for the supplied refresh token.
 - If a browser keeps sending a stale refresh cookie after logout, the backend still rejects refresh because the session row is gone.
 - The app uses enum roles and permissions. This is suitable for a learning project, but production systems often model roles and permissions as database entities.
+- The app also uses enum subscription plans. This is useful for learning fixed-plan rules, but production billing systems usually keep plans, entitlements, and payment state in database-backed models.
 - `@ElementCollection` is used for user roles because roles are enum values, not independent role entities.
 - `AccessDeniedException` is handled explicitly so REST APIs return JSON `403 Forbidden` instead of redirecting to an OAuth login page.
 - `HandlerExceptionResolver` is used in `JWTAuthFilter` so JWT exceptions thrown before MVC controllers still reach `@RestControllerAdvice`.
@@ -636,6 +692,13 @@ google-client-secret=...
 
 ```text
 @PreAuthorize("hasRole('ADMIN') or hasAuthority('POST_VIEW')")
+```
+
+- `PostController#createPost` demonstrates combining role authorization with business authorization. Both annotations must allow the request before the post is created:
+
+```text
+@Secured({"ROLE_ADMIN", "ROLE_CREATOR"})
+@PreAuthorize("@subscriptionService.canPost()")
 ```
 
 ## Commit Summary
@@ -669,6 +732,8 @@ google-client-secret=...
 | [`486e5ce`](https://github.com/shubhgaur37/SpringBoot/commit/486e5ce2dbc909bb407d4715237e04a08dc6a986) | Added logout flow with server-side session invalidation. |
 | [`be84c37`](https://github.com/shubhgaur37/SpringBoot/commit/be84c376161bdb1d20a99f22b227b7b053fbf2a1) | Removed access-token cookie creation during refresh. |
 | [`b873aed`](https://github.com/shubhgaur37/SpringBoot/commit/b873aed2af9943ecb82686311b0e972db90b348d) | Added refresh token rotation and moved session lifecycle into `SessionService`. |
+| [`39e1b96`](https://github.com/shubhgaur37/SpringBoot/commit/39e1b96d05d47b6f528c1af210010344245ff9c3) | Added the first user-specific session limit field. |
+| [`2697e0c`](https://github.com/shubhgaur37/SpringBoot/commit/2697e0c643ac54a4b3a2799268f2e1c0b2d3982bc) | Replaced fixed session limits with subscription-plan limits and added post creation limits. |
 
 ## Mental Model
 

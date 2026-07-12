@@ -2,6 +2,7 @@ package com.shubh.module5.Spring_Security_Demo;
 
 import com.shubh.module5.Spring_Security_Demo.entity.UserEntity;
 import com.shubh.module5.Spring_Security_Demo.entity.enums.Role;
+import com.shubh.module5.Spring_Security_Demo.entity.enums.SubscriptionPlan;
 import com.shubh.module5.Spring_Security_Demo.service.JWTService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ class JwtTest {
     @Test
     void validateJWTCreationAndValidation() {
         Long id = 153L;
-        UserEntity user = new UserEntity(id,"shubh","shubhgaur37","hello",1L,null);
+        UserEntity user = new UserEntity(id,"shubh","shubhgaur37","hello", SubscriptionPlan.FREE,null);
 
         String jwt = jwtService.createAccessToken(user);
         System.out.println(jwt);
