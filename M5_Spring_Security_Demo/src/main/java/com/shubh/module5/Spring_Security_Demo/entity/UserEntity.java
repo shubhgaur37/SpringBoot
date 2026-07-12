@@ -1,6 +1,7 @@
 package com.shubh.module5.Spring_Security_Demo.entity;
 
 import com.shubh.module5.Spring_Security_Demo.entity.enums.Role;
+import com.shubh.module5.Spring_Security_Demo.entity.enums.SubscriptionPlan;
 import com.shubh.module5.Spring_Security_Demo.utils.RolePermissionMapper;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,7 +36,15 @@ public class UserEntity implements UserDetails {
 
     String password;
 
-    Long sessionLimit;
+    //Long sessionLimit; // Added as a part of subsription now
+
+    // Store the user's current subscription plan directly as an enum.
+    // @ManyToOne is not appropriate here because SubscriptionPlan is an enum,
+    // not a JPA entity. Relationship annotations are used only to model
+    // associations between entities stored in separate database tables.
+    // default value is FREE which is initialised in SignUp DTO if no plan was passed in the payload
+    @Enumerated(EnumType.STRING)
+    SubscriptionPlan plan;
 
     /**
      * Stores the user's roles as an Element Collection.

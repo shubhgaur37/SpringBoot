@@ -69,11 +69,20 @@ public class PostController {
      * Authentication is enforced before reaching the controller, while
      * fine-grained authorization is delegated to method security.
      */
+
     @PostMapping
     // @Secured(...) performs only role-based authorization. Unlike hasRole(...),
     // it does not add the "ROLE_" prefix automatically, so the complete role
     // authority must be specified explicitly.
     @Secured({"ROLE_ADMIN", "ROLE_CREATOR"})
+    @PreAuthorize("@subscriptionService.canPost()")
+    // Authorization Flow
+    // 1. @Secured verifies the authenticated user has either ROLE_ADMIN
+    //    or ROLE_CREATOR.
+    // 2. @PreAuthorize invokes subscriptionService.canPost() to enforce
+    //    subscription-based business rules.
+    // Both checks must pass before the controller method is invoked.
+    // If either check fails, Spring Security returns 403 Forbidden.
     public PostDTO createPost(@RequestBody PostDTO inputPost) {
         return postService.createNewPost(inputPost);
     }

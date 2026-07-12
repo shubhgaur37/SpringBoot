@@ -4,6 +4,7 @@ import com.shubh.module5.Spring_Security_Demo.dto.LoginResponseDTO;
 import com.shubh.module5.Spring_Security_Demo.entity.Session;
 import com.shubh.module5.Spring_Security_Demo.entity.UserEntity;
 import com.shubh.module5.Spring_Security_Demo.repository.SessionRepository;
+import com.shubh.module5.Spring_Security_Demo.utils.SubscriptionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,6 +23,7 @@ public class SessionService {
 
     SessionRepository sessionRepository;
     JWTService jwtService;
+    SubscriptionService subscriptionService;
 
     // Maximum number of concurrent sessions allowed per user.
     //private static final int MAX_SESSIONS = 2;
@@ -98,7 +100,7 @@ public class SessionService {
         // Enforce the maximum concurrent session limit.
         // If the limit has been reached, remove the least recently used
         // session before creating a new one.
-        if (userSessions.size() == user.getSessionLimit()) {
+        if (userSessions.size() == subscriptionService.getSessionLimit(user.getPlan())) {
 
             userSessions.sort(Comparator.comparing(Session::getLastUsedAt));
 
