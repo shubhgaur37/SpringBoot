@@ -272,6 +272,7 @@ Commits:
 - [`ba560fa`](https://github.com/shubhgaur37/SpringBoot/commit/ba560fae109c8e0df9931f142530ce23af4fe063) Adding Oauth2 Client Dependency along with client-id and secret in yaml
 - [`b92c130`](https://github.com/shubhgaur37/SpringBoot/commit/b92c130891b67387092eef7407082c0cdcebd5af) removed devtools: A class-loading issue caused by the DevTools restart classloader
 - [`b1b2445`](https://github.com/shubhgaur37/SpringBoot/commit/b1b2445d5f3b1e40bb26f488e1c2c06d43694590) OAuth Flow: Failure, Success Handler, Redirects
+- [`14856fb`](https://github.com/shubhgaur37/SpringBoot/commit/14856fb27893c7d9488caead6cb19929b0df0ef8) Updating OauthSuccessHandler to persist session in DB and set cookie to the correct endpoint
 
 What was learned:
 
@@ -281,8 +282,10 @@ What was learned:
 - A custom `Oauth2SuccessHandler` can:
   - Read the OAuth2 user's email and name.
   - Create a local user if one does not exist.
-  - Generate application access and refresh tokens.
-  - Store the refresh token in an HttpOnly cookie.
+  - Assign OAuth-created users the default `FREE` subscription plan and `USER` role.
+  - Delegate to `SessionService#createSession(user)` so the refresh token is persisted in the `Session` table.
+  - Enforce the same plan-based concurrent session limits used by email/password login.
+  - Store the refresh token in an HttpOnly cookie scoped to `/`.
   - Redirect the browser to a frontend success page.
 - OAuth failure can redirect to a login error URL.
 - DevTools restart classloader can cause class-loading surprises with security/OAuth classes, so it was removed.
@@ -295,11 +298,11 @@ flowchart TD
     D --> E[Oauth2SuccessHandler]
     E --> F[Read email and name from OAuth2User]
     F --> G{Local user exists?}
-    G -- No --> H[Create local user]
+    G -- No --> H[Create local user with FREE plan and USER role]
     G -- Yes --> I[Reuse existing user]
-    H --> J[Generate application JWTs]
+    H --> J[SessionService creates persisted session and JWTs]
     I --> J
-    J --> K[Set refreshToken HttpOnly cookie]
+    J --> K[Set refreshToken HttpOnly cookie with Path /]
     K --> L[Redirect to /home.html with access token]
 ```
 
@@ -556,7 +559,7 @@ flowchart LR
 
     OAuthProvider["Google OAuth2"] --> Oauth2SuccessHandler["Oauth2SuccessHandler"]
     Oauth2SuccessHandler --> UserRepository
-    Oauth2SuccessHandler --> JWTService
+    Oauth2SuccessHandler --> SessionService
 ```
 
 ## Key Classes
@@ -570,7 +573,7 @@ flowchart LR
 | `JWTService` | Creates and validates access and refresh JWTs. |
 | `JWTAuthFilter` | Extracts bearer tokens, validates JWTs, loads users, and populates `SecurityContextHolder`. |
 | `SessionService` | Owns session lifecycle: token generation, refresh-token rotation, max session enforcement, and logout invalidation. |
-| `Oauth2SuccessHandler` | Handles successful Google login and bridges OAuth identity into application JWTs. |
+| `Oauth2SuccessHandler` | Handles successful Google login, creates/reuses the local user, delegates session creation to `SessionService`, sets the refresh-token cookie, and redirects with the access token. |
 | `UserEntity` | Implements `UserDetails` and converts roles/permissions into Spring Security authorities. |
 | `RolePermissionMapper` | Maps application roles to permissions. |
 | `PostSecurityService` | Performs post ownership authorization checks for `@PreAuthorize`. |
@@ -678,11 +681,13 @@ google-client-secret=...
 - Access tokens currently expire very quickly for learning purposes.
 - Refresh tokens are also short-lived for easier testing.
 - The refresh token is stateful because it is stored in the `Session` table.
+- OAuth2 login now uses `SessionService#createSession(user)`, so OAuth refresh tokens are also stored in the `Session` table and work with `/auth/refresh`.
 - Active refresh session limits are plan-based: `FREE` allows 1, `BASIC` allows 2, and `PREMIUM` allows 5.
 - Refresh tokens are rotated on every successful refresh, so the previous refresh token and session are immediately invalidated.
 - The refresh response returns only the new access token in JSON; the new refresh token is sent as an HttpOnly cookie.
 - Logout does not need to validate the JWT signature because it does not grant access or issue new tokens; it deletes the server-side session for the supplied refresh token.
 - If a browser keeps sending a stale refresh cookie after logout, the backend still rejects refresh because the session row is gone.
+- The OAuth refresh-token cookie is explicitly scoped to path `/`; without that, a cookie created on `/login/oauth2/code/google` would not be sent to `/auth/refresh` or `/auth/logout`.
 - The app uses enum roles and permissions. This is suitable for a learning project, but production systems often model roles and permissions as database entities.
 - The app also uses enum subscription plans. This is useful for learning fixed-plan rules, but production billing systems usually keep plans, entitlements, and payment state in database-backed models.
 - `@ElementCollection` is used for user roles because roles are enum values, not independent role entities.
@@ -734,6 +739,7 @@ google-client-secret=...
 | [`b873aed`](https://github.com/shubhgaur37/SpringBoot/commit/b873aed2af9943ecb82686311b0e972db90b348d) | Added refresh token rotation and moved session lifecycle into `SessionService`. |
 | [`39e1b96`](https://github.com/shubhgaur37/SpringBoot/commit/39e1b96d05d47b6f528c1af210010344245ff9c3) | Added the first user-specific session limit field. |
 | [`2697e0c`](https://github.com/shubhgaur37/SpringBoot/commit/2697e0c643ac54a4b3a2799268f2e1c0b2d3982bc) | Replaced fixed session limits with subscription-plan limits and added post creation limits. |
+| [`14856fb`](https://github.com/shubhgaur37/SpringBoot/commit/14856fb27893c7d9488caead6cb19929b0df0ef8) | Updated OAuth success handling to create persisted sessions through `SessionService` and scope the refresh-token cookie correctly. |
 
 ## Mental Model
 
