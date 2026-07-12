@@ -39,10 +39,15 @@ public class UserEntity implements UserDetails {
     //Long sessionLimit; // Added as a part of subsription now
 
     // Store the user's current subscription plan directly as an enum.
-    // @ManyToOne is not appropriate here because SubscriptionPlan is an enum,
-    // not a JPA entity. Relationship annotations are used only to model
-    // associations between entities stored in separate database tables.
-    // default value is FREE which is initialised in SignUp DTO if no plan was passed in the payload
+    // @ManyToOne is not appropriate because SubscriptionPlan is an enum,
+    // not a JPA entity. Relationship annotations model associations
+    // between entities stored in separate database tables.
+    //
+    // No default value is assigned here. The initial subscription plan is a
+    // business rule and is therefore assigned in the service/registration
+    // flow (e.g. SignUpDTO or OAuth signup), not in the entity itself.
+    // Entities should represent persisted state and avoid containing
+    // business-specific initialization logic.
     @Enumerated(EnumType.STRING)
     SubscriptionPlan plan;
 
