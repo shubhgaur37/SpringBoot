@@ -27,4 +27,6 @@ public class SignUpDTO {
     Set<Role> roles;
 
     Set<Permission> permissions;
+
+    Long sessionLimit;
 }

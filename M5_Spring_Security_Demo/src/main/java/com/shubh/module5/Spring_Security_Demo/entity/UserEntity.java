@@ -35,6 +35,8 @@ public class UserEntity implements UserDetails {
 
     String password;
 
+    Long sessionLimit;
+
     /**
      * Stores the user's roles as an Element Collection.
      * <p>

@@ -24,7 +24,7 @@ public class SessionService {
     JWTService jwtService;
 
     // Maximum number of concurrent sessions allowed per user.
-    private static final int MAX_SESSIONS = 2;
+    //private static final int MAX_SESSIONS = 2;
 
     /*
      * =========================================================================
@@ -98,7 +98,7 @@ public class SessionService {
         // Enforce the maximum concurrent session limit.
         // If the limit has been reached, remove the least recently used
         // session before creating a new one.
-        if (userSessions.size() == MAX_SESSIONS) {
+        if (userSessions.size() == user.getSessionLimit()) {
 
             userSessions.sort(Comparator.comparing(Session::getLastUsedAt));
 
