@@ -87,6 +87,7 @@ class EmployeeRepositoryTest {
         // Verify the repository returns the expected employee.
         assertThat(employeeList).isNotNull();
         assertThat(employeeList).isNotEmpty();
+        assertThat(employeeList.get(0).getEmail()).isEqualTo(email);
     }
 
     @Test
