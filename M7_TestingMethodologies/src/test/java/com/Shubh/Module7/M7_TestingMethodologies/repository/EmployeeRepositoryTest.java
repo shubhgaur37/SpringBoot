@@ -5,32 +5,42 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// Starts the complete Spring Boot application context, including all
-// auto-configured beans (controllers, services, repositories, configuration,
-// etc.). Since the entire application is initialized, these are integration
-// tests and are slower than slice tests such as @DataJpaTest.
-@SpringBootTest
-// Replaces the application's configured DataSource with an embedded test
-// database. Spring Boot scans the test classpath for a supported embedded
-// database (H2, HSQLDB, or Derby). Since H2 is present, an in-memory H2
-// database is automatically configured instead of the application's MySQL
-// database.
+// Configures a JPA test slice instead of starting the entire application.
 //
-// Benefits:
-//   • Tests do not modify the real database.
-//   • Faster execution because the database runs in-memory.
-//   • Each test run starts with a clean, isolated database.
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
+// Spring Boot loads only the persistence layer, including:
+//   • DataSource
+//   • EntityManager / Persistence Context
+//   • Hibernate (JPA provider)
+//   • Transaction Manager
+//   • Spring Data JPA repositories
+//   • Entity classes and JPA-related configuration
+//
+// Components unrelated to persistence (controllers, services, security,
+// schedulers, etc.) are not loaded, making repository tests significantly
+// faster than @SpringBootTest.
+//
+// Each test runs inside a transaction that is automatically rolled back after
+// completion, ensuring every test starts with a clean database state.
+//
+// By default, if an embedded database (H2, HSQLDB, or Derby) is available on
+// the test classpath, Spring Boot replaces the application's configured
+// DataSource with that embedded database.
+@DataJpaTest
+
+// Uncomment to disable DataSource replacement and use the application's
+// configured database instead (for example, MySQL or PostgreSQL).
+//
+// @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class EmployeeRepositoryTest {
 
-    // Injects the EmployeeRepository bean from the Spring application context.
+    // Injects the Spring Data JPA repository bean created as part of the
+    // JPA test slice.
     @Autowired
     private EmployeeRepository employeeRepository;
 
@@ -76,32 +86,35 @@ class EmployeeRepositoryTest {
     @Test
     @DisplayName("Test: Empty employee list returned when repository queried with an invalid email")
     void testFindByEmail_WhenInvalidEmail_ThenReturnEmployeeListEmpty() {
-
+        // Arrange: Given
         String email = "afv@xyz.com";
 
+        // Act: When
         // Execute the repository query.
         List<Employee> employeeList = employeeRepository.findByEmail(email);
 
+        // Assert: Then
         // Verify that no employee matches the supplied email.
         assertThat(employeeList).isNotNull();
         assertThat(employeeList).isEmpty();
     }
 }
 
-
-// Test classpath:
-//
-// Maven/Gradle create a separate classpath for running tests. It contains:
-//   • All application classes and dependencies.
-//   • Test classes and resources.
-//   • Dependencies declared with <scope>test</scope>.
-//
-// Benefits:
-//   • Test-only libraries (JUnit, AssertJ, Mockito, H2, etc.) are available
-//     during testing but are excluded from the production application.
-//   • Production dependencies remain smaller and cleaner.
-//   • Tests can safely use lightweight embedded databases and mocking
-//     libraries without affecting the deployed application.
-//
-// Since H2 is declared with test scope in this project, it is available only
-// while executing tests.
+/*
+ * Test Classpath
+ * ---------------------------------------------------------------------------
+ * Maven/Gradle create a separate classpath for running tests. It contains:
+ *   • All application classes and dependencies.
+ *   • Test classes and resources.
+ *   • Dependencies declared with <scope>test</scope>.
+ *
+ * Benefits:
+ *   • Test-only libraries (JUnit, AssertJ, Mockito, H2, etc.) are available
+ *     only during testing and are excluded from the production application.
+ *   • Production artifacts remain smaller and free of testing dependencies.
+ *   • Tests can safely use lightweight embedded databases and mocking
+ *     libraries without affecting the deployed application.
+ *
+ * Since H2 is declared with test scope in this project, it is available only
+ * while executing tests.
+ */
