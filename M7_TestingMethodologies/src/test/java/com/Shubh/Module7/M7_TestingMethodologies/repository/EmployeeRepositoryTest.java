@@ -20,7 +20,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 //   • Transaction Manager
 //   • Spring Data JPA repositories
 //   • Entity classes and JPA-related configuration
-//
+
+// Spring caches the ApplicationContext between test classes that use the
+// same configuration. The first test class incurs the cost of creating the
+// context, while subsequent tests reuse the cached context, making them
+// start much faster.
+// This behavior applies to both @DataJpaTest and @SpringBootTest.
+
 // Components unrelated to persistence (controllers, services, security,
 // schedulers, etc.) are not loaded, making repository tests significantly
 // faster than @SpringBootTest.
