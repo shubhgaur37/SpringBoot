@@ -1,11 +1,13 @@
 package com.Shubh.Module7.M7_TestingMethodologies.repository;
 
+import com.Shubh.Module7.M7_TestingMethodologies.TestContainersConfiguration;
 import com.Shubh.Module7.M7_TestingMethodologies.entity.Employee;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
@@ -38,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 // the test classpath, Spring Boot replaces the application's configured
 // DataSource with that embedded database.
 @DataJpaTest
-
+@Import(TestContainersConfiguration.class)
 // Uncomment to disable DataSource replacement and use the application's
 // configured database instead (for example, MySQL or PostgreSQL).
 //
