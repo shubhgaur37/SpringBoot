@@ -2,6 +2,8 @@ package com.Shubh.Module7.M7_TestingMethodologies.service;
 
 import com.Shubh.Module7.M7_TestingMethodologies.dto.EmployeeDTO;
 import com.Shubh.Module7.M7_TestingMethodologies.entity.Employee;
+import com.Shubh.Module7.M7_TestingMethodologies.exception.DuplicateResourceException;
+import com.Shubh.Module7.M7_TestingMethodologies.exception.ResourceNotFoundException;
 import com.Shubh.Module7.M7_TestingMethodologies.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -84,6 +87,15 @@ class EmployeeServiceImplTest {
         mockEmployeeDTO = modelMapper.map(mockEmployee, EmployeeDTO.class);
     }
 
+
+    @Test
+    void testGetAllEmployees() {
+        when(employeeRepository.findAll()).thenReturn(List.of(mockEmployee));
+
+        employeeService.getAllEmployees();
+
+        verify(employeeRepository, times(1)).findAll();
+    }
 
     @Test
     void test_getEmployeeById_returnsEmployeeDTO_withValidEmployeeID() {
@@ -188,5 +200,168 @@ class EmployeeServiceImplTest {
         assertThat(savedEmployee.getName()).isEqualTo("Shubh");
         assertThat(savedEmployee.getEmail()).isEqualTo("shubh@xyz.com");
         assertThat(savedEmployee.getSalary()).isEqualTo(10000);
+    }
+
+    @Test
+    void testCreateNewEmployee_WithExistingEmail_ThrowsException() {
+        // Arrange
+        when(employeeRepository.findByEmail(mockEmployeeDTO.getEmail())).thenReturn(List.of(mockEmployee));
+
+        // Act and assert
+
+        assertThatThrownBy(() -> employeeService.createNewEmployee(mockEmployeeDTO))
+                .isInstanceOf(DuplicateResourceException.class)
+                .hasMessage("Employee already exists with email: " + mockEmployeeDTO.getEmail());
+
+        // check save should never be called with any argument
+        verify(employeeRepository, never()).save(any());
+    }
+
+
+    @Test
+    void testUpdateEmployee_NotExists_ThrowsException() {
+
+        // Arrange
+        when(employeeRepository.findById(anyLong())).thenReturn(Optional.empty());
+        // Act and assert
+        Long id = mockEmployeeDTO.getId();
+        assertThatThrownBy(() -> employeeService.updateEmployeeByID(id, mockEmployeeDTO))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Employee not found with id: " + mockEmployee.getId());
+
+        // check save should never be called with any argument
+        verify(employeeRepository, never()).save(any());
+    }
+
+
+    @Test
+    void testUpdateEmployeeEmail_ThrowsException() {
+        Long id = mockEmployeeDTO.getId();
+        mockEmployeeDTO.setEmail("hola@amigo.com");
+        // Arrange
+        when(employeeRepository.findById(id)).thenReturn(Optional.of(mockEmployee));
+
+        // Act and assert
+        assertThatThrownBy(() -> employeeService.updateEmployeeByID(id, mockEmployeeDTO))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Email of the employee cannot be updated");
+
+        // check save should never be called with any argument
+        verify(employeeRepository, never()).save(any());
+    }
+
+    @Test
+    void testUpdateEmployeeDetails_updatesEmployee() {
+
+        Long id = mockEmployee.getId();
+
+        // Updated details (email must remain unchanged)
+        EmployeeDTO updatedEmployeeDTO = new EmployeeDTO(
+                id,
+                "Rahul",
+                "shubh@xyz.com",
+                25000.0
+        );
+
+        Employee updatedEmployee = new Employee(
+                id,
+                "Rahul",
+                "shubh@xyz.com",
+                25000.0
+        );
+
+        // ---------------------- Arrange (Stubbing) ----------------------
+
+        when(employeeRepository.findById(id))
+                .thenReturn(Optional.of(mockEmployee));
+
+        when(employeeRepository.save(any(Employee.class)))
+                .thenReturn(updatedEmployee);
+
+        // --------------------------- Act ---------------------------
+
+        EmployeeDTO result = employeeService.updateEmployeeByID(id, updatedEmployeeDTO);
+
+        // -------------------------- Assert --------------------------
+
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(id);
+        assertThat(result.getName()).isEqualTo("Rahul");
+        assertThat(result.getEmail()).isEqualTo("shubh@xyz.com");
+        assertThat(result.getSalary()).isEqualTo(25000.0);
+
+        // -------------------- ArgumentCaptor --------------------
+
+        ArgumentCaptor<Employee> employeeCaptor =
+                ArgumentCaptor.forClass(Employee.class);
+
+        verify(employeeRepository).save(employeeCaptor.capture());
+
+        Employee savedEmployee = employeeCaptor.getValue();
+
+        // Verify that the service created and passed the expected Employee to the
+        // repository. Since Employee uses Lombok's @EqualsAndHashCode, a single
+        // object comparison verifies all fields included in the generated equals()
+        // method.
+        //
+        // Caveat:
+        // This assertion is only as good as the equals() implementation. If
+        // @EqualsAndHashCode is configured to exclude fields (or include only the
+        // ID), differences in those excluded fields will not be detected by this
+        // assertion. In such cases, assert the individual fields explicitly.
+        assertThat(savedEmployee).isEqualTo(updatedEmployee);
+        assertThat(savedEmployee.getId()).isEqualTo(id);
+        assertThat(savedEmployee.getName()).isEqualTo("Rahul");
+        assertThat(savedEmployee.getEmail()).isEqualTo("shubh@xyz.com");
+        assertThat(savedEmployee.getSalary()).isEqualTo(25000.0);
+
+
+        verify(employeeRepository).findById(id);
+        verify(employeeRepository).save(any(Employee.class));
+        verifyNoMoreInteractions(employeeRepository);
+    }
+
+    @Test
+    void deleteEmployee_WhenEmployeeNotPresent_ThrowsException() {
+        when(employeeRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Long id = mockEmployee.getId();
+        assertThatThrownBy(() -> employeeService.deleteEmployeeByID(id))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Employee not found with id: " + id);
+
+        verify(employeeRepository, never()).deleteById(any());
+    }
+
+    @Test
+    void deleteEmployee_WhenEmployeeExists() {
+
+        Long id = mockEmployee.getId();
+
+        // ---------------------- Arrange (Stubbing) ----------------------
+
+        // Stub findById() only for this specific ID. Mockito matches arguments
+        // exactly unless argument matchers (e.g. anyLong()) are used.
+        when(employeeRepository.findById(id))
+                .thenReturn(Optional.of(mockEmployee));
+
+        // --------------------------- Act ---------------------------
+
+        // Invoking deleteEmployeeByID() with any ID other than 'id' would cause
+        // the repository to be called with an unstubbed argument. Since Mockito
+        // uses strict stubbing by default, it throws a PotentialStubbingProblem
+        // instead of silently returning Optional.empty(). This helps detect
+        // incorrect test setup early.
+        boolean isDeleted = employeeService.deleteEmployeeByID(id);
+
+        // -------------------------- Assert --------------------------
+
+        assertThat(isDeleted).isTrue();
+
+        // -------------------------- Verify --------------------------
+
+        verify(employeeRepository).findById(id);
+        verify(employeeRepository).deleteById(id);
+        verifyNoMoreInteractions(employeeRepository);
     }
 }

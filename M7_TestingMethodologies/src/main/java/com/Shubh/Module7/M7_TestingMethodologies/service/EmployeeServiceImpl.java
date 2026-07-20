@@ -52,7 +52,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO updateEmployeeByID(Long id, EmployeeDTO updateEmployee) {
         log.info("Updating employee with id {}", id);
-        getEmployeeEntityById(id);
+        Employee employee = getEmployeeEntityById(id);
+        if (!updateEmployee.getEmail().equals(employee.getEmail())) {
+            log.error("Attempted to update email for employee with id: {}", employee.getId());
+            throw new RuntimeException("Email of the employee cannot be updated");
+        }
         Employee toUpdate = modelMapper.map(updateEmployee, Employee.class);
         toUpdate.setId(id);
         Employee savedEmployee = employeeRepository.save(toUpdate);
