@@ -17,7 +17,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 // etc.). Since the entire application is initialized, these are integration
 // tests and are slower than slice tests such as @DataJpaTest.
 @SpringBootTest
-
+// Replaces the application's configured DataSource with an embedded test
+// database. Spring Boot scans the test classpath for a supported embedded
+// database (H2, HSQLDB, or Derby). Since H2 is present, an in-memory H2
+// database is automatically configured instead of the application's MySQL
+// database.
+//
+// Benefits:
+//   • Tests do not modify the real database.
+//   • Faster execution because the database runs in-memory.
+//   • Each test run starts with a clean, isolated database.
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class EmployeeRepositoryTest {
 
