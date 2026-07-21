@@ -147,7 +147,7 @@
                             Here, the JaCoCo 'report' goal is bound to the 'prepare-package' phase,
                             so Maven automatically executes it when the build reaches that phase.
                         -->
-						<phase>prepare-package</phase>
+						<phase>verify</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
