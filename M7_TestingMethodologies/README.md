@@ -304,7 +304,7 @@ Run unit and repository tests:
 Build the application and generate the JaCoCo report:
 
 ```bash
-./mvnw clean package
+./mvnw clean verify
 ```
 
 Run the application:
@@ -342,7 +342,7 @@ JaCoCo is configured in `pom.xml` with the `jacoco-maven-plugin`.
         </execution>
         <execution>
             <id>report</id>
-            <phase>prepare-package</phase>
+            <phase>verify</phase>
             <goals>
                 <goal>report</goal>
             </goals>
@@ -358,12 +358,12 @@ What each goal does:
 - `jacoco:report` reads `target/jacoco.exec` and produces human-readable and
   machine-readable reports.
 
-The report goal is bound to Maven's `prepare-package` phase. Therefore:
+The report goal is bound to Maven's `verify` phase. Therefore:
 
 - `./mvnw test` runs tests and records execution data, but may not generate the
   HTML report.
 - `./mvnw package` reaches `prepare-package`, so the report is generated.
-- `./mvnw clean package` removes stale output first, then rebuilds tests,
+- `./mvnw clean verify` removes stale output first, then rebuilds tests,
   coverage data, and the packaged jar.
 
 Generated JaCoCo output:
@@ -380,6 +380,23 @@ Open the HTML report in a browser:
 ```bash
 open target/site/jacoco/index.html
 ```
+
+
+
+## Continuous Integration
+
+The project includes a GitHub Actions workflow that automatically:
+
+- Checks out the repository.
+- Builds the application with `./mvnw clean verify`.
+- Executes unit, repository, and integration tests.
+- Generates the JaCoCo coverage report.
+- Publishes the HTML report to GitHub Pages.
+
+The generated `target/` directory is treated as a build artifact and is not
+committed to the repository. The latest coverage report is published by the CI
+pipeline after every successful build of the `main` branch.
+
 
 ## Current Coverage Snapshot
 
@@ -497,6 +514,6 @@ which tradeoffs each test style makes.
   constraints.
 - Use integration tests for full HTTP flows and exception-to-response behavior.
 - Keep Testcontainers tests dependent on Docker availability.
-- Regenerate JaCoCo reports with `./mvnw clean package` after changing tests.
+- Regenerate JaCoCo reports with `./mvnw clean verify` after changing tests.
 - Check `target/site/jacoco/index.html` before trusting a coverage percentage;
   stale reports or skipped integration tests can give misleading results.
