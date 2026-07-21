@@ -394,30 +394,54 @@ open target/site/jacoco/index.html
 
 ## Code Coverage
 
-JaCoCo coverage is generated automatically during the Maven `verify` phase.
+This project uses **JaCoCo** to measure code coverage during automated testing.
 
-Running:
+Generate the coverage report locally by running:
 
 ```bash
 ./mvnw clean verify
 ```
 
-executes the test suite, collects execution data, and generates the HTML, XML,
-and CSV reports under `target/site/jacoco`.
+This command:
 
-A GitHub Actions workflow automatically builds the project, generates the
-coverage report, and publishes it to GitHub Pages after every successful build.
-This means the published report always reflects the latest version of the code,
-without committing the generated `target/` directory to the repository.
+- Executes all unit, repository, and integration tests.
+- Collects execution data using the JaCoCo Java agent.
+- Generates HTML, XML, and CSV coverage reports.
 
-Once GitHub Pages is enabled, you can add the following badges near the top of
-this README (replace the placeholders with your repository details):
+The generated reports are available under:
 
-```md
-[![Build](https://github.com/<username>/<repository>/actions/workflows/jacoco-report.yml/badge.svg)](https://github.com/<username>/<repository>/actions/workflows/jacoco-report.yml)
-
-[![JaCoCo Report](https://img.shields.io/badge/JaCoCo-Live%20Report-brightgreen)](https://<username>.github.io/<repository>/)
+```text
+target/site/jacoco/
+├── index.html
+├── jacoco.xml
+├── jacoco.csv
+└── ...
 ```
+
+To view the report locally, open:
+
+```text
+target/site/jacoco/index.html
+```
+
+## Continuous Integration
+
+The project uses **GitHub Actions** to automatically:
+
+- Build the project
+- Execute all tests
+- Generate the JaCoCo coverage report
+- Publish the latest HTML report to GitHub Pages
+
+### Build Status
+
+[![Build](https://github.com/shubhgaur37/SpringBoot/actions/workflows/jacoco-report.yml/badge.svg)](https://github.com/shubhgaur37/SpringBoot/actions/workflows/jacoco-report.yml)
+
+### Live JaCoCo Report
+
+The latest published coverage report is available at:
+
+https://shubhgaur37.github.io/SpringBoot/
 
 
 ## Maven Lifecycle Notes
