@@ -24,9 +24,16 @@ public class TestContainersConfiguration {
     //   • Stops and removes the container after the tests complete.
     @Bean
 
-    // Marks this Testcontainer as the application's database connection.
-    // Spring Boot automatically configures the DataSource using the running
-    // container's JDBC URL, username, password, and driver.
+    // Marks this TestContainer as the application's primary database connection.
+    //
+    // Behind the scenes, `@ServiceConnection` registers a `JdbcConnectionDetails`
+    // bean in the Spring context. Spring Boot 3.1+ detects this explicit
+    // configuration and automatically skips the default behavior of replacing
+    // the DataSource with an in-memory database (like H2).
+    //
+    /**-----------IMP----------*/
+    // This allows `@DataJpaTest` to connect directly to the MySQL container
+    // using just an `@Import` statement, without needing `@AutoConfigureTestDatabase`.
     @ServiceConnection
     MySQLContainer<?> mySQLContainer() {
 
