@@ -25,7 +25,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 // web server, so WebTestClient cannot connect to one.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestContainersConfiguration.class)
-public abstract class BaseIntegrationTest {
+public abstract class BaseIntegrationTests {
 
     // Injected by @AutoConfigureWebTestClient. Declared as protected so all
     // integration test subclasses can directly use the configured

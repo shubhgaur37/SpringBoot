@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 
-class EmployeeControllerTestIT extends BaseIntegrationTest {
+class EmployeeControllerTestIntegrationTests extends BaseIntegrationTests {
     @Autowired
     EmployeeRepository employeeRepository;
 

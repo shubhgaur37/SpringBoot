@@ -1,5 +1,16 @@
 # M7 Testing Methodologies
 
+> Replace the placeholders below after creating your GitHub repository and enabling GitHub Pages.
+
+```md
+[![Build](https://github.com/<username>/<repository>/actions/workflows/jacoco-report.yml/badge.svg)](https://github.com/<username>/<repository>/actions/workflows/jacoco-report.yml)
+[![JaCoCo Report](https://img.shields.io/badge/JaCoCo-Live%20Report-brightgreen)](https://<username>.github.io/<repository>/)
+![Java](https://img.shields.io/badge/Java-21-orange)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1-brightgreen)
+![Maven](https://img.shields.io/badge/Maven-3.9+-blue)
+```
+
+
 This module is a Spring Boot employee-management sample used to demonstrate
 testing strategies across the service, persistence, and HTTP layers.
 
@@ -170,7 +181,7 @@ The module demonstrates three testing levels.
 | --- | --- | --- |
 | Unit test | `EmployeeServiceImplTest` | Test service logic in isolation with Mockito |
 | JPA slice test | `EmployeeRepositoryTest` | Test repository behavior with a focused Spring persistence context |
-| Integration test | `EmployeeControllerTestIT` | Test real HTTP requests through controller, service, repository, and database |
+| Integration test | `EmployeeControllerTestIntegrationTests` | Test real HTTP requests through controller, service, repository, and database |
 
 ## Unit Testing With Mockito
 
@@ -247,13 +258,13 @@ Docker must be running before tests that use Testcontainers can execute.
 
 ## Integration Testing With `WebTestClient`
 
-`BaseIntegrationTest` centralizes the integration test setup:
+`BaseIntegrationTests` centralizes the integration test setup:
 
 ```java
 @AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestContainersConfiguration.class)
-public abstract class BaseIntegrationTest {
+public abstract class BaseIntegrationTestss {
     @Autowired
     protected WebTestClient webTestClient;
 }
@@ -267,7 +278,7 @@ This configuration:
 - imports the MySQL Testcontainer;
 - allows concrete integration tests to focus on endpoint behavior.
 
-`EmployeeControllerTestIT` verifies:
+`EmployeeControllerTestIntegrationTests` verifies:
 
 - `GET /employees`
 - `GET /employees/{id}` success and not-found flows
@@ -290,7 +301,7 @@ This matters for:
 - `@SpringBootTest`
 - tests importing the same Testcontainers configuration
 
-Keeping shared integration test setup in `BaseIntegrationTest` helps reuse the
+Keeping shared integration test setup in `BaseIntegrationTests` helps reuse the
 same context shape across integration tests.
 
 ## Maven Test Execution
@@ -315,10 +326,10 @@ Run the application:
 
 Current naming caveat:
 
-- `EmployeeControllerTestIT` ends with `TestIT`.
+- `EmployeeControllerTestIntegrationTests` ends with `TestIT`.
 - Maven Surefire's default include patterns usually run classes named
   `*Test`, `*Tests`, or `*TestCase`.
-- Because of that, `EmployeeControllerTestIT` may not run during plain
+- Because of that, `EmployeeControllerTestIntegrationTests` may not run during plain
   `./mvnw test` unless Surefire is configured to include `*TestIT` or the class
   is renamed to a default pattern such as `EmployeeControllerITTest`.
 
@@ -362,7 +373,7 @@ The report goal is bound to Maven's `verify` phase. Therefore:
 
 - `./mvnw test` runs tests and records execution data, but may not generate the
   HTML report.
-- `./mvnw package` reaches `prepare-package`, so the report is generated.
+- `./mvnw package` reaches `verify`, so the report is generated.
 - `./mvnw clean verify` removes stale output first, then rebuilds tests,
   coverage data, and the packaged jar.
 
@@ -381,38 +392,33 @@ Open the HTML report in a browser:
 open target/site/jacoco/index.html
 ```
 
+## Code Coverage
 
+JaCoCo coverage is generated automatically during the Maven `verify` phase.
 
-## Continuous Integration
+Running:
 
-The project includes a GitHub Actions workflow that automatically:
+```bash
+./mvnw clean verify
+```
 
-- Checks out the repository.
-- Builds the application with `./mvnw clean verify`.
-- Executes unit, repository, and integration tests.
-- Generates the JaCoCo coverage report.
-- Publishes the HTML report to GitHub Pages.
+executes the test suite, collects execution data, and generates the HTML, XML,
+and CSV reports under `target/site/jacoco`.
 
-The generated `target/` directory is treated as a build artifact and is not
-committed to the repository. The latest coverage report is published by the CI
-pipeline after every successful build of the `main` branch.
+A GitHub Actions workflow automatically builds the project, generates the
+coverage report, and publishes it to GitHub Pages after every successful build.
+This means the published report always reflects the latest version of the code,
+without committing the generated `target/` directory to the repository.
 
+Once GitHub Pages is enabled, you can add the following badges near the top of
+this README (replace the placeholders with your repository details):
 
-## Current Coverage Snapshot
+```md
+[![Build](https://github.com/<username>/<repository>/actions/workflows/jacoco-report.yml/badge.svg)](https://github.com/<username>/<repository>/actions/workflows/jacoco-report.yml)
 
-The generated report currently shows:
+[![JaCoCo Report](https://img.shields.io/badge/JaCoCo-Live%20Report-brightgreen)](https://<username>.github.io/<repository>/)
+```
 
-- Overall instruction coverage: 75%.
-- Overall branch coverage: 100%.
-- `EmployeeServiceImpl`: 100% instruction, branch, line, method, and class
-  coverage.
-- `EmployeeController`: 0% in the current report.
-- `AppConfig`: 0% in the current report.
-- `GlobalExceptionHandler`: 0% in the current report.
-
-The controller has integration tests, so the 0% controller coverage is most
-likely caused by the integration test class not matching Maven Surefire's
-default test naming patterns.
 
 ## Maven Lifecycle Notes
 
@@ -420,7 +426,7 @@ Maven has three related concepts:
 
 - Lifecycle: a complete build workflow, such as `default`, `clean`, or `site`.
 - Phase: a step inside a lifecycle, such as `compile`, `test`,
-  `prepare-package`, `package`, or `install`.
+  `verify`, `package`, or `install`.
 - Goal: a task provided by a plugin, such as `jacoco:prepare-agent`,
   `jacoco:report`, `compiler:compile`, or `spring-boot:repackage`.
 
@@ -428,92 +434,23 @@ In this module:
 
 - JaCoCo `prepare-agent` is configured as a plugin goal so coverage collection
   is available during test execution.
-- JaCoCo `report` is bound to the `prepare-package` phase.
+- JaCoCo `report` is bound to the `verify` phase.
 - Maven compiler plugin executions are bound to `compile` and `test-compile`
   for Lombok annotation processing.
 
-## Recommended Coverage Improvement
+## Test Discovery
 
-To include integration tests in normal Maven test execution, use one of these
-approaches.
+The project now follows Maven Surefire's default test naming conventions:
 
-Option 1: rename the class:
+- `EmployeeServiceImplTest`
+- `EmployeeRepositoryTest`
+- `EmployeeControllerTestIntegrationTests`
 
-```text
-EmployeeControllerTestIT.java -> EmployeeControllerITTest.java
-```
-
-Option 2: configure Surefire to include `*TestIT`:
-
-```xml
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-surefire-plugin</artifactId>
-    <configuration>
-        <includes>
-            <include>**/*Test.java</include>
-            <include>**/*Tests.java</include>
-            <include>**/*TestCase.java</include>
-            <include>**/*TestIT.java</include>
-        </includes>
-    </configuration>
-</plugin>
-```
-
-Option 3: split integration tests into Failsafe:
-
-```xml
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-failsafe-plugin</artifactId>
-    <executions>
-        <execution>
-            <goals>
-                <goal>integration-test</goal>
-                <goal>verify</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
-```
-
-With Failsafe, integration tests commonly use names such as `*IT.java`, and the
-usual command is:
+Because the integration test class ends with `Tests`, Maven Surefire discovers it automatically. Running:
 
 ```bash
-./mvnw verify
+./mvnw clean verify
 ```
 
-For this module's current learning-oriented setup, renaming the class or adding
-a Surefire include is the smallest change.
+executes unit tests, repository tests, and integration tests in a single build, allowing JaCoCo to generate an accurate coverage report.
 
-## Git Comment History Summary
-
-Recent commit messages show the module evolving in this order:
-
-- Repository tests were added first for persistence-layer coverage.
-- Comments were added about test database replacement and Spring Boot test
-  performance.
-- `@DataJpaTest` behavior and Spring ApplicationContext caching were documented
-  in code comments.
-- Testcontainers dependencies and MySQL container configuration were added.
-- Service-layer unit tests were expanded to reach full service coverage.
-- WebTestClient dependencies and controller integration tests were added.
-- A global exception handler was added for integration-test HTTP responses.
-- A base integration test class was introduced to centralize common setup.
-- JaCoCo was added, with Maven lifecycle, phase, and goal comments in the POM.
-
-The comments in the code are mainly educational. They explain why each testing
-annotation or dependency exists, what Spring Boot is doing behind the scenes, and
-which tradeoffs each test style makes.
-
-## Practical Notes
-
-- Keep unit tests focused on service logic and repository interactions.
-- Use repository slice tests when validating JPA queries, mappings, and database
-  constraints.
-- Use integration tests for full HTTP flows and exception-to-response behavior.
-- Keep Testcontainers tests dependent on Docker availability.
-- Regenerate JaCoCo reports with `./mvnw clean verify` after changing tests.
-- Check `target/site/jacoco/index.html` before trusting a coverage percentage;
-  stale reports or skipped integration tests can give misleading results.
