@@ -1,6 +1,5 @@
 package com.Shubh.Module7.M7_TestingMethodologies.controller;
 
-import com.Shubh.Module7.M7_TestingMethodologies.TestContainersConfiguration;
 import com.Shubh.Module7.M7_TestingMethodologies.dto.EmployeeDTO;
 import com.Shubh.Module7.M7_TestingMethodologies.entity.Employee;
 import com.Shubh.Module7.M7_TestingMethodologies.repository.EmployeeRepository;
@@ -9,31 +8,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-// Automatically configures and exposes a WebTestClient bean for integration
-// tests. Required in Spring Boot 4.x when using WebTestClient.
-@AutoConfigureWebTestClient
 
-// Starts the full application on a random HTTP port so WebTestClient can send
-// real HTTP requests. The default MOCK environment does not start an embedded
-// web server, so WebTestClient cannot connect to one.
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import(TestContainersConfiguration.class)
-class EmployeeControllerTestIT {
-
-    // Injected by @AutoConfigureWebTestClient. Requires a running embedded web
-    // server; WebEnvironment.MOCK does not create this bean, causing startup to
-    // fail with NoSuchBeanDefinitionException.
-    @Autowired
-    WebTestClient webTestClient;
-
+class EmployeeControllerTestIT extends BaseIntegrationTest {
     @Autowired
     EmployeeRepository employeeRepository;
 
