@@ -49,12 +49,18 @@ public class TestContainersConfiguration {
 
                 // Creates the default database user.
                 .withUsername("test_user")
-                .withPassword("test_password")
+                .withPassword("test_password");
 
-                // Assigns a fixed Docker container name.
-                // Useful for debugging, but random names are generally
-                // preferred in automated test suites to avoid conflicts.
-                .withCreateContainerCmdModifier(cmd ->
-                        cmd.withName("employee-mysql-test"));
+        // Avoid assigning a fixed Docker container name.
+        //
+        // Testcontainers automatically generates a unique container name for each
+        // instance. Using a fixed name is convenient while debugging because the
+        // container is easy to identify in Docker Desktop or via `docker ps`.
+        // However, it causes conflicts when multiple test contexts are started or
+        // when a previous container with the same name still exists, resulting in:
+        //
+        //   Conflict. The container name "/employee-mysql-test" is already in use.
+        //
+        // .withCreateContainerCmdModifier(cmd -> cmd.withName("employee-mysql-test"));
     }
 }

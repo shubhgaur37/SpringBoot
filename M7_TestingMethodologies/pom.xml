@@ -123,6 +123,37 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.15</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<!--
+                            Maven build structure:
+                              • Lifecycle  -> A complete build process (e.g. default, clean, site).
+                              • Phase      -> A stage within a lifecycle (e.g. compile, test,
+                                              prepare-package, package, install).
+                              • Goal       -> A specific task provided by a Maven plugin (e.g.
+                                              jacoco:prepare-agent, jacoco:report).
+
+                            Here, the JaCoCo 'report' goal is bound to the 'prepare-package' phase,
+                            so Maven automatically executes it when the build reaches that phase.
+                        -->
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
