@@ -1,15 +1,13 @@
 package com.Shubh.Module7.M7_TestingMethodologies.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 public class EmployeeDTO {
     Long id;
     String name;

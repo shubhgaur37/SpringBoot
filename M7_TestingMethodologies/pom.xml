@@ -70,6 +70,26 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!--
+            Spring Boot 4.x:
+            WebTestClient support has been split into a dedicated module. Both
+            spring-boot-starter-webflux and spring-boot-webtestclient are required
+            for integration tests using WebTestClient. The former provides the
+            WebTestClient implementation, while the latter provides the
+            @AutoConfigureWebTestClient auto-configuration.
+        -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-webtestclient</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!--		Copied from SpringInitializer:  https://start.spring.io/	-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -81,7 +101,6 @@
 			<artifactId>testcontainers-junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!--		Appropriate dependency is generated based on the database driver	-->
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>testcontainers-mysql</artifactId>
