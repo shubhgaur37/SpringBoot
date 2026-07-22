@@ -3,9 +3,9 @@ spring:
     name: M7_TestingMethodologies
 
   datasource:
-    url: ${PROD_DB_URL} # in environment variables
-    username: root
-    password: rootroot
+    url: jdbc:mysql://${DB_URL}:3306/${DB_NAME} # in environment variables
+    username: ${DB_USERNAME}
+    password: ${DB_PASS}
 
   jpa:
     hibernate:
