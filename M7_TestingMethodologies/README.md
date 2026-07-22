@@ -69,8 +69,17 @@ src/main/java/com/Shubh/Module7/M7_TestingMethodologies
 +-- repository
 |   +-- EmployeeRepository.java
 +-- service
-    +-- EmployeeService.java
-    +-- EmployeeServiceImpl.java
+|   +-- DataService.java
+|   +-- EmployeeService.java
+|   +-- impl
+|       +-- DevDataService.java
+|       +-- EmployeeServiceImpl.java
+|       +-- ProdDataService.java
+
+src/main/resources
++-- application.yaml
++-- application-DEV.yaml
++-- application-PROD.yaml
 ```
 
 ## Domain Model
@@ -92,9 +101,12 @@ manually.
 `EmployeeDTO` mirrors the entity fields and is used as the controller and service
 API object.
 
-## Runtime Configuration
+## Runtime Configuration And Spring Profiles
 
-The application configuration is in `src/main/resources/application.yaml`.
+The base application configuration is in
+`src/main/resources/application.yaml`. Spring Boot always loads this file first.
+When one or more profiles are active, Spring Boot also loads matching
+profile-specific files named `application-{profile}.yaml`.
 
 ```yaml
 spring:
@@ -106,21 +118,82 @@ spring:
     username: root
     password: root
 
-  jpa:
-    hibernate:
-      ddl-auto: create
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+deployment:
+  env: global
 ```
 
-Runtime behavior:
+Base runtime behavior:
 
 - The application expects a local MySQL database named `SpringBoot_Test`.
-- Hibernate recreates the schema on startup because `ddl-auto` is set to
-  `create`.
-- SQL logging and formatted SQL are enabled for visibility while learning.
+- `deployment.env` defaults to `global`.
+- JPA settings are supplied by the active profile-specific configuration.
+
+### Available Profiles
+
+| Profile config file | Loaded by active profile | Main settings |
+| --- | --- | --- |
+| `application-DEV.yaml` | `DEV` | Local MySQL, `ddl-auto: create`, SQL logging enabled, formatted SQL enabled, `deployment.env: DEV` |
+| `application-PROD.yaml` | `PROD` | Database URL from `PROD_DB_URL`, `ddl-auto: update`, `deployment.env: PROD` |
+
+Spring merges profile-specific properties into the base configuration. If the
+same property appears in both places, the profile-specific value wins. If a
+property exists only in `application.yaml`, that base value remains active.
+
+For example, running with the `DEV` profile loads:
+
+```text
+application.yaml
+application-DEV.yaml
+```
+
+The final runtime configuration uses the base application name and datasource
+defaults from `application.yaml`, then applies the DEV JPA settings and
+`deployment.env: DEV` from `application-DEV.yaml`.
+
+### Running With Profiles
+
+Run with the DEV profile:
+
+```bash
+./mvnw spring-boot:run -Dspring-boot.run.profiles=DEV
+```
+
+Run the packaged jar with the PROD profile:
+
+```bash
+PROD_DB_URL=jdbc:mysql://prod-host:3306/SpringBoot_Test \
+java -jar target/M7_TestingMethodologies-0.0.1-SNAPSHOT.jar --spring.profiles.active=PROD
+```
+
+Profiles can also be activated with the environment variable:
+
+```bash
+SPRING_PROFILES_ACTIVE=DEV ./mvnw spring-boot:run
+```
+
+### Profile-Specific Beans
+
+The module also demonstrates profile-specific Spring beans through
+`DataService`.
+
+| Bean | Annotation | Returned environment | Returned data |
+| --- | --- | --- | --- |
+| `DevDataService` | `@Profile("DEV")` | `DEV_STAGING` | `DEV_STAGING_DATA` |
+| `ProdDataService` | `@Profile("PROD")` | `PROD` | `PROD_DATA` |
+
+`M7TestingMethodologiesApplication` injects `DataService` and prints the active
+environment/data when the application starts.
+
+The profile names used by the YAML files and the `@Profile` annotations now
+match, so activating `DEV` creates `DevDataService` and loads
+`application-DEV.yaml`; activating `PROD` creates `ProdDataService` and loads
+`application-PROD.yaml`.
+
+Note: on case-insensitive filesystems, such as the default on many macOS and
+Windows installations, differently cased filenames may resolve to the same file.
+That behavior comes from the operating system, not Spring Boot. On
+case-sensitive filesystems, such as many Linux environments, profile file names
+must match the active profile's case exactly.
 
 For production-like use, replace `ddl-auto: create` with a safer setting such as
 `validate` or use a migration tool such as Flyway or Liquibase.
@@ -477,4 +550,3 @@ Because the integration test class ends with `Tests`, Maven Surefire discovers i
 ```
 
 executes unit tests, repository tests, and integration tests in a single build, allowing JaCoCo to generate an accurate coverage report.
-
