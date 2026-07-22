@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: M7_TestingMethodologies
+
+  datasource:
+    url: ${PROD_DB_URL} # in environment variables
+    username: root
+    password: rootroot
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+deployment:
+  env: PROD

@@ -7,12 +7,50 @@ spring:
     username: root
     password: root
 
-  jpa:
-    hibernate:
-      ddl-auto: create
+deployment:
+  env: global
 
-    show-sql: true
-
-    properties:
-      hibernate:
-        format_sql: true
+# SPRING PROFILES DEEP DIVE
+# SPRING PROFILES DEEP DIVE
+# ------------------------------------------------------------------------
+# Base Configuration
+#
+# application.yml is always loaded first, regardless of the active profile.
+#
+# Spring Boot determines the active profile (e.g. from the
+# SPRING_PROFILES_ACTIVE environment variable or the
+# spring.profiles.active property). It then automatically looks for a file
+# named application-{profile}.yml, where {profile} exactly matches the
+# active profile name.
+#
+# Examples:
+#   Active Profile = dev   -> application-dev.yml
+#   Active Profile = prod  -> application-prod.yml
+#
+# Profile names are case-sensitive. For example:
+#   @Profile("prod") matches spring.profiles.active=prod
+#   @Profile("PROD") matches spring.profiles.active=PROD
+#
+# Similarly, application-prod.yml and application-PROD.yml are treated as
+# different files. For consistency, Spring Boot projects typically use
+# lowercase profile names (dev, test, prod).
+#
+# Note:
+# On case-insensitive file systems (e.g. the default on Windows and most
+# macOS installations), application-dev.yml and application-DEV.yml may
+# both resolve to the same file. This behavior is provided by the operating
+# system, not Spring Boot. On case-sensitive file systems (commonly Linux),
+# they are treated as different files.
+#
+# The profile-specific configuration is merged with this base
+# configuration. If the same property exists in both files, the
+# profile-specific value overrides the base value. Otherwise, the value
+# defined here is retained.
+#
+# Example:
+#   application.yml         -> spring.jpa.show-sql=true
+#   application-prod.yml    -> (property not present)
+#
+# Final configuration:
+#   spring.jpa.show-sql=true
+# ------------------------------------------------------------------------
