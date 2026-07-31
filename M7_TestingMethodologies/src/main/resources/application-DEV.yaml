@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
 
     show-sql: true
 
@@ -16,15 +16,57 @@ spring:
         format_sql: true
 
   flyway:
-    # Flyway expects to manage the database schema from the beginning. If the
-    # database already contains tables but has no flyway_schema_history table,
-    # startup fails because no baseline migration has been established.
+    # Flyway is intended to manage database schema changes through versioned
+    # migration scripts.
     #
-    # Possible solutions:
-    #   1. Disable Flyway temporarily (enabled: false).
-    #   2. Enable baseline-on-migrate to register the existing schema as the
-    #      starting point for future migrations.
-    enabled: false
+    # By default, Flyway expects to manage the schema from the very beginning.
+    # If the target database is non-empty but no flyway_schema_history table
+    # exists, application startup fails with:
+    #
+    #   Found non-empty schema(s) but no schema history table.
+    #   Use baseline() or set baselineOnMigrate to true.
+    #
+    # baseline-on-migrate is used when introducing Flyway to an existing
+    # database that was previously created using Hibernate (ddl-auto) or manual
+    # SQL scripts.
+    #
+    # During the first startup:
+    #   1. Creates the flyway_schema_history table.
+    #   2. Inserts the configured baseline version
+    #      (default = 1 if baseline-version is omitted).
+    #   3. Treats all migrations up to the baseline version as already applied.
+    #   4. Executes only migrations with a higher version.
+    #
+    # Example:
+    #   Database already contains changes from V1 and V2.
+    #
+    #   baseline-version: 2
+    #
+    #   Result:
+    #     V1 -> Skipped
+    #     V2 -> Skipped
+    #     V3 -> Executed
+    #
+    # IMPORTANT:
+    # - baseline-version must match the current schema version of the target
+    #   database. If a higher version is chosen than the schema actually
+    #   contains, Flyway skips required migrations and later migrations may fail
+    #   due to missing tables, columns, or constraints.
+    #
+    # - baseline-on-migrate is consulted ONLY when no flyway_schema_history
+    #   table exists. Once the history table has been created, Flyway ignores
+    #   this property and determines migration state solely from the entries in
+    #   flyway_schema_history.
+    baseline-on-migrate: true
+
+    # Optional.
+    # Defaults to version 1 if omitted.
+    # baseline-version: 2
+
+    # Flyway is enabled automatically when the Flyway dependency is present on
+    # the classpath. Set enabled=false to temporarily disable Flyway.
+    # enabled: false
+
 
 deployment:
   env: DEV
