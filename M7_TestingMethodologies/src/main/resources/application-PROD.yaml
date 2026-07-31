@@ -9,7 +9,24 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      # Validates that the existing database schema matches the JPA entities.
+      # Does not create or modify tables.
+      #
+      # Commonly used with Flyway in production. Flyway first applies any pending
+      # migrations, after which Hibernate verifies that the final schema matches
+      # the entity definitions. Application startup fails if validation fails.
+      ddl-auto: validate
+
+      # Hibernate neither creates nor validates the database schema.
+      #
+      # Commonly used in production when Flyway is the sole owner of schema
+      # creation and evolution. All schema changes are managed through versioned
+      # SQL migration scripts.
+      # ddl-auto: none
+
+#  flyway is enabled by default here
+#  flyway:
+#    baseline-on-migrate: true
 
 deployment:
   env: PROD
