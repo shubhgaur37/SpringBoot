@@ -1,0 +1,32 @@
+-- ============================================================================
+-- FLYWAY MIGRATION GUIDELINES
+--
+-- 1. Never modify a migration that has already been applied. Flyway stores
+--    the checksum of every executed migration in the flyway_schema_history
+--    table. Changing an applied migration results in a checksum mismatch and
+--    Flyway refuses to start. Always create a new versioned migration
+--    (V2, V3, ...) for schema changes.
+--
+-- 2. Always use the exact table and column names expected by the application.
+--    SQL keywords (CREATE, ALTER, SELECT, etc.) are case-insensitive, but
+--    database object names (tables, columns, schemas) may be case-sensitive
+--    depending on the database and operating system.
+--
+-- 3. Prefer lowercase snake_case names to match Spring Boot's default
+--    physical naming strategy.
+--
+--      Entity              -> Employee
+--      Table               -> employees
+--      Field               -> departmentName
+--      Column              -> department_name
+--
+-- 4. Each migration should represent a single logical schema change. This
+--    keeps the migration history easy to understand, review, and rollback.
+--
+-- 5. Flyway executes each versioned migration only once and records it in the
+--    flyway_schema_history table. On subsequent application startups, only
+--    pending migrations are executed.
+-- ============================================================================
+
+ALTER TABLE EMPLOYEES
+ADD COLUMN DEPARTMENT_NAME VARCHAR(255);

@@ -1,0 +1,41 @@
+-- ============================================================================
+-- FLYWAY MIGRATION GUIDELINES
+--
+-- 1. Migration files are immutable.
+--    Once a migration has been applied, never modify, rename, or delete it.
+--    Flyway stores the version, description, and checksum of every executed
+--    migration in the flyway_schema_history table. Any change to an applied
+--    migration (including comments or formatting) changes its checksum,
+--    causing Flyway validation to fail during application startup.
+--
+-- 2. Always create a new versioned migration (V2, V3, ...) for every schema
+--    change. Never edit an existing migration to introduce new changes.
+--
+-- 3. Use the exact table and column names expected by the application.
+--    SQL keywords (CREATE, ALTER, SELECT, etc.) are case-insensitive, but
+--    database object names (tables, columns, schemas) may be case-sensitive
+--    depending on the database and operating system.
+--
+-- 4. Prefer lowercase snake_case identifiers to align with Spring Boot's
+--    default Hibernate naming strategy.
+--
+--        Entity              -> Employee
+--        Table               -> employees
+--        Field               -> departmentName
+--        Column              -> department_name
+--
+--    On macOS, MySQL commonly uses lower_case_table_names = 2, where table
+--    names preserve their original case but lookups are case-insensitive.
+--    As a result, renaming a table by changing only its letter casing (e.g.
+--    EMPLOYEES -> employees) has no effect because MySQL treats both names as
+--    the same during lookup. For portability across environments (especially
+--    Linux), consistently use lowercase identifiers from the beginning.
+--
+-- 5. Keep each migration focused on a single logical schema change. This
+--    produces a clear, auditable migration history that is easier to review,
+--    debug, and maintain.
+--
+-- 6. Flyway executes each versioned migration only once and records it in the
+--    flyway_schema_history table. On subsequent application startups, only
+--    pending migrations are executed.
+-- ============================================================================
