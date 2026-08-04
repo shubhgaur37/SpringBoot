@@ -22,5 +22,5 @@ public class Employee {
     @Column(unique = true)
     String email;
     Double salary;
-    String departmentName;
+//    String departmentName; commenting for codebuild compilation, temporary
 }
