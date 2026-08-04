@@ -516,6 +516,416 @@ The latest published coverage report is available at:
 
 https://shubhgaur37.github.io/SpringBoot/
 
+## Flyway Migration Journey & Production Learnings
+
+This project originally used Hibernate schema generation to evolve the database
+with `spring.jpa.hibernate.ddl-auto=update`. That was useful while learning and
+moving quickly, but it meant the live schema was being changed implicitly by the
+ORM at startup. The project was later moved to Flyway so schema changes are
+explicit, versioned, reviewed, and repeatable.
+
+Flyway is now the intended owner of database schema evolution. Hibernate should
+not create or mutate production tables. In production-like environments, the
+safer target is:
+
+```yaml
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+```
+
+With this setup, startup follows this contract:
+
+```text
+Application starts
+      |
+      v
+Flyway applies pending SQL migrations
+      |
+      v
+Hibernate validates entity mappings against the final schema
+      |
+      v
+Application becomes ready
+```
+
+This makes Flyway the single source of truth for schema history. The practical
+advantages are:
+
+- Schema changes live in version control with the application code.
+- Deployments are deterministic because each environment receives the same
+  ordered migration scripts.
+- Development, test, staging, and production schemas stay easier to compare.
+- Rollback planning and auditing become possible because schema changes are
+  visible as reviewed files instead of hidden startup side effects.
+- Failed deployments are easier to reason about because Flyway records exactly
+  which migration version failed.
+
+### Introducing Flyway Into An Existing Database
+
+The production database already had application tables created by Hibernate, but
+it did not have Flyway metadata. On first startup, Flyway saw a non-empty schema
+without `flyway_schema_history` and failed with:
+
+```text
+Found non-empty schema but no schema history table.
+```
+
+Flyway fails here because it cannot safely infer whether existing tables came
+from previous migrations, manual SQL, Hibernate, or another tool. Running `V1`
+against a database that already contains those tables could duplicate objects or
+damage data.
+
+For a one-time adoption of Flyway on an existing production database, enable:
+
+```yaml
+spring:
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: 1
+```
+
+What this means:
+
+- `baseline-on-migrate=true` tells Flyway to create `flyway_schema_history` for
+  the existing schema instead of failing immediately.
+- The current database structure is treated as the baseline.
+- Migrations at or below the configured baseline version are considered already
+  applied.
+- With `baseline-version: 1`, migration `V1__...sql` is skipped and Flyway only
+  executes `V2` and later migrations.
+
+Warning: `baseline-on-migrate` should be used only for the initial Flyway
+adoption of an existing database. After `flyway_schema_history` exists, remove
+that setting from configuration. Leaving it enabled permanently weakens an
+important safety check that protects against accidentally pointing the
+application at the wrong non-empty schema.
+
+### Fresh Database Vs Existing Database
+
+Flyway behaves differently depending on whether the database already has schema
+objects and history.
+
+Fresh database, such as a new Testcontainers MySQL instance:
+
+```text
+Empty database
+      |
+      v
+No application tables
+      |
+      v
+Flyway executes V1 -> V2 -> V3 -> ...
+      |
+      v
+flyway_schema_history records each successful migration
+```
+
+Existing production database during Flyway adoption:
+
+```text
+Tables already exist
+      |
+      v
+No flyway_schema_history table
+      |
+      v
+Use baseline-on-migrate once
+      |
+      v
+Flyway records a baseline and runs only newer migrations
+```
+
+No baseline is required for a fresh database because Flyway can safely create
+the entire schema from the first migration.
+
+### Failed Migration Behaviour
+
+When a migration fails, Flyway records the failed attempt in
+`flyway_schema_history` with `success = false`. On the next application startup,
+Flyway does not simply retry the same migration. It first validates migration
+history, sees the failed entry, and stops startup.
+
+```text
+Startup
+  |
+  v
+Flyway validate
+  |
+  v
+Failed migration found in flyway_schema_history
+  |
+  v
+Startup fails before normal migration execution
+```
+
+This is why fixing the SQL file alone is not enough while a failed history row
+still exists.
+
+Development recovery is usually simple:
+
+- Inspect the failed row and local database state.
+- Delete the failed row from `flyway_schema_history`.
+- Fix the migration SQL.
+- Restart the application so Flyway can execute it again.
+
+Production recovery must be stricter:
+
+- Determine exactly which SQL statements ran before the failure.
+- Bring the database into the state expected by the migration version.
+- Use `flyway repair` only after the real schema state matches the intended
+  migration state.
+- Do not blindly delete Flyway history rows in production.
+
+### Flyway Repair
+
+`flyway repair` repairs Flyway metadata. It does not rerun a migration and it
+does not fix application tables.
+
+Use repair only when the database has already been manually corrected to match
+the expected state. Typical uses include removing failed metadata entries after
+the schema has been verified, or updating metadata after an intentional repair
+process. It should not be used as a way to hide an unknown failure.
+
+### Immutable Versioned Migrations
+
+Versioned migrations are immutable after they successfully run anywhere shared.
+If this migration has already succeeded:
+
+```text
+V2__AddDepartmentColumn.sql
+```
+
+do not edit it to add another schema change. Create a new migration instead:
+
+```text
+V3__FixSomething.sql
+```
+
+Flyway stores a checksum for every successful migration. If an already executed
+SQL file is edited, even for formatting or comments, Flyway calculates a new
+checksum and validation fails because the file no longer matches the recorded
+history.
+
+The only practical exception is a migration that failed and is recorded with
+`success = false`. In development, that file can be corrected before deleting
+the failed metadata row and rerunning. In production, first inspect how far the
+failed SQL got and repair the database state deliberately.
+
+### Linux MySQL Case Sensitivity
+
+A production failure exposed a MySQL case-sensitivity difference. AWS RDS was
+running with:
+
+```sql
+lower_case_table_names = 0
+```
+
+On Linux MySQL with this setting, table names are case-sensitive:
+
+```text
+employees != EMPLOYEES
+```
+
+SQL keywords are not case-sensitive:
+
+```sql
+SELECT * FROM employees;
+select * from employees;
+```
+
+Column names are generally not case-sensitive in MySQL, but relying on mixed
+case still creates portability problems. The safest convention is lowercase
+snake_case for tables and columns:
+
+```text
+employees
+department_name
+```
+
+The production migration failed because it executed:
+
+```sql
+ALTER TABLE EMPLOYEES ...
+```
+
+while the real table name was:
+
+```text
+employees
+```
+
+The error was:
+
+```text
+Table spring_test.EMPLOYEES doesn't exist.
+```
+
+Lesson: write migration SQL using the exact object names that exist in
+production, and prefer lowercase identifiers from the first migration.
+
+### Production Deployment Debugging
+
+One confusing production symptom was that a failed Flyway history row was
+deleted manually, then immediately reappeared. The delete had worked. The real
+cause was the Elastic Beanstalk application restart loop.
+
+```text
+Elastic Beanstalk starts app
+      |
+      v
+Flyway attempts migration
+      |
+      v
+Migration fails
+      |
+      v
+Flyway inserts success=false
+      |
+      v
+Application startup fails
+      |
+      v
+Elastic Beanstalk restarts app
+      |
+      v
+Same failed row is inserted again
+```
+
+This looked like MySQL ignored the `DELETE`, but another application startup was
+recreating the failed metadata row. When debugging production migrations, check
+whether the platform is continuously restarting the old or broken application
+version.
+
+### Elastic Beanstalk Rollback
+
+Another issue was caused by the deploy stage, not the source or build stage.
+CodePipeline source and CodeBuild were using the latest commit, but Elastic
+Beanstalk rolled back to an older application version during deployment.
+
+Result: the old migration SQL continued running in production even though the
+latest source and build looked correct.
+
+Important lesson:
+
+- A successful source stage does not prove production is running that commit.
+- A successful build stage does not prove the built artifact was deployed.
+- When production behavior does not match the repository, inspect the deployed
+  Elastic Beanstalk application version and artifact.
+
+### Testcontainers & Flyway
+
+For integration tests, Testcontainers starts a fresh MySQL database. Because the
+database is empty, Flyway runs the full ordered migration chain:
+
+```text
+Start MySQL container
+      |
+      v
+Create empty database
+      |
+      v
+Flyway executes V1 -> V2 -> V2.1 -> V2.2 -> ...
+      |
+      v
+Spring Boot starts tests
+```
+
+Flyway executes each versioned migration only once per database. If the same
+database is reused later and the history table already contains successful
+entries, Flyway validates the history and runs only pending newer migrations.
+
+No baseline is needed in Testcontainers because the database does not already
+contain Hibernate-created production tables.
+
+### Matching Production Database Versions
+
+The production database was MySQL 8.4, while the test container initially used
+an older MySQL image. A migration using:
+
+```sql
+ALTER TABLE employees
+    RENAME COLUMN old_name TO new_name;
+```
+
+worked in production but failed in tests because the test database did not match
+the production database version closely enough.
+
+Best practice: use the same MySQL major version in Testcontainers as production.
+For this project, that means using a MySQL 8.x image when production is MySQL
+8.4, rather than an older 5.7 image.
+
+### Build & Deployment Learnings
+
+The repository contains multiple Maven projects. CodeBuild checks out the
+repository contents and starts from the repository root, so `buildspec.yml`
+must move into the Spring Boot module before running Maven:
+
+```yaml
+phases:
+  build:
+    commands:
+      - cd M7_TestingMethodologies
+      - mvn clean package
+```
+
+The Maven command runs relative to the current working directory. Artifact
+packaging is separate. Because the JAR is created under the module's `target`
+directory, the artifact section should point there:
+
+```yaml
+artifacts:
+  base-directory: M7_TestingMethodologies/target
+  files:
+    - "*.jar"
+  discard-paths: yes
+```
+
+`discard-paths` only controls the layout of the final packaged build artifact
+uploaded by CodeBuild. It does not change where Maven runs, how Maven resolves
+the project, where Maven writes `target/`, or how CodeBuild discovers files
+before `base-directory` and `files` are applied.
+
+### CI/CD Path Learnings
+
+CodeBuild clones the contents of the Git repository into its workspace. It does
+not create an extra parent directory named after the repository.
+
+```text
+Local:
+SpringBoot/
+  M7_TestingMethodologies/
+  OtherModule/
+
+CodeBuild workspace:
+M7_TestingMethodologies/
+OtherModule/
+```
+
+Therefore all paths in `buildspec.yml` are relative to the repository root
+contents, not to the local parent directory. Assuming the repository folder
+itself existed inside CodeBuild caused the initial path-related build failures.
+
+### Final Flyway And Deployment Best Practices
+
+- Let Flyway own schema evolution.
+- Use Hibernate `ddl-auto=validate` for production-like environments.
+- Keep versioned migrations immutable after they succeed.
+- Create a new migration for every new schema change.
+- Use `baseline-on-migrate` only once when adopting Flyway for an existing
+  database.
+- Remove `baseline-on-migrate` after Flyway history exists.
+- Understand Flyway validation before assuming a fixed SQL file will rerun.
+- Do not use `flyway repair` until the real database state has been inspected
+  and corrected.
+- Match the Testcontainers database major version to production.
+- Use lowercase table and column names consistently.
+- Inspect the deployed Elastic Beanstalk application version when production
+  behavior differs from the latest commit.
+- Treat migration files as production application code: review them carefully,
+  version them deliberately, and test them against a production-like database.
+
 
 ## Maven Lifecycle Notes
 
