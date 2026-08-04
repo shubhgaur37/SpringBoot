@@ -8,7 +8,7 @@
 -- ============================================================================
 
 -- Step 1: Rename through an intermediate table name.
-ALTER TABLE EMPLOYEES
+ALTER TABLE employees
     RENAME TO employees_temp;
 
 -- Step 2: Rename to the desired lowercase table name.
