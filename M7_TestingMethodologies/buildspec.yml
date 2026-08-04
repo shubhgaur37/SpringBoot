@@ -42,7 +42,7 @@ phases:
       #
       # -DskipTests skips executing the tests while still compiling the test
       # source code.
-      - mvn clean package -DskipTests
+      - mvn clean package
 
   post_build:
     commands:

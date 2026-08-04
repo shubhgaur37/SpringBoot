@@ -22,5 +22,13 @@ public class Employee {
     @Column(unique = true)
     String email;
     Double salary;
-//    String departmentName; commenting for codebuild compilation, temporary
+    String departmentName;
+
+    // for tests to run during build stage
+    public Employee(Long id, String name, String email, Double salary) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.salary = salary;
+    }
 }
