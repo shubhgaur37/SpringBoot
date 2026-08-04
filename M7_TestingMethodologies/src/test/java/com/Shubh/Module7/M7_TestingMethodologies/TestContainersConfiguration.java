@@ -42,7 +42,7 @@ public class TestContainersConfiguration {
         // MySQLContainer uses generics internally to support
         // fluent method chaining, but we do not need to reference the type.
         return new MySQLContainer<>(
-                DockerImageName.parse("mysql:5.7.34") // docker image name from docker repository
+                DockerImageName.parse("mysql:8.4") // docker image name from docker repository
         )
                 // Creates a database named 'employee_db' inside the container.
                 .withDatabaseName("employee_db")
