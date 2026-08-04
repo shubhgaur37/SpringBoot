@@ -25,8 +25,9 @@ spring:
       # ddl-auto: none
 
 #  flyway is enabled by default here
-#  flyway:
+  flyway:
+    enabled: false # for application to start
 #    baseline-on-migrate: true
-
+#    baseline-version: 2
 deployment:
   env: PROD
