@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @RequiredArgsConstructor
 @SpringBootApplication
-
 // CommandLineRunner executes after Spring Boot has fully started and the
 // application context has been initialized. It is one of the last callbacks
 // during application startup and is commonly used for one-time startup tasks
@@ -19,7 +18,7 @@ public class M7TestingMethodologiesApplication implements CommandLineRunner {
 
     // Multiple DataService beans exist, so Spring requires @Primary or
     // @Qualifier to determine which bean to inject.
-    private final DataService dataService;
+//    private final DataService dataService;
 
     @Value("${deployment.env}")
     private String deploymentEnv;
@@ -30,7 +29,7 @@ public class M7TestingMethodologiesApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("The Environment is: " + dataService.getEnvironment());
-        System.out.println("The Data Source is: " + dataService.getData());
+        System.out.println("The Environment is: " + deploymentEnv);
+//        System.out.println("The Data Source is: " + dataService.getData());
     }
 }
