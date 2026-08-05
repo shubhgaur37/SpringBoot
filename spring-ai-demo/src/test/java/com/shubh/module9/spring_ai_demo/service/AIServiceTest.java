@@ -14,4 +14,5 @@ class AIServiceTest {
     void testGetJoke(){
         aiService.getJoke();
     }
+
 }
