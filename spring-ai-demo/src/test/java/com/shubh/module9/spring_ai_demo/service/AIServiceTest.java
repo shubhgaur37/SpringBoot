@@ -15,4 +15,16 @@ class AIServiceTest {
         aiService.getJoke();
     }
 
+    @Test
+    void testGetJokeByTopic(){
+        String topic = "Potty";
+        System.out.println(aiService.getJokeByTopic(topic));
+    }
+
+    @Test
+    void testGetJokeEntityByTopic(){
+        String topic = "Politics";
+        System.out.println(aiService.getJokeByTopicDeserialized(topic));
+    }
+
 }

@@ -1,10 +1,15 @@
 package com.shubh.module9.spring_ai_demo.service;
 
+import com.shubh.module9.spring_ai_demo.dto.Joke;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
@@ -118,4 +123,135 @@ public class AIService {
         System.out.println("User & System Prompt");
         System.out.println(content2);
     }
+
+    public String getJokeByTopic(String topic) {
+
+        // Triple quoted text block used for creating a multi-line prompt.
+        //
+        // {topic} is a placeholder which will be replaced dynamically at runtime.
+        String promptString = """
+            You are a professional comic.
+            You don't make jokes about politics.
+            Give me a hilarious joke in one line on {topic}
+            """;
+
+
+        // PromptTemplate provides placeholder substitution similar to String.format()
+        // but is specifically designed for AI prompts.
+        //
+        // It converts the prompt template into a reusable object that can later be
+        // rendered by replacing placeholders with actual values.
+        PromptTemplate promptTemplate = new PromptTemplate(promptString);
+
+
+        // Replaces {topic} with the supplied argument.
+        //
+        // Example:
+        //
+        // Topic = Java
+        //
+        // Generated Prompt:
+        //
+        // You are a professional comic.
+        // You don't make jokes about politics.
+        // Give me a hilarious joke in one line on Java
+        String sendPrompt = promptTemplate.render(Map.of("topic", topic));
+
+
+        var response = chatClient.prompt()
+
+                // Sends the generated prompt as a UserMessage.
+                .user(sendPrompt)
+
+                // Advisors intercept the request/response lifecycle of ChatClient.
+                //
+                // SimpleLoggerAdvisor logs:
+                //
+                // • Prompt sent to the LLM
+                // • Model being invoked
+                // • Complete AI response
+                // • Request/response metadata
+                //
+                // This is extremely useful while developing prompts and debugging
+                // interactions with the model.
+                //
+                // Normal Spring Boot logging only logs application events
+                // (bean creation, HTTP requests, exceptions, etc.).
+                //
+                // It does NOT log:
+                //
+                // • The exact prompt sent to the LLM
+                // • The generated AI response
+                // • Token usage
+                // • Prompt execution details
+                //
+                // Advisors provide AI-specific logging by decorating the ChatClient
+                // request pipeline before and after the LLM invocation.
+                //
+                // Note:
+                // Detailed advisor logs are visible only when the corresponding logger is
+                // configured at DEBUG level.
+                .advisors(new SimpleLoggerAdvisor())
+
+                // Sends the request to the configured LLM.
+                .call()
+
+                // Returns the complete ChatClientResponse rather than only the text.
+                //
+                // ChatClientResponse contains:
+                //
+                // • ChatResponse
+                // • Generation metadata
+                // • Advisor context
+                // • Execution context
+                //
+                // Useful when additional metadata is required.
+                .chatClientResponse();
+
+
+        // Navigation:
+        //
+        // ChatClientResponse
+        //        │
+        //        ▼
+        // ChatResponse
+        //        │
+        //        ▼
+        // Generation Result
+        //        │
+        //        ▼
+        // Assistant Message
+        //        │
+        //        ▼
+        // Generated Text
+        return response.chatResponse()
+                .getResult()
+                .getOutput()
+                .getText();
+    }
+
+    public Joke getJokeByTopicDeserialized(String topic) {
+
+        String promptString = """
+            You are a professional comic.
+            You don't make jokes about politics.
+            Give me a hilarious joke in one line on {topic}
+            """;
+
+        PromptTemplate promptTemplate = new PromptTemplate(promptString);
+
+        String sendPrompt = promptTemplate.render(Map.of("topic", topic));
+
+
+        return chatClient.prompt()
+                .user(sendPrompt)
+                .advisors(new SimpleLoggerAdvisor())
+                .call()
+                // Automatically converts the LLM's structured response into an instance of
+                // Joke.class. Spring AI generates a JSON response matching the target class
+                // and deserializes it using Jackson, eliminating the need for manual parsing.
+                .entity(Joke.class);
+
+    }
+
 }
