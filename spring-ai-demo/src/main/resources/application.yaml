@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: spring-ai-demo
+
+  # spring ai model configuration
+  ai:
+    # not picked up when bean does not exist
+    ollama:
+      # ollama needs to be exposed to the network from settings
+      # listens on port 11434 (default)
+      base-url: http://localhost:11434
+      # specify chat options, models to use
+      chat:
+        options:
+          # should be downloaded from ollama beforehand
+          model: qwen3.5:9b
+
+    openai:
+      api-key: ${OPEN_AI_API_KEY}
+      chat:
+        options:
+          model: gpt-5.6-luna
+          # higher temperature means more creativity (more probaballistic) lower values mean more deterministic
+          temperature: 0.9
+
