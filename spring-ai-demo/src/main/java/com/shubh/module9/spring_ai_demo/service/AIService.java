@@ -7,7 +7,9 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +20,14 @@ import java.util.Map;
 @Service
 public class AIService {
 
-
-    // injected based on the model specified in yaml
+    // Injects the configured EmbeddingModel implementation (inferred from .yml)
+    // (e.g. OllamaEmbeddingModel or OpenAiEmbeddingModel).
     EmbeddingModel embeddingModel;
+
+    // Injects the configured VectorStore implementation.
+    // Since the Spring AI PGVector starter is on the classpath and
+    // spring.ai.vectorstore.pgvector is configured, this will be a PgVectorStore.
+    VectorStore vectorStore;
 
     /**
      * ChatClient is the primary abstraction provided by Spring AI for
@@ -260,15 +267,76 @@ public class AIService {
 
     }
 
-    public float[] getEmbeddingsForText(String text){
-        // this is a default method for Embedding Model interface, can only be called from the interface reference
+    public float[] getEmbeddingsForText(String text) {
+        // Generate embedding for a single text (blocking call)
         return embeddingModel.embed(text);
     }
 
-    public List<float[]> getEmbeddingsForListOfText(List<String> text){
-        // this is a default method for Embedding Model interface, can only be called from the interface reference
-        // embed(String text) internally uses this list method
-        return embeddingModel.embed(text);
+    public List<float[]> getEmbeddingsForListOfText(List<String> textList) {
+        // Generate embeddings for multiple texts (blocking call)
+        // embed(String) internally delegates to this method
+        return embeddingModel.embed(textList);
+    }
+
+    public void ingestSimpleTextDataToVectorStore(String text) {
+
+        // Wrap raw text as a Document
+        Document document = new Document(text);
+
+        // Converts the document to embeddings internally using the configured EmbeddingModel
+        // and stores them in the vector store (blocking call)
+        vectorStore.add(List.of(document));
+    }
+
+    public void ingestComplexDataToVectorStore() {
+
+        List<Document> documents = List.of(
+                // Documents containing text content and metadata.
+                // Embeddings are generated only from the content, while metadata is stored for filtering and retrieval.
+                new Document(
+                        "Inception is a science fiction thriller where a skilled thief enters people's dreams to steal and plant ideas.",
+                        Map.of(
+                                "title", "Inception",
+                                "genre", "Sci-Fi",
+                                "year", 2010,
+                                "director", "Christopher Nolan"
+                        )
+                ),
+
+                new Document(
+                        "The Dark Knight follows Batman as he battles the Joker, who spreads chaos across Gotham City.",
+                        Map.of(
+                                "title", "The Dark Knight",
+                                "genre", "Action",
+                                "year", 2008,
+                                "director", "Christopher Nolan"
+                        )
+                ),
+
+                new Document(
+                        "Interstellar is a science fiction adventure about astronauts searching for a new home for humanity.",
+                        Map.of(
+                                "title", "Interstellar",
+                                "genre", "Sci-Fi",
+                                "year", 2014,
+                                "director", "Christopher Nolan"
+                        )
+                ),
+
+                new Document(
+                        "The Shawshank Redemption tells the story of a banker who forms an unlikely friendship while serving a life sentence in prison.",
+                        Map.of(
+                                "title", "The Shawshank Redemption",
+                                "genre", "Drama",
+                                "year", 1994,
+                                "director", "Frank Darabont"
+                        )
+                )
+
+        );
+
+        // Generates embeddings for each document and stores them in the vector database
+        vectorStore.add(documents);
     }
 
 

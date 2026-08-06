@@ -45,5 +45,10 @@ class AIServiceTest {
         embeddingList.forEach(embedding -> System.out.println(Arrays.toString(embedding)));
     }
 
+    @Test
+    void testStoreSimpleDataInVectorStore(){
+        String text = "Twinkle Twinkle Little Star, How I wonder what you are";
+        aiService.ingestSimpleTextDataToVectorStore(text);
+    }
 
 }
