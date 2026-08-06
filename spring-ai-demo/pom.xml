@@ -37,6 +37,12 @@
 
 		</dependency>
 
+	<!--		Adding PgVector Dependency	-->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-vector-store-pgvector</artifactId>
+		</dependency>
+
 <!--For Resolving Chat Model Bean Conflict in AIConfig-->
 <!--		<dependency>-->
 <!--			<groupId>org.springframework.ai</groupId>-->
