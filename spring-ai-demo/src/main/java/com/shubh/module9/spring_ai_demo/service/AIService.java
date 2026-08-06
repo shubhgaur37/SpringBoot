@@ -7,14 +7,20 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 @Service
 public class AIService {
+
+
+    // injected based on the model specified in yaml
+    EmbeddingModel embeddingModel;
 
     /**
      * ChatClient is the primary abstraction provided by Spring AI for
@@ -91,7 +97,7 @@ public class AIService {
         //
         String content1 = chatClient.prompt("Give me a joke on programmers")
                 .call()
-                .content();
+                .content(); // actual call to LLM made here
 
         System.out.println("User Prompt Only");
         System.out.println(content1);
@@ -253,5 +259,17 @@ public class AIService {
                 .entity(Joke.class);
 
     }
+
+    public float[] getEmbeddingsForText(String text){
+        // this is a default method for Embedding Model interface, can only be called from the interface reference
+        return embeddingModel.embed(text);
+    }
+
+    public List<float[]> getEmbeddingsForListOfText(List<String> text){
+        // this is a default method for Embedding Model interface, can only be called from the interface reference
+        // embed(String text) internally uses this list method
+        return embeddingModel.embed(text);
+    }
+
 
 }

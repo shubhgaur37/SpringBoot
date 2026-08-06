@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+import java.util.List;
+
 @SpringBootTest
 class AIServiceTest {
     @Autowired
@@ -26,5 +29,21 @@ class AIServiceTest {
         String topic = "Politics";
         System.out.println(aiService.getJokeByTopicDeserialized(topic));
     }
+
+    @Test
+    void testGetEmbeddingForText(){
+        String text = "This is my text";
+        float [] embeddings = aiService.getEmbeddingsForText(text);
+        System.out.println("EMBEDDINGS FOR THE TEXT");
+        System.out.println(Arrays.toString(embeddings));
+    }
+
+    @Test
+    void testGetEmbeddingsForTextList(){
+        List<float[]> embeddingList = aiService.getEmbeddingsForListOfText(List.of("Hello","Boy"));
+        System.out.println("EMBEDDING LIST FOR THE TEXT");
+        embeddingList.forEach(embedding -> System.out.println(Arrays.toString(embedding)));
+    }
+
 
 }
