@@ -9,7 +9,9 @@ import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.ai.vectorstore.filter.FilterExpressionBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -340,4 +342,51 @@ public class AIService {
     }
 
 
+    public List<Document> similaritySearch(String criteria) {
+
+        // Semantic search is performed on the document content (embeddings).
+        // Metadata is not used unless explicitly provided as a filter.
+
+        // Documents are ranked by vector similarity.
+        // Lower distance => Higher similarity score => Better match.
+        // The score is a relative similarity measure, not a probability.
+
+        return vectorStore.similaritySearch(criteria);
+    }
+
+    public List<Document> getTopKSimilaritySearch(String criteria, int k) {
+        // Build a search request for top k
+        SearchRequest searchRequest = SearchRequest.builder().query(criteria).topK(k).build();
+        return vectorStore.similaritySearch(searchRequest);
+    }
+
+    public List<Document> similaritySearchExactFiltering(String criteria, String filter){
+        // doing an exact matching against the criteria using a filter expression
+        // we can pass a sql style string expression also
+        SearchRequest searchRequest = SearchRequest.builder().query(criteria)
+                .filterExpression(new FilterExpressionBuilder().eq("director",filter).build())
+                .build();
+
+        return vectorStore.similaritySearch(searchRequest);
+    }
+
+    public List<Document> similaritySearchStringExpressionFilter(String criteria, String filterExpression) {
+
+        // Build a search request consisting of:
+        //
+        // • Query       -> Semantic search criteria used for vector similarity.
+        // • Filter      -> Metadata filter expression applied by the VectorStore
+        //                  to narrow the candidate documents before similarity
+        //                  search is performed.
+        SearchRequest searchRequest = SearchRequest.builder()
+                .query(criteria)
+                .filterExpression(filterExpression)
+                .build();
+
+        // Execute a similarity search over the VectorStore.
+        //
+        // The VectorStore first applies the metadata filter and then performs
+        // semantic similarity search on the remaining documents.
+        return vectorStore.similaritySearch(searchRequest);
+    }
 }
