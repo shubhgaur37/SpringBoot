@@ -64,7 +64,7 @@ class AIServiceTest {
     @Test
     void testSimilaritySearchTopK(){
         String criteria = "space";
-        int k = 2;
+        int k = 5;
         List<Document> documents = aiService.getTopKSimilaritySearch(criteria,k);
         documents.forEach(document -> System.out.println(document +"\n"));
     }

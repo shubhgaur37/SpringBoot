@@ -355,8 +355,26 @@ public class AIService {
     }
 
     public List<Document> getTopKSimilaritySearch(String criteria, int k) {
-        // Build a search request for top k
-        SearchRequest searchRequest = SearchRequest.builder().query(criteria).topK(k).build();
+        // Build a search request specifying:
+        //
+        // Query                -> Semantic search criteria.
+        // Top K                -> Maximum number of documents to return.
+        // Similarity Threshold -> Minimum normalized similarity score (0.0 - 1.0)
+        //                         required for a document to be included.
+        //
+        // 0.0 -> Disables threshold filtering and accepts all similarity scores.
+        // 1.0 -> Returns only near-identical matches.
+        //
+        // The threshold is evaluated by Spring AI after retrieving similarity
+        // results from the underlying VectorStore. Documents scoring below the
+        // threshold are discarded, and up to the Top K remaining documents are
+        // returned.
+        //
+        // The similarity scores exposed by Spring AI in the returned Document
+        // metadata are normalized to the range [0.0, 1.0], making them suitable
+        // for comparison irrespective of the underlying VectorStore's distance
+        // metric.
+        SearchRequest searchRequest = SearchRequest.builder().query(criteria).topK(k).similarityThreshold(0.13).build();
         return vectorStore.similaritySearch(searchRequest);
     }
 
