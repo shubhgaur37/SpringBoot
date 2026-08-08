@@ -1,0 +1,24 @@
+package com.shubh.module9.spring_ai_demo.service;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+
+@SpringBootTest
+class RAGServiceTest {
+
+    @Autowired
+    RAGService ragService;
+
+    @Test
+    void testSpringAIPromptInvalidUserPrompt(){
+        ragService.answerSpringAIQuestionIntelligently("What is apple");
+    }
+
+    @Test
+    void testSpringAIPromptValidUserPrompt(){
+        ragService.answerSpringAIQuestionIntelligently("What is vector store and how does it help in answering targeted queries");
+    }
+
+}
