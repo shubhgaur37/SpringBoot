@@ -8,6 +8,8 @@ import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
+import org.springframework.ai.transformer.splitter.TextSplitter;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,11 +21,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class RAGService {
-    VectorStore vectorStore;
-    ChatClient chatClient;
+    final VectorStore vectorStore;
+    final ChatClient chatClient;
     // classpath:
     // The classpath is the collection of locations available to the application
     // at runtime from which Java/Spring can load compiled classes and resources.
@@ -33,7 +35,7 @@ public class RAGService {
     //
     // Therefore, "classpath:file.pdf" tells Spring to look for the file relative
     // to the root of the application's classpath.
-    @Value("classpath::Resume_Shubh_IND_OP_7833")
+    @Value("classpath:Resume_Shubh_Latest_Delhi.pdf")
     Resource resumePDFResource;
 
     // Resource:
@@ -245,11 +247,107 @@ public class RAGService {
         // VectorStore so that they can be retrieved later using semantic search.
         vectorStore.add(springAIDocuments);
     }
+    public void answerResumeQuestions(String userPrompt) {
+        ingestPdfToVectorStore();
+
+        String systemPrompt = """
+            You are a software critique working for an MNC.
+            Your Job is to review resumes and answer the questions based on the candidate's profile.
+            
+            RULES:
+            1. You can **ONLY** use the information provided in the context section AND 
+            **NEVER** use your own knowledge or any information outside the Context.
+            2. You can combine multiple context sections when relevant
+            3. If you don't have enough information to answer a question, just say "I am not sure about it but can connect with candidate to learn more"
+            4. Answer in a professional and conversational tone.
+            
+            Context:
+            {context}
+            """;
+
+        // The search configuration should be tuned carefully.
+        // A very high similarity threshold or a very small Top K can exclude
+        // useful context, especially for broad or vague questions such as
+        // "What impact did the candidate have?"
+        //
+        // For such questions, multiple pieces of the resume may be relevant,
+        // so retrieving a sufficiently broad set of relevant chunks can help
+        // the LLM form a complete answer.
+        SearchRequest searchRequest = SearchRequest.builder().query(userPrompt)
+                .filterExpression("file_name == 'Resume_Shubh_Latest_Delhi.pdf'")
+                .similarityThreshold(0.5)
+                .topK(5)
+                .build();
+
+        // Perform semantic search to retrieve the resume chunks that are most
+        // relevant to the user's question.
+        //
+        // The metadata filter ensures that the search is performed only against
+        // chunks belonging to the specified resume.
+        List<Document> relevantDocuments = vectorStore.similaritySearch(searchRequest);
+
+        // Extract the text from the retrieved chunks and combine them into a
+        // single context string that will be provided to the LLM.
+        //
+        // Multiple chunks are separated by a blank line to keep their boundaries
+        // distinguishable while still providing them as a single context.
+        String relevantContext = relevantDocuments.stream().map(Document::getText).collect(Collectors.joining("\n\n"));
+
+        // Replace the {context} placeholder in the system prompt with the
+        // information retrieved from the VectorStore.
+        systemPrompt = new PromptTemplate(systemPrompt).render(Map.of("context", relevantContext));
+
+        // Send the retrieved resume context along with the user's question to
+        // the LLM so that the answer can be generated based on the candidate's
+        // profile.
+        String response = chatClient.prompt()
+                .system(systemPrompt)
+                .user(userPrompt)
+                .advisors(new SimpleLoggerAdvisor())
+                .call()
+                .content();
+
+        System.out.println(response);
+    }
+
 
     private void ingestPdfToVectorStore(){
-        String pdfKey = "Resume_Shubh";
+        // Clear the previously ingested resume chunks before re-ingesting the PDF.
+        //
+        // The file_name metadata is automatically associated with the chunks
+        // created from this resume, allowing all chunks belonging to this file
+        // to be deleted together.
+        //
+        // This is mainly for the demo so that running the ingestion repeatedly
+        // does not insert duplicate copies of the same resume into the VectorStore.
+        vectorStore.delete("file_name == 'Resume_Shubh_Latest_Delhi.pdf'");
 
+        // Load the PDF from the configured Resource and convert each PDF page
+        // into a Document.
         PagePdfDocumentReader pagePdfDocumentReader = new PagePdfDocumentReader(resumePDFResource);
+        List<Document> pages = pagePdfDocumentReader.read();
 
+        // Split the page documents into smaller chunks before generating
+        // embeddings and storing them in the VectorStore.
+        //
+        // Chunk size controls how much text is contained in each chunk.
+        // Smaller chunks provide more fine-grained retrieval, while larger chunks
+        // preserve more surrounding context but may retrieve more unrelated text.
+        //
+        // The value should be tuned based on the document and retrieval use case.
+        TextSplitter textSplitter = TokenTextSplitter.builder().withChunkSize(200).build();
+
+        // Transform the page-level documents into smaller documents that can
+        // independently be embedded and retrieved during similarity search.
+        List<Document> chunkedDocuments = textSplitter.transform(pages);
+
+        // A common document_id could also be added to all chunks if the chunks
+        // need to be grouped and managed as one logical source document.
+        // chunkedDocuments.forEach(document -> document.getMetadata().put("document_id","shubh-resume"));
+
+        // Generate embeddings for the chunks and store the resulting documents
+        // and vectors in the configured VectorStore.
+        vectorStore.add(chunkedDocuments);
     }
+
 }
