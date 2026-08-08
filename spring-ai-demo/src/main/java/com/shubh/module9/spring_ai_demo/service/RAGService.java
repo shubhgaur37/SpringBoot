@@ -7,8 +7,11 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +24,30 @@ import java.util.stream.Collectors;
 public class RAGService {
     VectorStore vectorStore;
     ChatClient chatClient;
+    // classpath:
+    // The classpath is the collection of locations available to the application
+    // at runtime from which Java/Spring can load compiled classes and resources.
+    //
+    // In a Maven Spring Boot application, src/main/resources is copied into the
+    // application's runtime classpath (typically target/classes).
+    //
+    // Therefore, "classpath:file.pdf" tells Spring to look for the file relative
+    // to the root of the application's classpath.
+    @Value("classpath::Resume_Shubh_IND_OP_7833")
+    Resource resumePDFResource;
 
+    // Resource:
+    // Spring's Resource is an abstraction for accessing data from a resource,
+    // regardless of where that resource is located.
+    //
+    // It can represent resources from different locations, such as:
+    // - classpath:   A resource packaged with the application.
+    // - file:        A file on the filesystem.
+    // - http/https:  A resource accessible through a URL.
+    //
+    // Resource does not contain the file data itself. It provides methods to
+    // access the underlying resource, such as getInputStream(), getFile(),
+    // exists(), and getFilename().
 
     public void answerSpringAIQuestionIntelligently(String userPrompt){
         ingestSpringAIDataToVectorStore();
@@ -31,19 +57,19 @@ public class RAGService {
         // This helps reduce the amount of context sent to the model and therefore
         // helps manage the model's context window.
         String systemPrompt = """
-    You are a helpful and knowledgeable software developer.
-
-    Answer the user's question using ONLY the information provided in the
-    Context. Do not use your own knowledge or any information outside the
-    Context.
-
-    If the Context does not contain enough information to answer the
-    question, state : I don't know
-
-    Combine information from multiple Context sections when relevant.
-
-    Context:
-    {context}
+        You are a helpful and knowledgeable software developer.
+    
+        Answer the user's question using ONLY the information provided in the
+        Context. Do not use your own knowledge or any information outside the
+        Context.
+    
+        If the Context does not contain enough information to answer the
+        question, state : I don't know
+    
+        Combine information from multiple Context sections when relevant.
+    
+        Context:
+        {context}
     """;
 
         // Find the most relevant documents from the VectorStore using semantic
@@ -56,6 +82,7 @@ public class RAGService {
         // The similarity threshold specifies the minimum similarity score required
         // for a document to be included in the results.
         SearchRequest searchRequest = SearchRequest.builder().query(userPrompt)
+                .filterExpression("technology == 'Spring AI'")
                 .similarityThreshold(0.5).topK(2).build();
 
         List<Document> documents = vectorStore.similaritySearch(searchRequest);
@@ -219,5 +246,10 @@ public class RAGService {
         vectorStore.add(springAIDocuments);
     }
 
+    private void ingestPdfToVectorStore(){
+        String pdfKey = "Resume_Shubh";
 
+        PagePdfDocumentReader pagePdfDocumentReader = new PagePdfDocumentReader(resumePDFResource);
+
+    }
 }
