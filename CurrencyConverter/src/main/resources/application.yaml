@@ -3,7 +3,7 @@ currencyConvertor:
     url: https://api.freecurrencyapi.com/v1/latest
 
   api:
-    key: YOUR_API_KEY
+    key: ${API_KEY} #use as environment variable
 
 spring:
   application:
