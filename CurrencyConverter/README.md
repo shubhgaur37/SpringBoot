@@ -35,9 +35,7 @@ src/main/java/com/shubh/module4/CurrencyConverter
 
 The application expects configuration in `src/main/resources/application.yaml`.
 
-To use the project, register on `freecurrencyapi.com`, generate an API key, and add that key in the YAML file. The committed YAML file does not include a personal API key, so each user must provide their own key for the app to work.
-
-No extra configuration mechanism has been added in this project; update the YAML file with the required values before running the app.
+To use the project, register on `freecurrencyapi.com` and generate an API key. The committed configuration reads the key from the `API_KEY` environment variable, so do not commit a personal key to the YAML file or a Dockerfile.
 
 Example `application.yaml`:
 
@@ -47,7 +45,7 @@ currencyConvertor:
     url: https://api.freecurrencyapi.com/v1/latest
 
   api:
-    key: YOUR_FREECURRENCY_API_KEY
+    key: ${API_KEY}
 
 spring:
   application:
@@ -57,7 +55,7 @@ spring:
 Required properties:
 
 - `currencyConvertor.base.url`: Base URL of the external currency API.
-- `currencyConvertor.api.key`: API key generated from `freecurrencyapi.com`.
+- `currencyConvertor.api.key`: API key generated from `freecurrencyapi.com`, supplied through `API_KEY`.
 
 ## How It Works
 
@@ -70,9 +68,10 @@ Required properties:
 
 ## Run the Application
 
-Make sure Java 21 is installed, then run:
+Make sure Java 21 is installed, set the API key for the current shell, then run:
 
 ```bash
+export API_KEY="YOUR_FREECURRENCY_API_KEY"
 ./mvnw spring-boot:run
 ```
 
@@ -87,6 +86,48 @@ By default, the application runs at:
 ```text
 http://localhost:8080
 ```
+
+## Docker
+
+Docker Desktop (or another Docker daemon) must be running. The project supports two ways to create a container image. In both cases, provide `API_KEY` only when the container runs; it is not baked into the image.
+
+### Dockerfile workflow
+
+The `Dockerfile` copies the executable JAR from `target/`, so the JAR must be built before `docker build`.
+
+```bash
+./mvnw clean package -Dmaven.test.skip=true
+docker build -t currency_converter:v0.0.1 .
+```
+
+Run the image with the API key injected at runtime:
+
+```bash
+docker run --rm -p 9090:8080 \
+  --name currency-converter-app \
+  -e API_KEY="$API_KEY" \
+  currency_converter:v0.0.1
+```
+
+The API and Swagger UI are then available at `http://localhost:9090` and `http://localhost:9090/swagger-ui/index.html`.
+
+If the container name is already in use, remove the stopped container first:
+
+```bash
+docker rm currency-converter-app
+```
+
+### Spring Boot Maven plugin workflow
+
+The Spring Boot Maven plugin can build an OCI image with Cloud Native Buildpacks, without using the repository's `Dockerfile`. Its `build-image` goal runs Maven's `package` lifecycle first, so it creates the required executable JAR automatically.
+
+```bash
+./mvnw spring-boot:build-image \
+  -Dspring-boot.build-image.imageName=currency_converter:v0.0.1 \
+  -Dmaven.test.skip=true
+```
+
+Start the resulting image with the same `docker run` command above. The image name in `pom.xml` is lowercase because Docker image names cannot contain uppercase characters.
 
 ## API Endpoint
 
@@ -168,11 +209,20 @@ The app has a global runtime exception handler. If the external API returns a cl
 
 ## Tests
 
-Run tests with:
+The current integration test loads the Spring application context and calls the external currency API. It needs a valid `API_KEY` and network access. To run it, set the key and use:
 
 ```bash
+export API_KEY="YOUR_FREECURRENCY_API_KEY"
 ./mvnw test
 ```
+
+For local builds or image builds where a key is not available, tests are intentionally skipped:
+
+```bash
+./mvnw clean package -Dmaven.test.skip=true
+```
+
+`-Dmaven.test.skip=true` skips test compilation and execution. Use `-DskipTests` instead when you want Maven to compile tests but not execute them.
 
 ## Notes
 
