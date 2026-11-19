@@ -33,14 +33,15 @@ This history does **not** contain a version where `UserService`, `OrderService`,
 
 ## Implementation Evolution
 
-The repository contains four commits relevant to this project. The stages below are based on their actual diffs.
+The repository contains five commits relevant to this project. The stages below are based on their actual diffs.
 
 | Commit | Stage | Verified change |
 | --- | --- | --- |
 | `8b1c5e6` | Initial report implementation | Added the project, `@Async` services, a custom executor, and a controller returning `List<String>`. Report collection blocked through sequential `CompletableFuture.get()` calls. |
 | `a3d6029` | Initial documentation | Added the first README. No executable code changed. |
-| `05da165` | Bounded executor and retry handler | Changed maximum pool size from five to three, added queue capacity one, installed `CustomRejectedExecutionHandler`, and changed result waiting to `allOf(...).join()` followed by `get()`. |
-| `a3e489d` | Asynchronous MVC response | Changed the controller and service to return `CompletableFuture<List<String>>`; replaced request-thread waiting with `allOf().thenApply(...)`; added `whenComplete(...)` failure logging. |
+| `fd49c5f` | Bounded executor and retry handler | Changed maximum pool size from five to three, added queue capacity one, installed `CustomRejectedExecutionHandler`, and changed result waiting to `allOf(...).join()` followed by `get()`. |
+| `7e03c26` | Asynchronous MVC response | Changed the controller and service to return `CompletableFuture<List<String>>`; replaced request-thread waiting with `allOf().thenApply(...)`; added `whenComplete(...)` failure logging. |
+| `2d55827` | Documentation update | Improved the comments and README without changing the application logic. |
 
 ### Stage 1: asynchronous tasks, blocking report response — `8b1c5e6`
 
@@ -60,7 +61,7 @@ The work ran on executor threads, but one servlet-container request thread remai
 
 This commit added the initial README and did not change execution behavior. It documented the two-core-worker schedule and the approximately six-second single-request critical path that follows from the two-, three-, and four-second simulated operations.
 
-### Stage 3: bounded capacity, retry, and explicit aggregate wait — `05da165`
+### Stage 3: bounded capacity, retry, and explicit aggregate wait — `fd49c5f`
 
 This commit made executor saturation observable:
 
@@ -69,20 +70,23 @@ This commit made executor saturation observable:
 - `CustomRejectedExecutionHandler` was registered.
 - `UserReportService` changed from a discarded `allOf(...)` plus sequential blocking `get()` calls to `allOf(...).join()` followed by `get()` calls.
 
-`allOf(...).join()` made the blocking point explicit: the request thread waited until all three futures completed successfully or the aggregate future completed exceptionally. After a successful aggregate join, the following `get()` calls normally returned immediately because the component futures were already complete. The endpoint still returned `List<String>`, so the servlet-container request thread remained occupied.
+`allOf(...).join()` gave the code one clear place to wait for all three tasks. The request thread stopped at this line until every task finished. After that, the later `get()` calls returned immediately because the results were already ready.
 
-The rejection handler also introduced another possible request-thread delay. When the executor rejected a submission, the handler slept for one second on the submitting thread and tried to submit the task again. Because service submission occurred inside the HTTP request, saturation could pause that request thread before the controller had a future to return.
+`join()` also has a coding benefit over `get()`: it does not force the method to catch or declare checked exceptions. A failed future still throws an unchecked `CompletionException`. This version still used `get()` afterward, so its `try-catch` was still required.
 
-### Stage 4: composed result and asynchronous MVC response — `a3e489d`
+The rejection handler can also delay the HTTP request thread. The request thread calls `userService`, `orderService`, and `paymentService`, and those calls submit tasks to the executor. `@Async` moves the service work to executor threads, but the request thread still performs the submission. If the executor is full, the rejection handler runs on that same request thread, sleeps for one second, and retries. The controller cannot return the report future until these submissions finish.
 
-The current commit changed the HTTP boundary:
+### Stage 4: composed result and asynchronous MVC response — `7e03c26`
 
-- `UserReportService.fetchUserReport()` now returns `CompletableFuture<List<String>>`.
-- `CompletableFuture.allOf(...)` represents aggregate completion without an immediate wait.
-- `thenApply(...)` assembles the ordered report after all three tasks succeed.
-- The component `join()` calls run inside that continuation, after successful `allOf` completion, so they retrieve completed values rather than creating the earlier request-thread wait.
-- `whenComplete(...)` logs exceptional completion without converting it to a successful result.
-- `UserReportController.getUserReport()` now returns the future directly.
+This commit changed the HTTP boundary:
+
+- `UserReportService.fetchUserReport()` returns a future because the final list will be ready later.
+- `allOf(...)` creates one future that completes when all three service tasks finish. It does not wait at this point.
+- `thenApply(...)` builds the report after all three tasks complete successfully.
+- The `join()` calls read the three completed values. They do not wait again because `allOf(...)` has already completed successfully.
+- Using `join()` avoids the checked exceptions required by `get()`, so this result-building code does not need a `try-catch`. Failures still propagate as `CompletionException`.
+- `whenComplete(...)` logs a failure but does not turn the failed future into a successful result.
+- `UserReportController.getUserReport()` returns the future directly, allowing Spring MVC to release the request thread after the controller returns.
 
 Under normal executor capacity, the original request thread is used for the controller call and three task submissions, then released after Spring MVC receives the incomplete future. This changes request-thread utilization, but it does not shorten the underlying single-report critical path.
 
@@ -102,9 +106,11 @@ The executor tasks overlapped, but the servlet-container request thread could no
 
 ### `allOf().join()` variant
 
-In `05da165`, `CompletableFuture.allOf(userFuture, orderFuture, paymentFuture).join()` blocked the same request thread at one aggregate point. `join()` reports failure through unchecked `CompletionException` rather than checked `ExecutionException`. The later `get()` calls preserved user/order/payment result order but normally did not block again after a successful aggregate join.
+In `fd49c5f`, `CompletableFuture.allOf(userFuture, orderFuture, paymentFuture).join()` made the request thread wait until all three tasks finished. This was simpler than waiting separately on three incomplete futures because there was one clear waiting point.
 
-Neither version prevented the asynchronous service tasks from running concurrently. Their limitation was that one request thread was retained while waiting, reducing the number of request threads available to accept or process other HTTP work.
+`join()` throws unchecked `CompletionException`, so it does not require the checked-exception handling required by `get()`. However, this version still called `get()` after `join()`, so it still needed the existing `try-catch`. Those `get()` calls normally returned immediately because `join()` had already waited for every task.
+
+In both older versions, the three service tasks still ran in parallel where executor capacity allowed. The problem was that the HTTP request thread waited for the report to finish. While it was waiting, that thread could not process another request.
 
 ## Current Asynchronous Implementation
 
@@ -157,8 +163,8 @@ The table separates methods used by this project from related Java methods that 
 | Method | Used where | Does the call block? | Execution and return value | Failure behavior |
 | --- | --- | --- | --- | --- |
 | `CompletableFuture.allOf(futures...)` | Earlier and current implementations | No | Registers aggregate completion and returns `CompletableFuture<Void>`; it does not contain the component values. | Completes exceptionally if a component future fails. |
-| `future.get()` | Commits `8b1c5e6` and `05da165` | Yes, if incomplete | The calling thread waits and receives `T`. It is interruptible. | Throws checked `InterruptedException` or `ExecutionException`. |
-| `future.join()` | Aggregate wait in `05da165`; component reads in the current `thenApply` | Yes, if incomplete | The calling thread waits and receives `T`. Current component joins occur after successful `allOf`, so they should already be complete. | Throws unchecked `CompletionException`; cancellation produces `CancellationException`. |
+| `future.get()` | Commits `8b1c5e6` and `fd49c5f` | Yes, if incomplete | The calling thread waits and receives `T`. It is interruptible. | Throws checked `InterruptedException` or `ExecutionException`. |
+| `future.join()` | Aggregate wait in `fd49c5f`; component reads in the current `thenApply` | Yes, if incomplete | The calling thread waits and receives `T`. Current component joins occur after successful `allOf`, so they should already be complete. | Throws unchecked `CompletionException`; cancellation produces `CancellationException`. |
 | `thread.join()` | Not used | Yes | Waits for a specific `Thread` to terminate and returns `void`. It is unrelated to `CompletableFuture.join()`. | Throws checked `InterruptedException`. |
 | `thenApply(function)` | Current implementation | Registration itself does not wait for an incomplete upstream stage | Returns `CompletableFuture<U>`. The function runs on the completing thread, or may run immediately on the registering thread if the stage is already complete. | Skipped when the upstream stage is exceptional; the returned stage remains exceptional. |
 | `thenApplyAsync(function)` | Not used | Registration does not wait | Returns `CompletableFuture<U>` and schedules the function on the common pool by default, or on an explicitly supplied executor. | Propagates upstream failure and captures function failure in the returned stage. |
