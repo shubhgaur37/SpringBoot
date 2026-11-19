@@ -9,21 +9,23 @@ import java.util.concurrent.RejectedExecutionHandler;
 @Configuration
 public class ThreadConfig {
 
-    // Spring uses this executor for the @Async service methods.
+    // Spring uses this task executor for the @Async service methods.
     @Bean
     ThreadPoolTaskExecutor getThreadPoolTaskExecutor(){
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        // Keeps two worker threads available for asynchronous tasks.
+        // Keeps two workers available before tasks are placed in the queue.
         taskExecutor.setCorePoolSize(2);
-        // Caps the pool at five workers when the work queue cannot accept more tasks.
+        // Allows one additional worker when the queue is full, up to three workers total.
         taskExecutor.setMaxPoolSize(3);
-        // Allows non-core workers to stop after five idle seconds.
+        // Retires an idle non-core worker after five seconds.
         taskExecutor.setKeepAliveSeconds(5);
 
-        // Makes executor threads identifiable in the service log messages.
+        // Makes executor workers identifiable in the service log messages.
         taskExecutor.setThreadNamePrefix("TestParallel_");
 
-        taskExecutor.setQueueCapacity(1); // to check retry behaviour
+        // Holds one task before the pool attempts to grow beyond its core size.
+        taskExecutor.setQueueCapacity(1);
+        // Delays and resubmits work rejected after both the pool and queue are full.
         taskExecutor.setRejectedExecutionHandler(new CustomRejectedExecutionHandler());
         return taskExecutor;
     }

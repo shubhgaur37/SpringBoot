@@ -20,11 +20,8 @@ public class UserReportController {
 
     @GetMapping("/users/reports")
     public CompletableFuture<List<String>> getUserReport() throws InterruptedException {
-        // Spring MVC recognizes CompletableFuture as an asynchronous
-        // response type and starts asynchronous request processing.
-        //
-        // Once the future has been returned, the original Tomcat
-        // worker can be released while the report is generated.
+        // Spring MVC releases the initial request thread after receiving this future
+        // and performs an asynchronous dispatch when the report completes.
         CompletableFuture<List<String>> userReports = userReportService.fetchUserReport();
         return userReports;
     }
