@@ -1,289 +1,902 @@
 # M_18_ThreadPooling
 
-## Project Overview
+**Understanding Java thread pools, Spring `@Async`, `CompletableFuture`, and asynchronous HTTP responses in Spring MVC**
 
-This project demonstrates the evolution of one Spring MVC endpoint from a blocking result-collection flow to asynchronous HTTP request processing based on `CompletableFuture`.
+## 1. What is this project about?
 
-The current implementation exposes `GET /users/reports`. `UserReportService` submits three independent `@Async` operations to a custom `ThreadPoolTaskExecutor`, combines their futures with `CompletableFuture.allOf(...)`, assembles the result in `thenApply(...)`, and returns `CompletableFuture<List<String>>` to the controller. Spring MVC can then release the original servlet-container request thread while the report is being generated and perform an asynchronous dispatch when the future completes.
+This is a small Spring Boot learning project that generates a user report by calling three independent services:
 
-This history does **not** contain a version where `UserService`, `OrderService`, and `PaymentService` were ordinary synchronous methods. They used `@Async` in the first project commit. The earlier implementation was nevertheless blocking at the HTTP layer because `UserReportService` waited for those asynchronous results before returning a `List<String>`.
+| Operation | Service | Simulated execution time | Result type |
+| --- | --- | ---: | --- |
+| Fetch user details | `UserService` | 2 seconds | `CompletableFuture<String>` |
+| Fetch order details | `OrderService` | 3 seconds | `CompletableFuture<String>` |
+| Fetch payment details | `PaymentService` | 4 seconds | `CompletableFuture<String>` |
 
-## Technologies Used
+The endpoint is:
 
-- Java 21
-- Spring Boot 4.1.2
-- Spring Web MVC
-- Spring `@EnableAsync`, `@Async`, and `ThreadPoolTaskExecutor`
-- Java `CompletableFuture` and `ThreadPoolExecutor`
-- Lombok `@Slf4j`
-- Maven Wrapper
-- JUnit 5 with Spring Boot test support
+```http
+GET /users/reports
+```
 
-## Current Project Structure
+A successful response is a JSON array containing the user, order, and payment information, in that order.
 
-- `M18ThreadPoolingApplication` starts Spring Boot and enables `@Async` method interception.
-- `ThreadConfig` defines the executor used by the three asynchronous services.
-- `CustomRejectedExecutionHandler` delays and resubmits tasks rejected by the saturated executor.
-- `UserService` simulates a two-second user operation.
-- `OrderService` simulates a three-second order operation.
-- `PaymentService` simulates a four-second payment operation.
-- `UserReportService` submits the operations and composes their results without waiting for task completion on the request thread.
-- `UserReportController` returns the composed future as the asynchronous MVC response.
-- `M18ThreadPoolingApplicationTests` verifies that the Spring application context loads.
+The project explores an important distinction:
 
-## Implementation Evolution
+> **Running service tasks on background threads is not the same as handling the HTTP request asynchronously.**
 
-The repository contains five commits relevant to this project. The stages below are based on their actual diffs.
+The first versions already ran the three service methods with `@Async`. However, the Tomcat request thread **waited** for their results. The current version instead returns an incomplete `CompletableFuture<List<String>>` to Spring MVC so that Spring MVC can free the request thread while the work continues.
 
-| Commit | Stage | Verified change |
+The goal is **better use of request threads**, not magically faster service operations.
+
+---
+
+## 2. Technologies
+
+- **Java 21** — `CompletableFuture`, threads, and concurrency APIs.
+- **Spring Boot 4.1.2** — application configuration and startup.
+- **Spring Web MVC + Tomcat** — HTTP request and response handling.
+- **Spring `@EnableAsync` and `@Async`** — execution of service methods using an executor.
+- **`ThreadPoolTaskExecutor`** — configured pool for the service tasks.
+- **`ThreadPoolExecutor`** — underlying Java executor and rejection policy.
+- **Lombok `@Slf4j`** — thread and timing logs.
+- **Maven Wrapper** — build and run commands.
+- **JUnit 5 / Spring Boot test support** — application context test.
+
+This is a **Spring MVC** application, **not** a Spring WebFlux application. Returning a `CompletableFuture` enables Spring MVC asynchronous request processing; it does not turn Tomcat into a reactive event-loop server.
+
+---
+
+## 3. Project components
+
+| Component | Responsibility |
+| --- | --- |
+| `M18ThreadPoolingApplication` | Starts the Spring Boot application and enables asynchronous method interception with `@EnableAsync`. |
+| `ThreadConfig` | Defines the task executor and its pool, queue, thread names, and rejection policy. |
+| `CustomRejectedExecutionHandler` | Handles tasks rejected when the executor is full; currently sleeps and resubmits. |
+| `UserService` | Simulates fetching user information; about 2 seconds. |
+| `OrderService` | Simulates fetching order information; about 3 seconds. |
+| `PaymentService` | Simulates fetching payment information; about 4 seconds. |
+| `UserReportService` | Starts the three operations and combines their eventual results. |
+| `UserReportController` | Handles `GET /users/reports` and returns the report future to Spring MVC. |
+| `M18ThreadPoolingApplicationTests` | Checks that the Spring application context loads. |
+
+### What does `@Async` actually change?
+
+Without asynchronous method interception, a normal method call executes on the **calling thread**.
+
+With `@EnableAsync`, a Spring-managed service method annotated with `@Async` can instead be **submitted to the configured executor**. A worker thread runs the method body.
+
+For a request entering through Tomcat:
+
+```text
+Tomcat request thread
+  |
+  | calls userService.getUserInfo()
+  v
+Spring @Async proxy
+  |
+  | submits task
+  v
+ThreadPoolTaskExecutor
+  |
+  v
+TestParallel_1 executes UserService method body
+```
+
+The call to the service returns a `CompletableFuture<String>` representing a result that may not be ready yet. The returned future is **not** the same thing as the result itself.
+
+**Important:** Spring's proxy must actually intercept the method call. In particular, an `@Async` method called directly from another method on the **same object** does not normally go through that proxy. This project calls the async methods on separate injected services.
+
+---
+
+## 4. Three ideas to understand before reading the code
+
+### 4.1 A `CompletableFuture` is a placeholder for a result
+
+Imagine ordering food at a restaurant:
+
+- The **order receipt** is like a `CompletableFuture` — it represents food that will be ready later.
+- The **food** is the actual result — in this project, a `String` returned by a service.
+- Holding the receipt does **not** mean the food is ready.
+
+Likewise:
+
+```java
+CompletableFuture<String> userFuture = userService.getUserInfo();
+```
+
+This gives us a future immediately after successful submission (under normal executor conditions). It does **not** mean the user information has finished loading.
+
+A future may be:
+
+1. **Incomplete** — the operation has not finished yet.
+2. **Completed successfully** — a result is available.
+3. **Completed exceptionally** — it finished with an error.
+
+### 4.2 Starting tasks concurrently is different from waiting for them
+
+The report service initiates three independent operations:
+
+```java
+CompletableFuture<String> userFuture = userService.getUserInfo();
+CompletableFuture<String> orderFuture = orderService.getOrderInfo();
+CompletableFuture<String> paymentFuture = paymentService.getPaymentInfo();
+```
+
+These three **submission statements are written one after another**. But after submission, the tasks can **run at the same time** on different executor workers if capacity is available.
+
+A blocking operation such as `get()` or `join()` only blocks **the thread that calls it** while the future is incomplete. It does not automatically stop other worker threads from progressing.
+
+### 4.3 There are two different sets of threads
+
+**Tomcat request threads**, such as `http-nio-8080-exec-1`, handle incoming HTTP requests and Spring MVC controller execution.
+
+**Async executor threads**, such as `TestParallel_1`, perform the three service operations.
+
+They have different jobs:
+
+```text
+HTTP request --> Tomcat thread --> Controller --> Report service
+                                                   |
+                                                   | submits work
+                                                   v
+                                          ThreadPoolTaskExecutor
+                                          /         |         \
+                                      User        Order      Payment
+```
+
+The critical question is: **Does the Tomcat thread wait for these operations, or can it return to the request-thread pool while they finish?**
+
+That is exactly what changed across the commits.
+
+---
+
+## 5. How the project evolved — recent commits
+
+The commit history below follows the commit IDs and changes documented in the README supplied with this project. It is a history of the **reported repository changes**, rather than a fresh inspection of the Git repository.
+
+| Commit | Stage | What changed |
 | --- | --- | --- |
-| `8b1c5e6` | Initial report implementation | Added the project, `@Async` services, a custom executor, and a controller returning `List<String>`. Report collection blocked through sequential `CompletableFuture.get()` calls. |
-| `a3d6029` | Initial documentation | Added the first README. No executable code changed. |
-| `fd49c5f` | Bounded executor and retry handler | Changed maximum pool size from five to three, added queue capacity one, installed `CustomRejectedExecutionHandler`, and changed result waiting to `allOf(...).join()` followed by `get()`. |
-| `7e03c26` | Asynchronous MVC response | Changed the controller and service to return `CompletableFuture<List<String>>`; replaced request-thread waiting with `allOf().thenApply(...)`; added `whenComplete(...)` failure logging. |
-| `2d55827` | Documentation update | Improved the comments and README without changing the application logic. |
+| `8b1c5e6` | Initial implementation | Introduced the project, three `@Async` services, custom executor, and a controller returning `List<String>`. Results were collected using blocking `get()` calls. |
+| `a3d6029` | Initial README | Added documentation; no runtime change. |
+| `fd49c5f` | Executor saturation experiments | Changed maximum pool size from 5 to 3; set queue capacity to 1; introduced the custom rejection handler; replaced sequential waiting with `allOf(...).join()` followed by `get()`. |
+| `7e03c26` | Asynchronous HTTP response | Changed controller and report service return types to `CompletableFuture<List<String>>`; replaced blocking waiting with `allOf(...).thenApply(...)`; added `whenComplete(...)` failure logging. |
+| `2d55827` | Documentation update | Updated comments and documentation without changing application logic. |
 
-### Stage 1: asynchronous tasks, blocking report response — `8b1c5e6`
+**One important clarification:** The initial version was **not** made of ordinary synchronous service methods. The services already used `@Async`. What was synchronous was the **HTTP response path**, because the report service waited for the results before returning the list.
 
-The first implementation already enabled Spring asynchronous method execution:
+---
 
-- `@EnableAsync` activated proxy-based handling of the three `@Async` service methods.
-- `ThreadConfig` provided two core workers, a maximum of five workers, a five-second keep-alive time, and the `TestParallel_` thread-name prefix.
-- Queue capacity was not configured, so the executor used its default effectively unbounded queue. Tasks beyond the two core workers were queued, meaning the configured maximum of five did not normally cause pool growth.
-- `UserReportService` submitted all three operations and obtained three `CompletableFuture<String>` values.
-- It called `CompletableFuture.allOf(...)` but discarded the returned future. That call did not wait and had no effect on the following control flow.
-- It then called `get()` for the user, order, and payment futures. Each incomplete future blocked the request thread until its value was available.
-- `UserReportController` returned `List<String>`, so the controller could not return until `fetchUserReport()` had finished collecting every result.
+## 6. Previous implementation: asynchronous work, blocking HTTP request
 
-The work ran on executor threads, but one servlet-container request thread remained occupied for the entire report-generation period. This distinction is central to the later changes: asynchronous service execution alone did not make the HTTP request asynchronous.
+### 6.1 Initial version — sequential `get()` calls (`8b1c5e6`)
 
-### Stage 2: documentation — `a3d6029`
+The early report-generation flow was conceptually equivalent to:
 
-This commit added the initial README and did not change execution behavior. It documented the two-core-worker schedule and the approximately six-second single-request critical path that follows from the two-, three-, and four-second simulated operations.
+```java
+CompletableFuture<String> userFuture = userService.getUserInfo();
+CompletableFuture<String> orderFuture = orderService.getOrderInfo();
+CompletableFuture<String> paymentFuture = paymentService.getPaymentInfo();
 
-### Stage 3: bounded capacity, retry, and explicit aggregate wait — `fd49c5f`
+// Earlier code also called allOf(...) without waiting on or using its result.
 
-This commit made executor saturation observable:
+userReport.add(userFuture.get());
+userReport.add(orderFuture.get());
+userReport.add(paymentFuture.get());
 
-- Maximum pool size changed from `5` to `3`.
-- Queue capacity was explicitly set to `1`.
-- `CustomRejectedExecutionHandler` was registered.
-- `UserReportService` changed from a discarded `allOf(...)` plus sequential blocking `get()` calls to `allOf(...).join()` followed by `get()` calls.
+return userReport;
+```
 
-`allOf(...).join()` gave the code one clear place to wait for all three tasks. The request thread stopped at this line until every task finished. After that, the later `get()` calls returned immediately because the results were already ready.
+*This excerpt is simplified to show the control flow; it is not a verbatim copy of the historical source.*
 
-`join()` also has a coding benefit over `get()`: it does not force the method to catch or declare checked exceptions. A failed future still throws an unchecked `CompletionException`. This version still used `get()` afterward, so its `try-catch` was still required.
+What happens?
 
-The rejection handler can also delay the HTTP request thread. The request thread calls `userService`, `orderService`, and `paymentService`, and those calls submit tasks to the executor. `@Async` moves the service work to executor threads, but the request thread still performs the submission. If the executor is full, the rejection handler runs on that same request thread, sleeps for one second, and retries. The controller cannot return the report future until these submissions finish.
+1. A Tomcat worker receives `GET /users/reports`.
+2. It enters the controller, then `UserReportService.fetchUserReport()`.
+3. It submits all three `@Async` tasks to the task executor.
+4. The service calls `userFuture.get()`. If that result is not ready, **the Tomcat worker stops and waits**.
+5. After the user result is available, it calls `orderFuture.get()`. This might wait too.
+6. It then calls `paymentFuture.get()`, which might also wait.
+7. Only after collection finishes does the service return a `List<String>` to the controller.
+8. The controller returns the completed list for HTTP response processing.
 
-### Stage 4: composed result and asynchronous MVC response — `7e03c26`
+**The three executor tasks can still overlap.** Calling `get()` does not make the user, order, and payment tasks run sequentially. It makes **result collection by the Tomcat thread** blocking.
 
-This commit changed the HTTP boundary:
+In the initial version, the code also invoked `allOf(...)` without using the returned aggregate future. That invocation was non-blocking and did not change the subsequent sequential `get()` waits.
 
-- `UserReportService.fetchUserReport()` returns a future because the final list will be ready later.
-- `allOf(...)` creates one future that completes when all three service tasks finish. It does not wait at this point.
-- `thenApply(...)` builds the report after all three tasks complete successfully.
-- The `join()` calls read the three completed values. They do not wait again because `allOf(...)` has already completed successfully.
-- Using `join()` avoids the checked exceptions required by `get()`, so this result-building code does not need a `try-catch`. Failures still propagate as `CompletionException`.
-- `whenComplete(...)` logs a failure but does not turn the failed future into a successful result.
-- `UserReportController.getUserReport()` returns the future directly, allowing Spring MVC to release the request thread after the controller returns.
+### 6.2 Later blocking version — `allOf(...).join()` (`fd49c5f`)
 
-Under normal executor capacity, the original request thread is used for the controller call and three task submissions, then released after Spring MVC receives the incomplete future. This changes request-thread utilization, but it does not shorten the underlying single-report critical path.
+A later version introduced an explicit aggregate wait:
 
-## Previous Blocking Implementation
+```java
+CompletableFuture.allOf(userFuture, orderFuture, paymentFuture).join();
 
-Two blocking variants appear in the history.
+userReport.add(userFuture.get());
+userReport.add(orderFuture.get());
+userReport.add(paymentFuture.get());
+```
 
-### Sequential `get()` variant
+Read that first line in two parts:
 
-In `8b1c5e6`, all three tasks were submitted before collection began. The calls then occurred in this order:
+```java
+CompletableFuture.allOf(userFuture, orderFuture, paymentFuture)
+```
 
-1. `userFuture.get()` waited for the user result if it was incomplete.
-2. `orderFuture.get()` waited for the order result if it was still incomplete.
-3. `paymentFuture.get()` waited for the payment result if it was still incomplete.
+Creates a future representing **all three tasks finishing**. This part does **not** block.
 
-The executor tasks overlapped, but the servlet-container request thread could not return from `fetchUserReport()`. `get()` is interruptible and reports asynchronous failure through the checked `ExecutionException` wrapper. The surrounding catch block logged the message and returned whatever the list contained at that point.
+```java
+.join()
+```
 
-### `allOf().join()` variant
+Immediately waits for that aggregate future **if it is incomplete**. This part **does block the calling Tomcat thread**.
 
-In `fd49c5f`, `CompletableFuture.allOf(userFuture, orderFuture, paymentFuture).join()` made the request thread wait until all three tasks finished. This was simpler than waiting separately on three incomplete futures because there was one clear waiting point.
+Once this `join()` returns successfully, all three results are already complete. The following `get()` calls therefore return without further waiting.
 
-`join()` throws unchecked `CompletionException`, so it does not require the checked-exception handling required by `get()`. However, this version still called `get()` after `join()`, so it still needed the existing `try-catch`. Those `get()` calls normally returned immediately because `join()` had already waited for every task.
+**Why this version was still blocking:** The Tomcat worker could not leave `fetchUserReport()` until `allOf(...).join()` finished.
 
-In both older versions, the three service tasks still ran in parallel where executor capacity allowed. The problem was that the HTTP request thread waited for the report to finish. While it was waiting, that thread could not process another request.
+### 6.3 Why this matters under load
 
-## Current Asynchronous Implementation
+Suppose several clients request reports at the same time. In either blocking version, **each request can occupy one Tomcat worker for the duration of the report wait**.
 
-The current success path is:
+Even though the actual service work is happening on `TestParallel_*` workers, the Tomcat worker is still tied up waiting for results. A tied-up request worker cannot be used to process another request during that wait.
 
-1. A servlet-container worker invokes `UserReportController.getUserReport()`.
-2. The controller calls `UserReportService.fetchUserReport()` on that same thread.
-3. The report service invokes the three Spring-proxied `@Async` methods. Each call submits work to the configured `ThreadPoolTaskExecutor` and returns a `CompletableFuture<String>`.
-4. `allOf(...)` creates a `CompletableFuture<Void>` that completes after all component futures complete. It does not wait on the calling thread.
-5. `thenApply(...)` creates the report stage. Because this is the non-`Async` variant, the continuation may run on the thread that completes the aggregate future; if the aggregate were already complete during registration, it could run on the registering thread.
-6. `whenComplete(...)` adds success/failure observation. In this code it only logs when an exception is present and leaves the exceptional result intact.
-7. The composed future returns through the controller. Spring MVC recognizes it as an asynchronous return value, starts asynchronous request processing, and releases the original request thread after the controller returns.
-8. The executor workers run the service bodies. Each service logs its worker name, sleeps for its configured simulation delay, and completes its future.
-9. After all three complete successfully, `thenApply(...)` reads their values in user/order/payment order with `join()`, logs the continuation thread and total report-generation time, and completes the report future.
-10. Spring MVC receives the concurrent result and requests an asynchronous servlet dispatch. A servlet-container worker performs response handling and JSON serialization before the HTTP response is sent.
+That is the limitation addressed by the newer implementation.
+
+---
+
+## 7. Current implementation: asynchronous HTTP response (`7e03c26`)
+
+The current service uses this composition pattern:
+
+```java
+public CompletableFuture<List<String>> fetchUserReport() throws InterruptedException {
+
+    long start = System.currentTimeMillis();
+
+    CompletableFuture<String> userFuture = userService.getUserInfo();
+    CompletableFuture<String> orderFuture = orderService.getOrderInfo();
+    CompletableFuture<String> paymentFuture = paymentService.getPaymentInfo();
+
+    return CompletableFuture.allOf(userFuture, orderFuture, paymentFuture)
+            .thenApply(ignoredParam -> {
+
+                List<String> userReport = List.of(
+                        userFuture.join(),
+                        orderFuture.join(),
+                        paymentFuture.join()
+                );
+
+                log.info("Total Time taken to generate Report: {}",
+                        System.currentTimeMillis() - start);
+
+                return userReport;
+            })
+            .whenComplete((result, exception) -> {
+                if (exception != null) {
+                    log.error("User Report generation failed", exception);
+                }
+            });
+}
+```
+
+*This is a focused excerpt of the documented current design, with unrelated log statements omitted to make the sequence easier to read.*
+
+The controller returns the future rather than extracting its result:
+
+```java
+@GetMapping("/users/reports")
+public CompletableFuture<List<String>> getUserReport() throws InterruptedException {
+    return userReportService.fetchUserReport();
+}
+```
+
+The signatures above illustrate the current asynchronous HTTP boundary. The existing checked `InterruptedException` declaration is not required by the visible `CompletableFuture` composition itself, but it was retained in the project's implementation.
+
+### 7.1 Step-by-step request flow
+
+**Step 1 — The HTTP request arrives.**
+
+Tomcat assigns a request worker, for example `http-nio-8080-exec-1`. That worker invokes the controller and calls `fetchUserReport()`.
+
+**Step 2 — The three tasks are submitted.**
+
+The Tomcat thread calls the three `@Async` methods. Spring submits their bodies to `ThreadPoolTaskExecutor`. Each call returns a `CompletableFuture<String>` after successful submission.
+
+**Step 3 — `allOf()` creates a combined future.**
+
+This combined future represents the completion of all three individual futures. It does **not** wait here. The Tomcat thread can immediately move to the next line.
+
+**Step 4 — `thenApply()` registers what should happen afterward.**
+
+It tells Java: **“When all three operations succeed, run this function to create my report.”** Registration does not wait for the tasks to finish.
+
+**Step 5 — `whenComplete()` registers failure observation.**
+
+It adds a callback that can log an exception if the report stage fails. It does not recover from that failure.
+
+**Step 6 — The future returns to Spring MVC.**
+
+The report service returns a `CompletableFuture<List<String>>`, and the controller returns it directly. The result list may not yet exist. Spring MVC starts asynchronous request processing and the original Tomcat worker can be released once that setup is done.
+
+**Step 7 — The worker tasks finish.**
+
+The three service operations finish according to executor availability and queueing. Java completes their respective futures.
+
+**Step 8 — The report continuation executes.**
+
+Once all three succeed, the combined `allOf()` future completes successfully. That triggers the registered `thenApply()` function. Inside the function, `join()` reads the already-completed values and creates the list.
+
+**Step 9 — The returned report future completes.**
+
+The `thenApply()` stage completes after its function returns the list. In this code, `whenComplete()` adds one more stage; the final future returned by the chain completes after that callback finishes too.
+
+**Step 10 — Spring MVC finishes the HTTP response.**
+
+Spring MVC arranges an asynchronous servlet dispatch. An available Tomcat worker resumes response processing and serializes the list to JSON. The original Tomcat worker does **not** need to be the same worker that handles this final stage.
+
+### 7.2 A visual flow
 
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Request as Servlet request thread
-    participant Controller as UserReportController
+    participant Tomcat as Tomcat request worker
     participant Report as UserReportService
-    participant Executor as ThreadPoolTaskExecutor
-    participant MVC as Spring MVC async processing
-    participant Dispatch as Async-dispatch thread
+    participant Pool as TestParallel workers
+    participant MVC as Spring MVC
 
-    Client->>Request: GET /users/reports
-    Request->>Controller: getUserReport()
-    Controller->>Report: fetchUserReport()
-    Report->>Executor: submit user task
-    Report->>Executor: submit order task
-    Report->>Executor: submit payment task
-    Report-->>Controller: CompletableFuture<List<String>>
-    Controller-->>MVC: return incomplete future
-    MVC-->>Request: release initial request thread
-    Executor->>Executor: execute tasks subject to pool and queue limits
-    Executor->>Report: complete service futures
-    Report->>Report: allOf completion, thenApply, whenComplete
-    Report-->>MVC: complete report future
-    MVC->>Dispatch: asynchronous dispatch
-    Dispatch-->>Client: serialize and send JSON response
+    Client->>Tomcat: GET /users/reports
+    Tomcat->>Report: fetchUserReport()
+    Report->>Pool: submit User, Order, Payment
+    Note over Report: allOf() creates aggregate future
+    Note over Report: thenApply() registers continuation
+    Report-->>Tomcat: return incomplete report future
+    Tomcat-->>MVC: controller returns future
+    Note over Tomcat,MVC: MVC enables async handling; initial worker released
+    Pool->>Pool: execute and finish service tasks
+    Note over Pool: all three futures complete successfully
+    Pool->>Report: trigger thenApply() continuation
+    Note over Report: join() reads completed values
+    Report-->>MVC: report future completes with List<String>
+    MVC->>Tomcat: asynchronous servlet dispatch
+    Tomcat-->>Client: HTTP JSON response
 ```
 
-The custom executor is responsible for the service work. It is not the executor used for the final servlet asynchronous dispatch; that response phase still requires a servlet-container worker.
+**Important:** In this diagram, the final `Tomcat` participant represents an **available** request-processing worker, not necessarily the original one. The continuation often runs on the worker that completes the last outstanding service future.
 
-## CompletableFuture Method Comparison
+---
 
-The table separates methods used by this project from related Java methods that are useful for comparison.
+## 8. `allOf()`, `thenApply()`, and `join()` — the key concept
 
-| Method | Used where | Does the call block? | Execution and return value | Failure behavior |
-| --- | --- | --- | --- | --- |
-| `CompletableFuture.allOf(futures...)` | Earlier and current implementations | No | Registers aggregate completion and returns `CompletableFuture<Void>`; it does not contain the component values. | Completes exceptionally if a component future fails. |
-| `future.get()` | Commits `8b1c5e6` and `fd49c5f` | Yes, if incomplete | The calling thread waits and receives `T`. It is interruptible. | Throws checked `InterruptedException` or `ExecutionException`. |
-| `future.join()` | Aggregate wait in `fd49c5f`; component reads in the current `thenApply` | Yes, if incomplete | The calling thread waits and receives `T`. Current component joins occur after successful `allOf`, so they should already be complete. | Throws unchecked `CompletionException`; cancellation produces `CancellationException`. |
-| `thread.join()` | Not used | Yes | Waits for a specific `Thread` to terminate and returns `void`. It is unrelated to `CompletableFuture.join()`. | Throws checked `InterruptedException`. |
-| `thenApply(function)` | Current implementation | Registration itself does not wait for an incomplete upstream stage | Returns `CompletableFuture<U>`. The function runs on the completing thread, or may run immediately on the registering thread if the stage is already complete. | Skipped when the upstream stage is exceptional; the returned stage remains exceptional. |
-| `thenApplyAsync(function)` | Not used | Registration does not wait | Returns `CompletableFuture<U>` and schedules the function on the common pool by default, or on an explicitly supplied executor. | Propagates upstream failure and captures function failure in the returned stage. |
-| `whenComplete(action)` | Current implementation | Registration does not wait | Returns a stage with the same result type and invokes the action for success or failure, using non-`Async` continuation execution rules. | Observes rather than recovers from the original failure; an exception thrown by the action can also affect the returned stage. |
+This is the most important part of the current implementation:
 
-`thenApply()` was appropriate for the current assembly step because creating a three-element list is small and does not require a separate scheduling boundary. The repository contains no use of `thenApplyAsync()`.
+```java
+return CompletableFuture.allOf(userFuture, orderFuture, paymentFuture)
+        .thenApply(ignoredParam -> {
+            return List.of(
+                    userFuture.join(),
+                    orderFuture.join(),
+                    paymentFuture.join()
+            );
+        });
+```
 
-## Thread Pool and Rejection Handling
+### 8.1 `allOf()` answers: **“Are all the tasks finished?”**
 
-`ThreadConfig` currently defines:
+```java
+CompletableFuture<Void> combinedFuture =
+        CompletableFuture.allOf(userFuture, orderFuture, paymentFuture);
+```
 
-| Setting | Value | Practical effect |
+Java creates a **new** future that depends on the three supplied futures. Think of it as a completion checkpoint:
+
+```text
+userFuture    ------ completed ----\
+                                 \
+orderFuture   ------------ done ---+--> combinedFuture completes
+                                 /
+paymentFuture ------------------/
+```
+
+If all three tasks succeed, `combinedFuture` succeeds. If one or more fail, the combined future completes exceptionally after the supplied futures have completed.
+
+**Creating `combinedFuture` does not wait.** It merely sets up this relationship.
+
+Its type is `CompletableFuture<Void>` because it represents completion, **not a list of the three results**.
+
+### 8.2 `thenApply()` answers: **“What should happen after they all succeed?”**
+
+```java
+combinedFuture.thenApply(ignoredParam -> {
+    // Build the report here.
+});
+```
+
+This registers a **dependent action**. Java's `CompletableFuture` machinery already knows that this action belongs to `combinedFuture`.
+
+If `combinedFuture` is still incomplete, the lambda is **not run yet**. No thread is sitting inside the lambda waiting for the tasks. The action simply becomes eligible to run when the prerequisite future completes successfully.
+
+When `combinedFuture` completes successfully, Java executes the registered function.
+
+If the combined future was already complete before `thenApply()` was registered, the function may run immediately on the thread registering it.
+
+If the combined future completes exceptionally, the `thenApply()` function is **skipped** and its dependent future completes exceptionally instead.
+
+**`thenApply()` also returns a new future:** the result of the transformation, here a `CompletableFuture<List<String>>`.
+
+### 8.3 `join()` answers: **“What value did this task produce?”**
+
+```java
+userFuture.join()
+```
+
+Normally, `CompletableFuture.join()` **can block**: if the future is incomplete, it waits for completion before returning the value.
+
+But look at **where** these three `join()` calls occur:
+
+```java
+combinedFuture.thenApply(ignoredParam -> {
+    return List.of(
+            userFuture.join(),
+            orderFuture.join(),
+            paymentFuture.join()
+    );
+});
+```
+
+The lambda executes only **after `combinedFuture` completes successfully**. And successful `combinedFuture` completion guarantees that **all three supplied futures have already completed successfully**.
+
+Therefore, at the moment the lambda starts:
+
+```text
+userFuture      COMPLETED -> user value is available
+orderFuture     COMPLETED -> order value is available
+paymentFuture   COMPLETED -> payment value is available
+```
+
+Each `join()` just reads an already-available value. **It does not have to wait again.**
+
+This is not because `join()` magically became non-blocking. It is because **the code only calls it after the required results are known to be ready**.
+
+### 8.4 What would happen without `allOf()`?
+
+Consider this different code:
+
+```java
+return userFuture.thenApply(user -> {
+    String order = orderFuture.join();
+    String payment = paymentFuture.join();
+
+    return List.of(user, order, payment);
+});
+```
+
+Here `thenApply()` depends **only on `userFuture`**. If the user task finishes after 2 seconds, the lambda might start while the order and payment tasks are still running.
+
+In that case:
+
+- `orderFuture.join()` **could block** until the order result is ready.
+- `paymentFuture.join()` **could block** until the payment result is ready.
+
+That is why the original `allOf()` dependency matters. It makes sure the continuation starts **after every required operation succeeds**, avoiding a wait inside the report-building continuation.
+
+### 8.5 Where does the continuation run?
+
+The code uses **`thenApply()`**, not `thenApplyAsync()`.
+
+The `thenApply()` function generally runs:
+
+- On the thread that completes its preceding future, **or**
+- On the thread registering it, if the preceding future is already complete.
+
+For example, if `TestParallel_1` finishes the last outstanding task, the report-building lambda may also execute on `TestParallel_1`.
+
+`thenApply()` does **not** promise a new thread, and it does **not** necessarily use the original Tomcat thread.
+
+### 8.6 Three separate future stages
+
+It helps to give each stage a name:
+
+```java
+CompletableFuture<Void> combinedFuture =
+        CompletableFuture.allOf(userFuture, orderFuture, paymentFuture);
+
+CompletableFuture<List<String>> reportFuture =
+        combinedFuture.thenApply(ignoredParam -> List.of(
+                userFuture.join(), orderFuture.join(), paymentFuture.join()
+        ));
+
+CompletableFuture<List<String>> finalFuture =
+        reportFuture.whenComplete((result, exception) -> {
+            if (exception != null) {
+                log.error("User Report generation failed", exception);
+            }
+        });
+
+return finalFuture;
+```
+
+There are **three milestones**:
+
+1. **`combinedFuture` completes:** all underlying service futures are done.
+2. **`reportFuture` completes:** `thenApply()` has finished building and returning the list.
+3. **`finalFuture` completes:** `whenComplete()` has finished observing the outcome.
+
+The HTTP controller receives **`finalFuture`**, not the original `combinedFuture`.
+
+---
+
+## 9. Understanding the six-second report generation time
+
+The configured executor has **two core workers**, not three always-available workers. It also has a queue slot.
+
+For one request against an otherwise idle executor, the tasks are normally scheduled like this:
+
+```text
+Time                  0s       2s       3s                  6s
+                      |--------|--------|--------------------|
+
+TestParallel_1         [ User 2s ][      Payment 4s        ]
+
+TestParallel_2         [    Order 3s    ]
+
+Executor queue         [Payment waits] -> picked up at ~2s
+
+Report future          incomplete ........................ done
+```
+
+### Why is the result about 6 seconds rather than 4 or 9?
+
+1. At approximately **0 seconds**, the user task runs on worker 1.
+2. At approximately **0 seconds**, the order task runs on worker 2.
+3. The payment task is submitted next, but **both core workers are busy**. Because the queue has capacity for one task, payment is **queued** rather than immediately creating a third worker.
+4. At approximately **2 seconds**, the user task finishes. Worker 1 picks up the queued payment task.
+5. At approximately **3 seconds**, the order task finishes.
+6. At approximately **6 seconds**, the payment task finishes (2 seconds waiting + 4 seconds executing).
+7. Only then can `allOf()` complete successfully and trigger `thenApply()`.
+
+So the nominal total is:
+
+```text
+2 seconds (User runs while Payment waits)
++ 4 seconds (Payment runs)
+= approximately 6 seconds
+```
+
+The three delays do **not** add to 9 seconds because work overlaps. And the time is not simply 4 seconds because the payment task has to **wait for a worker**.
+
+**Why was `thenApply()` logged on `TestParallel_1`?** In the observed scheduling pattern, worker 1 finishes the user task, then processes the queued payment task. Payment finishes last, so that worker can trigger the aggregate completion and execute the continuation.
+
+The exact worker suffixes and timestamps can change across runs. Under concurrent HTTP requests, tasks compete for the same pool and queue, so timings can be much longer.
+
+### What if three workers were immediately available?
+
+With user, order, and payment all starting together on separate workers, the approximate critical path would be **4 seconds** (the duration of the slowest operation), plus small overhead.
+
+That is an illustration of executor capacity, **not** what the queue-first scheduling of this idle two-core-worker configuration normally does for its first three tasks.
+
+---
+
+## 10. How the executor schedules and rejects work
+
+The current `ThreadConfig` values documented for the project are:
+
+| Setting | Value | Plain-English meaning |
 | --- | ---: | --- |
-| Core pool size | `2` | The first two tasks can start on core workers. |
-| Maximum pool size | `3` | A third worker can be created after the queue is full. |
-| Queue capacity | `1` | One task can wait while both core workers are occupied. |
-| Keep-alive | `5` seconds | The non-core worker can be retired after five idle seconds. |
-| Thread prefix | `TestParallel_` | Service log entries reveal use of this executor. |
-| Rejection handler | `CustomRejectedExecutionHandler` | A rejected submission sleeps one second and is submitted again. |
+| Core pool size | `2` | Up to two core workers start handling tasks as needed. |
+| Maximum pool size | `3` | A third worker can be created under greater load. |
+| Queue capacity | `1` | One additional task can wait for a worker. |
+| Keep-alive | `5` seconds | An idle worker above the core size can be removed after this delay. |
+| Thread-name prefix | `TestParallel_` | Makes async workers easy to recognize in logs. |
+| Rejection handler | `CustomRejectedExecutionHandler` | Handles an attempted submission when the pool and queue are full. |
 
-For a `ThreadPoolExecutor`, submission proceeds in this order:
+For a standard `ThreadPoolExecutor` with this configuration, the normal sequence is:
 
-1. Create workers until the core size of two is reached.
-2. Place the next task in the one-slot queue.
-3. If the queue is full, create a third worker up to the maximum pool size.
-4. If all three workers are busy and the queue is full, invoke the rejection handler.
+| Submitted task (when previous tasks are still busy) | What happens? |
+| --- | --- |
+| Task 1 | Starts on core worker 1. |
+| Task 2 | Starts on core worker 2. |
+| Task 3 | Enters the one-slot queue. |
+| Task 4 | Queue is full; executor can create worker 3 (maximum size). |
+| Task 5 | If all three workers are occupied and the queue is full, the task is rejected and the handler runs. |
 
-The handler runs synchronously on the thread attempting the submission. For the three service calls, that is normally the HTTP request thread. It logs the rejection, sleeps for one second, and calls `threadPoolExecutor.submit(runnable)`. If capacity has become available, the retry is accepted. If the executor is still saturated, that submission can invoke the same handler again. The implementation has no retry counter, timeout, backoff limit, or shutdown check.
+**Important:** A maximum pool size of `3` does **not** mean that the first three tasks automatically get three workers. The executor normally **fills the queue before growing beyond the core pool size**.
 
-This means the current HTTP design is asynchronous while waiting for accepted service futures, but task submission itself is not guaranteed to be non-blocking under saturation. Five simultaneous endpoint calls attempt to submit fifteen tasks to one shared executor, so queueing, pool expansion, and rejection retries determine their individual response times.
+### 10.1 What does the custom rejection handler do?
 
-## Blocking vs Non-Blocking Comparison
+According to the documented implementation, it:
 
-| Concern | Earlier `List<String>` implementations | Current `CompletableFuture<List<String>>` implementation |
+1. Logs that the task was rejected.
+2. Sleeps for **one second**.
+3. Attempts to resubmit the rejected task using `threadPoolExecutor.submit(runnable)`.
+
+This raises an important question: **Which thread sleeps?**
+
+The rejection handler is invoked during task submission. When the controller's Tomcat worker calls an `@Async` service, it is the **Tomcat worker** that performs that submission. If submission is rejected, **that same Tomcat worker executes the rejection handler and sleeps**.
+
+So the current implementation is **non-blocking while waiting for accepted async results**, but it is **not guaranteed to be non-blocking while submitting tasks**.
+
+### 10.2 Why recursive resubmission is risky
+
+Suppose the pool remains full after the one-second sleep:
+
+```text
+Original submission is rejected
+    |
+    v
+Rejection handler sleeps for 1 second
+    |
+    v
+Handler calls executor.submit(runnable)
+    |
+    v
+Still full -> rejected again
+    |
+    v
+Same rejection handler runs again, nested inside previous call
+    |
+    v
+...potentially repeats...
+```
+
+That can repeatedly block the submitting thread, build up nested handler calls, and ultimately risk **`StackOverflowError`**. The documented handler has no retry limit or explicit shutdown handling. It also wraps an interruption without restoring the interrupt flag.
+
+This makes it useful for learning how saturation behaves, but it is **not a production-ready retry strategy**. The current README documents that risk without changing the implementation.
+
+### 10.3 What happens with multiple simultaneous HTTP requests?
+
+Five concurrent clients may submit **15 service tasks** (3 per request) to the same executor.
+
+All requests compete for:
+
+- A maximum of **3 executor workers**.
+- **1 queue slot**.
+- The same rejection handler if submissions arrive while the pool and queue are full.
+
+As a result, individual request times depend on scheduling, queue positions, and retries. They will not all necessarily finish after six seconds. A request may also fail if a submission or callback encounters an exception.
+
+---
+
+## 11. Blocking vs. asynchronous MVC — side-by-side
+
+| Question | Previous versions: controller returned `List<String>` | Current version: controller returns `CompletableFuture<List<String>>` |
 | --- | --- | --- |
-| Controller return | Waited for `fetchUserReport()` to return a completed list. | Returns the composed future to Spring MVC. |
-| Waiting for service results | Request thread blocked in sequential `get()` or aggregate `join()`. | No result wait in the normal request path; completion is composed with `thenApply()`. |
-| Request-thread occupancy | Held for approximately the full report-generation duration. | Released after successful task submission and future registration. |
-| Saturated submission | In the rejection-handler stage, the request thread could sleep during retry. | The same caveat remains before the future is returned. |
-| Single-request service latency | Determined by the executor schedule and simulated delays. | Essentially the same critical path; asynchronous MVC does not make the service tasks faster. |
-| Concurrent HTTP requests | Waiting reports consumed request threads. | Waiting reports normally do not retain their initial request threads, but all reports still share the small service executor. |
-| Response processing | Performed before the synchronous controller call returned. | Requires a later asynchronous dispatch and an available servlet-container worker. |
-| Failure handling | Caught in `UserReportService` and returned a possibly empty or partial list. | Exceptional completion is logged and remains available to Spring MVC for HTTP error processing. |
+| Do service tasks use `@Async`? | Yes. | Yes. |
+| Who runs the service bodies? | `TestParallel_*` executor workers. | `TestParallel_*` executor workers. |
+| Does the Tomcat worker wait for the results? | **Yes**, in `get()` or `allOf().join()`. | **No**, during normal future composition and waiting for accepted tasks. |
+| When does the controller return? | After the list has been assembled. | After obtaining the composed future, even if the list is not ready. |
+| What does Spring MVC receive? | A completed `List<String>`. | A `CompletableFuture<List<String>>`. |
+| Can the original Tomcat worker be released while tasks run? | No, it is blocked collecting results. | Yes, after Spring MVC starts asynchronous request processing. |
+| Does each report's underlying work get faster? | Depends on worker availability. | **Not inherently.** Same service delays and executor limits. |
+| Is the HTTP response generated without a Tomcat worker? | No. | No. A later async dispatch still needs servlet processing. |
+| Can submission block under executor saturation? | Yes, with the rejection handler. | **Yes, still.** |
+| How do task failures affect the result? | Earlier service code caught failures and could return a partial/empty list. | Failures propagate through the composed future; `whenComplete()` logs them. |
 
-The current design primarily improves servlet request-thread utilization. Its throughput and response latency remain bounded by the three-worker executor, one-slot queue, simulated task durations, retry policy, and final servlet dispatch capacity.
+**Main takeaway:** The benefit is that the initial Tomcat worker does not stay occupied simply waiting for the accepted tasks to finish. That can help an application handle more simultaneous waiting requests, provided the executor and servlet container have sufficient capacity.
 
-## Execution Timeline and Logs
+It does **not** mean unlimited concurrency or a faster individual service call.
 
-For one request against an otherwise idle executor, the code implies this schedule:
+---
 
-| Approximate time | Executor state |
-| ---: | --- |
-| `0s` | User task starts on core worker 1; order task starts on core worker 2; payment task enters the one-slot queue. |
-| `2s` | User task completes. Its worker takes the queued payment task. |
-| `3s` | Order task completes. |
-| `6s` | Payment task completes after running for four seconds; the aggregate future can now complete and assemble the report. |
+## 12. `CompletableFuture` method reference
 
-The maximum pool size of three is not reached for this isolated request because the third task fits in the queue. The critical path is therefore the two-second user task followed by the queued four-second payment task, producing a nominal report-generation time of about six seconds plus scheduling overhead.
+| Method | What it means | Does calling it wait? | Result or behavior |
+| --- | --- | --- | --- |
+| `CompletableFuture.allOf(a, b, c)` | Create one future representing the completion of all inputs. | **No.** | Returns `CompletableFuture<Void>`. |
+| `allOf(a, b, c).join()` | Wait until the combined future completes, then observe the outcome. | **Yes, if incomplete.** | Returns `Void` (`null`) on success; throws unchecked exception on failure. |
+| `future.get()` | Retrieve the value, waiting if needed. | **Yes, if incomplete.** | Returns `T`; throws checked `InterruptedException` and `ExecutionException` as applicable. |
+| `future.join()` | Retrieve the value, waiting if needed. | **Yes, if incomplete.** | Returns `T`; typically throws unchecked `CompletionException` for failure. |
+| `thread.join()` | Wait for a **thread to terminate**. | **Yes, if the thread is still alive.** | Returns `void`; unrelated to `CompletableFuture.join()`. |
+| `thenApply(fn)` | Run a transformation after successful completion of the preceding future. | **Does not wait for an incomplete future during registration.** | Returns a dependent `CompletableFuture<U>`. Lambda may run inline if already complete. |
+| `thenApplyAsync(fn)` | Schedule a transformation asynchronously after successful completion. | **No waiting during registration.** | Uses the common pool by default, or a specified executor. |
+| `whenComplete(action)` | Observe success or failure, usually for side effects such as logging. | **Does not wait for an incomplete future during registration.** | Returns another stage; normally preserves the previous outcome. |
 
-The six-second figure is an execution consequence of the current delays and an otherwise idle executor, and it matches the behavior documented in `a3d6029`. The Git history does not contain captured console output or a benchmark, so exact timestamps and thread suffixes are not reproduced here. Under concurrent requests, prior work may already occupy the workers and queue, so the timeline can be longer and the task order can differ.
+### `get()` vs `join()`: a simple rule
 
-The existing logs expose:
+Both retrieve values, and **both can block** if the future is incomplete.
 
-- The request thread entering `UserReportService`.
-- The executor worker used by each service operation.
-- The thread that executes the `thenApply()` report assembly.
-- Total time from entry into `fetchUserReport()` through report assembly, including submission delays, queueing, and service execution, but excluding final HTTP dispatch and response transmission.
-- Rejection and retry attempts from `CustomRejectedExecutionHandler`.
+The main difference is exception handling:
 
-## Limitations and Caveats
+```java
+String value = userFuture.get();  // Checked exceptions must be handled/declared.
+String value2 = userFuture.join(); // No checked-exception requirement.
+```
 
-- **Exceptional service completion:** If any component future fails, `allOf(...)` completes exceptionally, `thenApply(...)` is skipped, and `whenComplete(...)` logs the failure. Because `whenComplete(...)` does not recover, Spring MVC receives an exceptional future.
-- **Synchronous submission failure:** A failure thrown while one of the three `@Async` calls is being submitted occurs before the composed future is returned. In that case, the later `whenComplete(...)` stage is never registered for the failed request, and normal synchronous MVC exception handling applies.
-- **Submitting-thread delay:** The rejection handler sleeps on the caller. During endpoint submission this can retain a servlet-container worker even though the controller's declared return type is asynchronous.
-- **Unbounded retry behavior:** A retry that is rejected can re-enter the same handler. There is no fixed attempt limit or special handling for executor shutdown.
-- **Interrupted retry:** The handler converts `InterruptedException` to `RuntimeException` and does not restore the interrupted flag.
-- **Executor bottleneck:** All HTTP requests share three service workers and one queue slot. Returning a future does not increase that capacity.
-- **MVC asynchronous timeout:** No application-specific asynchronous request timeout is configured. The effective framework/container timeout can expire before a heavily queued or repeatedly retried report completes. Timing out the HTTP request does not automatically guarantee that already-submitted executor work stops.
-- **Final response dispatch:** Future completion does not itself write the response. Spring MVC performs an asynchronous dispatch, which can be delayed if no servlet-container worker is available.
-- **Continuation thread:** Non-`Async` `thenApply()` and `whenComplete()` do not select a dedicated executor. Their actions normally run on the thread completing the preceding stage, but the API does not guarantee one named application thread.
-- **Declared interruption:** `fetchUserReport()` and the controller still declare `InterruptedException`, although the current composition does not directly wait in those methods. Their signatures are preserved as part of the existing implementation.
+`join()` does **not** eliminate errors. It reports failures through unchecked exceptions, commonly `CompletionException`; cancellation has its own `CancellationException` behavior.
 
-## Running and Testing
+### `thenApply()` vs `thenApplyAsync()`: a simple rule
 
-Compile with the Maven Wrapper:
+`thenApply()` attaches a continuation without requiring a separate scheduling step. The callback might execute on the completing thread, or on the registering thread if the previous stage is already complete.
+
+`thenApplyAsync()` schedules the callback onto an executor. If you do not supply one, it normally uses the `ForkJoinPool.commonPool()`.
+
+For this project's tiny report assembly operation — constructing a three-element list — the non-`Async` `thenApply()` is sufficient. Using `thenApplyAsync()` would not make the already-running service tasks faster.
+
+---
+
+## 13. What happens when something fails?
+
+### 13.1 A service task fails asynchronously
+
+Suppose `paymentFuture` completes exceptionally:
+
+```text
+User task    -> completed successfully
+Order task   -> completed successfully
+Payment task -> completed exceptionally
+                    |
+                    v
+                allOf() completes exceptionally
+                    |
+                    v
+                thenApply() is SKIPPED
+                    |
+                    v
+                whenComplete() logs the failure
+                    |
+                    v
+                returned future remains exceptional
+                    |
+                    v
+                Spring MVC handles the failed async result
+```
+
+Crucially, the code does **not** enter the `thenApply()` lambda in this case, so the individual `join()` calls inside it are **not executed**.
+
+`whenComplete()` is for **observation**, not recovery. Logging an exception there does not magically turn it into a valid `List<String>`.
+
+If the `whenComplete()` callback itself throws, that can also influence the outcome of the future it returns.
+
+### 13.2 A task submission fails synchronously
+
+There is a different failure point **before** the future chain is created.
+
+For example, if the rejection handler throws while executing `paymentService.getPaymentInfo()`, `fetchUserReport()` may exit immediately with that exception. In this case, the later `allOf(...).thenApply(...).whenComplete(...)` chain was never registered.
+
+That is a **synchronous submission failure**, not an asynchronous failure reported through the eventual report future. Normal synchronous MVC exception handling applies.
+
+Already-submitted user/order tasks might still be running even if the later payment submission fails.
+
+### 13.3 An asynchronous HTTP request can time out
+
+Asynchronous MVC request handling may have a timeout configured by Spring or the servlet container. This project does not document an application-specific timeout value.
+
+If a report takes too long, the HTTP request may time out even though executor tasks continue running. Returning a future does not itself guarantee task cancellation when an HTTP timeout happens.
+
+### 13.4 What if Tomcat workers are busy at the end?
+
+Completing the report future does **not** bypass the servlet container. Spring MVC schedules an asynchronous dispatch so that an available Tomcat worker can process the result and send the response.
+
+If no Tomcat worker is currently available, that dispatch must wait for capacity (subject to the application's timeouts and container limits). The already-computed report is not lost merely because response processing has not started yet.
+
+---
+
+## 14. Reading the thread logs
+
+The logs help answer two questions:
+
+1. **Which thread submitted the tasks?** Look for `http-nio-8080-exec-*` in the controller or report service.
+2. **Which thread executed the tasks and continuation?** Look for `TestParallel_*` in the individual services and report completion log.
+
+An example of the **sequence of events** for a single otherwise-idle request is:
+
+```text
+http-nio-8080-exec-1  -> controller and report service invoked
+TestParallel_1        -> User task starts
+TestParallel_2        -> Order task starts
+                        Payment task waits in queue
+TestParallel_1        -> User completes after about 2 seconds
+TestParallel_1        -> Payment task starts
+TestParallel_2        -> Order completes after about 3 seconds
+TestParallel_1        -> Payment completes at about 6 seconds
+TestParallel_1        -> thenApply() assembles the report
+                        Spring MVC handles asynchronous response dispatch
+```
+
+These are **illustrative events**, not copied log lines or guaranteed thread IDs. Thread scheduling may change.
+
+### What the elapsed-time log includes
+
+If `start` is recorded at the beginning of `fetchUserReport()` and elapsed time is logged from inside `thenApply()`, that measurement includes:
+
+- Time spent submitting tasks.
+- Time blocked by any submission-time rejection retry.
+- Waiting in the executor queue.
+- Actual service execution.
+- Assembling the final list, up to the timestamp at the log call.
+
+It does **not** measure final HTTP dispatch, JSON serialization, network transmission, or client download time. The client-side `curl %{time_total}` value measures something different: the full HTTP transaction from the client's perspective.
+
+---
+
+## 15. Run and test
+
+### 15.1 Compile
+
+From the project root:
 
 ```bash
 ./mvnw clean compile
 ```
 
-Run the application:
+### 15.2 Start Spring Boot
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-Call the endpoint:
+### 15.3 Send one request
 
 ```bash
 curl -i http://localhost:8080/users/reports
 ```
 
-Send five requests concurrently from a shell:
+On success, expect a JSON array with **three strings**, representing user, order, and payment information.
+
+The exact string contents are defined by the service implementations.
+
+### 15.4 Send five concurrent requests
 
 ```bash
-for request_id in 1 2 3 4 5; do
-  curl -sS -w "\nrequest ${request_id}: HTTP %{http_code}, %{time_total}s\n" \
-    http://localhost:8080/users/reports &
-done
-wait
+seq 5 | xargs -P 5 -I {} curl -sS -o /dev/null \
+  -w "HTTP %{http_code} | Time %{time_total}s\n" \
+  http://localhost:8080/users/reports
 ```
 
-The concurrent test intentionally exceeds the small executor's immediately available capacity. It can demonstrate queueing and rejection retries, but the exact ordering and duration depend on thread scheduling and executor state at the start of the test.
+**How to read the command:**
 
-## Key Takeaways
+- `seq 5` creates five request iterations.
+- `xargs -P 5` allows up to five `curl` processes to run concurrently.
+- `-o /dev/null` suppresses response bodies.
+- `%{http_code}` prints each HTTP status code.
+- `%{time_total}` prints the request's total client-observed duration.
 
-- `@Async` moved the three simulated operations to a dedicated executor from the first project commit, but the original `List<String>` response still blocked the request thread while collecting results.
-- `allOf()` represents aggregate completion; only `get()` or `join()` introduces a blocking wait when called on an incomplete future.
-- Replacing `allOf().join()` with `allOf().thenApply()` enabled completion-based composition instead of request-thread waiting.
-- Returning `CompletableFuture<List<String>>` allowed Spring MVC asynchronous request processing, while still requiring a later servlet dispatch to produce the HTTP response.
-- The custom rejection handler demonstrates saturation behavior, but its sleep-and-resubmit policy can block request threads and retry repeatedly.
-- Asynchronous HTTP processing improves request-thread utilization; it does not remove executor limits or reduce the approximately six-second isolated-request critical path.
+Do **not** assume every response will take the same time or return HTTP 200 under saturation. This test intentionally stresses a small executor and its potentially unsafe rejection/retry behavior.
+
+When investigating the output, compare it with the server's `TestParallel_*`, rejection, retry, and report-completion logs.
+
+---
+
+## 16. Common misconceptions
+
+**“The three service methods have `@Async`, so the HTTP request must be non-blocking.”**
+
+No. The earlier versions used `@Async` but still blocked the Tomcat worker in `get()` or `allOf().join()` before returning the response.
+
+**“`allOf()` waits until everything finishes.”**
+
+It creates a future that **represents** that event; calling `allOf()` itself does not block. Calling `join()` on the future can block.
+
+**“`thenApply()` starts running immediately in the background.”**
+
+Not necessarily. It **registers a dependent action**. That action runs when the preceding future completes successfully, or may run immediately if the preceding future was already successful at registration time.
+
+**“`join()` is always non-blocking.”**
+
+No. It blocks on an incomplete future. In this implementation, it **doesn't need to wait** because the successful `allOf()` completion guarantees the values are ready before the lambda reads them.
+
+**“Returning a future means the HTTP response is already sent.”**
+
+No. It means the controller handed Spring MVC a representation of a future result. Spring MVC sends the HTTP response after that future completes and response processing occurs.
+
+**“A maximum pool size of three means the first three tasks all run immediately.”**
+
+No. With a core size of two and queue capacity of one, the third task normally waits in the queue first. The executor grows beyond the core size when the queue is full and more work arrives.
+
+**“This change makes the report finish faster.”**
+
+Not inherently. The two-, three-, and four-second operations still run under the same executor constraints. The main change is that the original Tomcat worker need not remain blocked while waiting for them.
+
+---
+
+## 17. Final takeaways
+
+1. **`@Async` moves service execution to an executor.** It does not automatically make the HTTP boundary asynchronous.
+2. **`allOf()` coordinates completion without blocking** the caller.
+3. **`thenApply()` registers the next step:** assemble the list after every required future succeeds.
+4. **`join()` normally can wait, but here just retrieves ready values** because the lambda runs only after successful `allOf()` completion.
+5. **Returning `CompletableFuture<List<String>>` lets Spring MVC free the original request worker** after setting up asynchronous request handling.
+6. **The response still requires servlet processing later** when the future completes.
+7. **Executor limits still matter.** Two core workers, one queue slot, and the rejection handler explain the nominal six-second single-report schedule and possible delays under load.
+8. **The custom rejection handler can block the submitting Tomcat thread**, even in the current asynchronous response design.
+
+> **Remember the flow:** submit the three tasks → create the `allOf()` dependency → register the `thenApply()` action → return the future → finish the tasks → read their completed values → complete the report future → let Spring MVC send the response.
