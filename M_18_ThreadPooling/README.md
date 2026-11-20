@@ -1,6 +1,6 @@
 # M_18_ThreadPooling
 
-**Understanding Java thread pools, Spring `@Async`, `CompletableFuture`, and asynchronous HTTP responses in Spring MVC**
+**Understanding Java thread pools, Spring `@Async`, `CompletableFuture`, scheduled tasks, and asynchronous HTTP responses in Spring MVC**
 
 ## 1. What is this project about?
 
@@ -20,6 +20,14 @@ GET /users/reports
 
 A successful response is a JSON array containing the user, order, and payment information, in that order.
 
+The project also has a small scheduling example:
+
+```http
+POST /emails/{email}
+```
+
+This endpoint schedules one email log message for ten seconds later. It demonstrates delayed execution with `TaskScheduler`; it does not send a real email.
+
 The project explores an important distinction:
 
 > **Running service tasks on background threads is not the same as handling the HTTP request asynchronously.**
@@ -37,27 +45,26 @@ The goal is **better use of request threads**, not magically faster service oper
 - **Spring Web MVC + Tomcat** — HTTP request and response handling.
 - **Spring `@EnableAsync` and `@Async`** — execution of service methods using an executor.
 - **`ThreadPoolTaskExecutor`** — configured pool for the service tasks.
+- **`TaskScheduler` and `ThreadPoolTaskScheduler`** — one-time delayed email tasks.
 - **`ThreadPoolExecutor`** — underlying Java executor and rejection policy.
 - **Lombok `@Slf4j`** — thread and timing logs.
 - **Maven Wrapper** — build and run commands.
 - **JUnit 5 / Spring Boot test support** — application context test.
-
-This is a **Spring MVC** application, **not** a Spring WebFlux application. Returning a `CompletableFuture` enables Spring MVC asynchronous request processing; it does not turn Tomcat into a reactive event-loop server.
-
----
 
 ## 3. Project components
 
 | Component | Responsibility |
 | --- | --- |
 | `M18ThreadPoolingApplication` | Starts the Spring Boot application and enables asynchronous method interception with `@EnableAsync`. |
-| `ThreadConfig` | Defines the task executor and its pool, queue, thread names, and rejection policy. |
+| `ThreadConfig` | Defines the async task executor and the separate scheduler used by delayed email tasks. |
 | `CustomRejectedExecutionHandler` | Handles tasks rejected when the executor is full; currently sleeps and resubmits. |
 | `UserService` | Simulates fetching user information; about 2 seconds. |
 | `OrderService` | Simulates fetching order information; about 3 seconds. |
 | `PaymentService` | Simulates fetching payment information; about 4 seconds. |
 | `UserReportService` | Starts the three operations and combines their eventual results. |
 | `UserReportController` | Handles `GET /users/reports` and returns the report future to Spring MVC. |
+| `EmailService` | Schedules one email log message to run ten seconds later. |
+| `EmailController` | Handles `POST /emails/{email}` and returns immediately after scheduling. |
 | `M18ThreadPoolingApplicationTests` | Checks that the Spring application context loads. |
 
 ### What does `@Async` actually change?
@@ -86,6 +93,48 @@ TestParallel_1 executes UserService method body
 The call to the service returns a `CompletableFuture<String>` representing a result that may not be ready yet. The returned future is **not** the same thing as the result itself.
 
 **Important:** Spring's proxy must actually intercept the method call. In particular, an `@Async` method called directly from another method on the **same object** does not normally go through that proxy. This project calls the async methods on separate injected services.
+
+### How the delayed email scheduler works
+
+The email example uses a different bean from the `@Async` services:
+
+```text
+HTTP request thread
+  |
+  | POST /emails/{email}
+  v
+EmailService calculates a time 10 seconds later
+  |
+  | scheduler.schedule(action, scheduleTime)
+  v
+TaskScheduler stores the delayed action
+  |
+  | returns immediately
+  v
+HTTP 204 response
+
+About 10 seconds later:
+Task_Scheduler_ worker runs the email log action
+```
+
+`ThreadConfig` gives this scheduler a pool size of `3` and the thread-name prefix `Task_Scheduler_`. Up to three scheduled actions can execute at the same time when they become due. If more actions become due while all three scheduler workers are busy, the remaining actions wait for a scheduler worker.
+
+The task exists only in application memory. If the application stops before the ten-second delay finishes, there is no persistent store in this project that can run the task later.
+
+### `TaskScheduler.schedule()` vs `@Scheduled`
+
+The current email code uses `TaskScheduler.schedule(...)` because the execution time is calculated when the HTTP request arrives. It creates one task for one specific time.
+
+`@Scheduled` is different. Spring calls an annotated method automatically according to a schedule written in the annotation:
+
+| Option | Behavior |
+| --- | --- |
+| `fixedDelay` | Waits for one execution to finish, then waits for the configured delay before starting again. |
+| `fixedRate` | Tries to start executions at a regular interval measured from their start times. A long-running execution can delay the next run. |
+| `cron` | Runs when the cron expression matches a date and time. |
+| `initialDelay` | Delays the first execution. |
+
+This project does **not** currently use `@Scheduled`, and `@EnableScheduling` is not present. If annotation-based scheduling is added later, scheduling must be enabled and the annotated method will be triggered by Spring without an HTTP request. The existing `TaskScheduler` bean can then provide the scheduler threads.
 
 ---
 
@@ -153,7 +202,7 @@ That is exactly what changed across the commits.
 
 ## 5. How the project evolved — recent commits
 
-The commit history below follows the commit IDs and changes documented in the README supplied with this project. It is a history of the **reported repository changes**, rather than a fresh inspection of the Git repository.
+The commit history below is based on the actual changes in this repository.
 
 | Commit | Stage | What changed |
 | --- | --- | --- |
@@ -777,6 +826,8 @@ The logs help answer two questions:
 1. **Which thread submitted the tasks?** Look for `http-nio-8080-exec-*` in the controller or report service.
 2. **Which thread executed the tasks and continuation?** Look for `TestParallel_*` in the individual services and report completion log.
 
+The email logs use `Task_Scheduler_*`. The first message records when the task is scheduled. The later message records the scheduler thread and the actual execution time.
+
 An example of the **sequence of events** for a single otherwise-idle request is:
 
 ```text
@@ -854,6 +905,14 @@ Do **not** assume every response will take the same time or return HTTP 200 unde
 
 When investigating the output, compare it with the server's `TestParallel_*`, rejection, retry, and report-completion logs.
 
+### 15.5 Schedule one email log
+
+```bash
+curl -i -X POST http://localhost:8080/emails/user@example.com
+```
+
+The endpoint returns HTTP `204 No Content` after registering the task. About ten seconds later, check the application logs for the message executed by a `Task_Scheduler_*` thread.
+
 ---
 
 ## 16. Common misconceptions
@@ -898,5 +957,7 @@ Not inherently. The two-, three-, and four-second operations still run under the
 6. **The response still requires servlet processing later** when the future completes.
 7. **Executor limits still matter.** Two core workers, one queue slot, and the rejection handler explain the nominal six-second single-report schedule and possible delays under load.
 8. **The custom rejection handler can block the submitting Tomcat thread**, even in the current asynchronous response design.
+9. **`TaskScheduler.schedule()` registers one task for a chosen time.** It returns immediately, and a `Task_Scheduler_*` worker executes the action when it becomes due.
+10. **`@Scheduled` is for automatic repeated or cron-based execution.** It is described for comparison but is not enabled or used by the current code.
 
 > **Remember the flow:** submit the three tasks → create the `allOf()` dependency → register the `thenApply()` action → return the future → finish the tasks → read their completed values → complete the report future → let Spring MVC send the response.

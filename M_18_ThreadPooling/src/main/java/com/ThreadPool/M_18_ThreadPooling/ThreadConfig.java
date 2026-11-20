@@ -2,7 +2,9 @@ package com.ThreadPool.M_18_ThreadPooling;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import java.util.concurrent.RejectedExecutionHandler;
 
@@ -28,5 +30,16 @@ public class ThreadConfig {
         // Delays and resubmits work rejected after both the pool and queue are full.
         taskExecutor.setRejectedExecutionHandler(new CustomRejectedExecutionHandler());
         return taskExecutor;
+    }
+
+    // Provides a separate scheduler for delayed email tasks.
+    @Bean
+    TaskScheduler getTaskScheduler(){
+        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+        // Allows up to three scheduled actions to execute at the same time when they become due.
+        taskScheduler.setPoolSize(3);
+        // Identifies scheduler workers in the email execution log.
+        taskScheduler.setThreadNamePrefix("Task_Scheduler_");
+        return taskScheduler;
     }
 }
