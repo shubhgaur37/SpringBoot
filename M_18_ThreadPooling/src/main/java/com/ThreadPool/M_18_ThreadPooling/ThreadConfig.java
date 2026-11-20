@@ -6,14 +6,12 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
-import java.util.concurrent.RejectedExecutionHandler;
-
 @Configuration
 public class ThreadConfig {
 
     // Spring uses this task executor for the @Async service methods.
     @Bean
-    ThreadPoolTaskExecutor getThreadPoolTaskExecutor(){
+    ThreadPoolTaskExecutor getThreadPoolTaskExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
         // Keeps two workers available before tasks are placed in the queue.
         taskExecutor.setCorePoolSize(2);
@@ -34,7 +32,7 @@ public class ThreadConfig {
 
     // Provides a separate scheduler for delayed email tasks.
     @Bean
-    TaskScheduler getTaskScheduler(){
+    TaskScheduler getTaskScheduler() {
         ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
         // Allows up to three scheduled actions to execute at the same time when they become due.
         taskScheduler.setPoolSize(3);

@@ -10,8 +10,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableAsync
 public class M18ThreadPoolingApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(M18ThreadPoolingApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(M18ThreadPoolingApplication.class, args);
+    }
 
 }
